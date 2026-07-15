@@ -218,20 +218,20 @@ Validation schemas should be reusable by both frontend and backend.
 
 ```text
 app
- │
- ▼
-features
- │
- ▼
-services
- │
- ▼
-repositories
- │
- ▼
+│
+▼
+features/*
+│
+▼
+feature service
+│
+▼
+feature repository
+│
+▼
 lib/prisma
- │
- ▼
+│
+▼
 database
 ```
 

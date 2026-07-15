@@ -58,11 +58,26 @@ Authorization (RBAC)
 
 ↓
 
-Service Layer
+Business logic is colocated with its feature whenever practical.
 
-↓
+Example
 
-Repository Layer
+features/
+
+contact/
+
+service.ts
+
+repository.ts
+
+schemas/
+
+types/
+
+Shared cross-cutting services
+(Logger, Email, Auth, Cache)
+
+remain inside lib/.
 
 ↓
 

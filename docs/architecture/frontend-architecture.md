@@ -103,11 +103,19 @@ Page
 
 ↓
 
-Feature Components
+Feature UI
 
 ↓
 
-Shared Components
+Feature Service (Server Action / API)
+
+↓
+
+Feature Repository
+
+↓
+
+Database
 ```
 
 ---
@@ -314,14 +322,16 @@ Performance targets include:
 
 # 17. Frontend Module Responsibilities
 
-Each feature module owns:
+Each feature owns:
 
-- Components
-- Hooks
-- Validation
-- Types
-- Utilities
+components/
+schemas/
+service.ts
+repository.ts
+types.ts
+utils.ts
 
+Shared infrastructure remains inside lib/.
 Shared functionality should remain outside feature modules.
 
 ---

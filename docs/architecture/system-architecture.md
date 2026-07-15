@@ -2,82 +2,82 @@
 
 > **Document Version:** 1.0
 >
-> **Status:** Draft
+> **Status:** Approved (Architecture Baseline v1.0)
 >
 > **Last Updated:** July 2026
 
 ---
 
-# 1. Overview
+# 1. Purpose
 
-The Portfolio application is designed as a **production-ready, scalable, and maintainable full-stack web application** built using **Next.js App Router**.
+This document defines the high-level architecture of the Portfolio application.
 
-Rather than separating the frontend and backend into multiple repositories, the application follows a **single codebase architecture**, where both the client-facing application and backend APIs coexist in the same project.
+It serves as the architectural foundation for the project and establishes the major architectural decisions that every implementation must follow.
 
-This architecture minimizes deployment complexity, improves developer experience, enables code sharing, and supports future scalability.
+All implementation artifacts—including folder structure, feature modules, API routes, database schema, and deployment configuration—are **derived from this approved Architecture Baseline**.
 
 ---
 
 # 2. Architecture Goals
 
-The system is designed to achieve the following goals:
+The architecture is designed to achieve the following goals:
 
 - Production-ready architecture
-- High maintainability
-- Excellent developer experience
-- Scalability for future features
+- Scalability
+- Maintainability
+- Feature independence
 - Strong separation of concerns
-- Shared TypeScript types
-- Shared validation logic
-- SEO optimization
+- Type safety
 - Security by design
-- Modular feature development
+- High performance
+- Excellent developer experience
+- Future extensibility
 
 ---
 
 # 3. High-Level Architecture
 
 ```text
-                        +----------------------+
-                        |      Visitor         |
-                        +----------+-----------+
-                                   |
-                                   |
-                                   ▼
-                        +----------------------+
-                        |      Next.js         |
-                        |     App Router       |
-                        +----------+-----------+
-                                   |
-            ┌──────────────────────┴──────────────────────┐
-            │                                             │
-            ▼                                             ▼
-+-----------------------------+              +-----------------------------+
-|      React UI Layer         |              |     Route Handlers / APIs   |
-|                             |              |      Server Actions          |
-+-------------+---------------+              +-------------+---------------+
-              |                                              |
-              └────────────────────┬─────────────────────────┘
-                                   ▼
-                       Business Logic / Services
-                                   │
-                                   ▼
-                        Repository / Data Layer
-                                   │
-                                   ▼
-                              Prisma ORM
-                                   │
-                                   ▼
-                       Supabase PostgreSQL Database
+                               Visitor
+                                  │
+                                  ▼
+                     Next.js App Router (Presentation)
+                                  │
+                 ┌────────────────┴────────────────┐
+                 │                                 │
+                 ▼                                 ▼
+        React Server/Client UI          Route Handlers / Server Actions
+                 │                                 │
+                 └───────────────┬─────────────────┘
+                                 ▼
+                      Feature Service Layer
+                                 │
+                                 ▼
+                    Feature Repository Layer
+                                 │
+                                 ▼
+                           Prisma ORM
+                                 │
+                                 ▼
+                    Supabase PostgreSQL Database
 ```
+
+The application follows a **single-codebase architecture**, where frontend and backend coexist in one Next.js application while remaining logically separated.
 
 ---
 
 # 4. Architectural Style
 
-The application follows a **Layered Architecture** combined with **Feature-Oriented Organization**.
+The system combines multiple architectural styles:
 
-Every layer has a single responsibility.
+- Layered Architecture
+- Feature-Oriented Architecture
+- Repository Pattern
+- Service Layer Pattern
+- Modular Design
+- Domain-Oriented Organization
+
+Every layer has one clear responsibility.
 
 ```text
 Presentation Layer
@@ -88,15 +88,19 @@ Application Layer
 
 ↓
 
-Business Layer
+Feature Service Layer
 
 ↓
 
-Data Access Layer
+Feature Repository Layer
 
 ↓
 
-Database Layer
+Persistence Layer
+
+↓
+
+Database
 ```
 
 ---
@@ -105,22 +109,22 @@ Database Layer
 
 ## 5.1 Presentation Layer
 
-Responsible for everything related to the user interface.
+Responsible for rendering the user interface.
 
 Responsibilities:
 
 - Pages
 - Layouts
-- Components
+- Shared Components
+- Feature Components
 - Navigation
 - Theme
 - Forms
-- User interactions
-- Client-side state
+- User Interactions
 
 Technologies:
 
-- Next.js
+- Next.js App Router
 - React
 - Tailwind CSS
 - TypeScript
@@ -131,58 +135,72 @@ This layer never communicates directly with the database.
 
 ## 5.2 Application Layer
 
-Responsible for coordinating requests.
+Acts as the entry point into backend functionality.
 
 Responsibilities:
 
 - Route Handlers
 - Server Actions
-- Request Validation
+- Request Parsing
+- Authentication
 - Authorization
 - Response Formatting
 
-Business rules should remain minimal in this layer.
+Business logic must remain minimal.
 
 ---
 
-## 5.3 Business Layer
+## 5.3 Feature Service Layer
 
-Contains the application's business logic.
+Contains business rules.
 
 Examples:
 
 - Submit Contact Form
 - Publish Blog
-- Create Portfolio Item
-- Update Skills
-- Authenticate User
+- Update Project
+- Authenticate Admin
+- Manage Portfolio Content
 
-Business logic should remain independent from framework-specific code whenever possible.
+Feature services coordinate workflows and delegate persistence to repositories.
+
+Business logic should remain independent from HTTP, Prisma, and UI whenever practical.
 
 ---
 
-## 5.4 Data Access Layer
+## 5.4 Feature Repository Layer
 
-Responsible for database interaction.
+Responsible only for data access.
 
 Responsibilities:
 
-- Repository Pattern
-- Database Queries
+- CRUD Operations
 - Transactions
-- Data Mapping
+- Query Optimization
+- Database Mapping
 
-Uses:
+Repositories communicate exclusively with Prisma.
 
-- Prisma ORM
-
-No business logic belongs in this layer.
+No business logic belongs here.
 
 ---
 
-## 5.5 Database Layer
+## 5.5 Persistence Layer
 
-Persistent storage.
+Technology:
+
+- Prisma ORM
+
+Responsibilities:
+
+- Type-safe Queries
+- Relationship Handling
+- Transactions
+- Database Abstraction
+
+---
+
+## 5.6 Database Layer
 
 Technology:
 
@@ -190,59 +208,80 @@ Technology:
 
 Responsibilities:
 
-- Data persistence
+- Persistent Storage
 - Constraints
 - Relationships
 - Indexes
-- Integrity
+- Data Integrity
 
 ---
 
-# 6. Rendering Strategy
+# 6. Domain-Oriented Architecture
 
-The application uses a hybrid rendering model.
+The project is organized around business domains rather than database tables.
+
+Primary domains:
+
+```text
+Portfolio
+
+Content
+
+Communication
+
+Administration
+```
+
+Each domain owns its own:
+
+- Components
+- Schemas
+- Services
+- Repositories
+- Types
+- Utilities
+
+This keeps related functionality cohesive and reduces coupling between features.
+
+---
+
+# 7. Rendering Strategy
+
+The application follows a hybrid rendering model.
 
 | Page | Rendering Strategy | Reason |
 |------|--------------------|--------|
-| Home | Static Site Generation (SSG) | Best performance and SEO |
-| About | SSG | Rarely changes |
-| Skills | SSG | Static content |
-| Experience | SSG | Static content |
-| Portfolio | SSG initially, ISR later | Future updates |
-| Projects | SSG initially, ISR later | SEO + updates |
-| Blog | Incremental Static Regeneration (ISR) | Frequently updated |
-| Journey | ISR | Occasionally updated |
-| Contact | Client + Server | Form submission |
-| Login | Dynamic Rendering | Authentication |
-| Dashboard | Server-Side Rendering (SSR) | Protected content |
+| Home | SSG | Performance + SEO |
+| About | SSG | Static Content |
+| Skills | SSG | Static Content |
+| Experience | SSG | Static Content |
+| Portfolio | SSG → ISR | Future Content Updates |
+| Projects | SSG → ISR | SEO |
+| Blog | ISR | Frequently Updated |
+| Journey | ISR | Occasionally Updated |
+| Contact | Client + Server | Interactive Form |
+| Login | Dynamic | Authentication |
+| Dashboard | SSR | Protected Content |
 
 ---
 
-# 7. Request Flow
+# 8. Request Flow
 
-## Public Page Request
+## Public Page
 
 ```text
 Visitor
-
-↓
-
-Browser
-
-↓
-
+    │
+    ▼
 Next.js Route
-
-↓
-
+    │
+    ▼
 Server Component
-
-↓
-
+    │
+    ▼
 Rendered HTML
-
-↓
-
+    │
+    ▼
 Browser
 ```
 
@@ -252,38 +291,33 @@ Browser
 
 ```text
 Browser
-
-↓
-
+    │
+    ▼
 Route Handler
-
-↓
-
+    │
+    ▼
 Validation
-
-↓
-
+    │
+    ▼
+Authentication (if required)
+    │
+    ▼
 Authorization (if required)
-
-↓
-
-Business Service
-
-↓
-
-Repository
-
-↓
-
+    │
+    ▼
+Feature Service
+    │
+    ▼
+Feature Repository
+    │
+    ▼
 Prisma
-
-↓
-
+    │
+    ▼
 Supabase PostgreSQL
-
-↓
-
-JSON Response
+    │
+    ▼
+ApiResponse<T>
 ```
 
 ---
@@ -292,42 +326,36 @@ JSON Response
 
 ```text
 Visitor
-
-↓
-
+    │
+    ▼
 Contact Form
-
-↓
-
+    │
+    ▼
 Client Validation
-
-↓
-
-POST /api/contact
-
-↓
-
+    │
+    ▼
+Server Action / POST /api/contact
+    │
+    ▼
 Server Validation
-
-↓
-
+    │
+    ▼
 Contact Service
-
-↓
-
-Repository
-
-↓
-
+    │
+    ▼
+Contact Repository
+    │
+    ▼
 Prisma
-
-↓
-
-Supabase
-
-↓
-
-Success Response
+    │
+    ▼
+Supabase PostgreSQL
+    │
+    ▼
+ApiResponse<T>
+    │
+    ▼
+Toast Notification
 ```
 
 ---
@@ -336,45 +364,34 @@ Success Response
 
 ```text
 Admin
-
-↓
-
+    │
+    ▼
 Login
-
-↓
-
+    │
+    ▼
 JWT Verification
-
-↓
-
+    │
+    ▼
 RBAC Authorization
-
-↓
-
-Protected Route
-
-↓
-
-Business Service
-
-↓
-
+    │
+    ▼
+Feature Service
+    │
+    ▼
 Repository
-
-↓
-
+    │
+    ▼
 Database
-
-↓
-
+    │
+    ▼
 Response
 ```
 
 ---
 
-# 8. Module Boundaries
+# 9. Module Boundaries
 
-The application is organized around independent feature modules.
+The application is divided into independent feature modules.
 
 Core modules include:
 
@@ -385,41 +402,59 @@ Core modules include:
 - Contact
 - Authentication
 - Dashboard
-- Shared Configuration
-- Shared UI
-- SEO
 
-Each module owns:
+Every feature owns:
 
 - UI
 - Validation
 - Business Logic
-- API
-- Data Access
+- Repository
+- Types
+- Utilities
 
-Modules communicate through well-defined interfaces rather than accessing each other's internal implementation.
+Shared infrastructure remains outside feature modules.
 
 ---
 
-# 9. External Services
+# 10. Shared Infrastructure
+
+Cross-cutting concerns live inside `lib/`.
+
+Examples:
+
+- Prisma Client
+- Logger
+- Request ID
+- Authentication Utilities
+- Email Utilities
+- Date Utilities
+- Environment Utilities
+- Cache Provider
+- Error Helpers
+
+These modules must remain framework-agnostic whenever practical.
+
+---
+
+# 11. External Services
 
 | Service | Purpose |
 |----------|---------|
-| Next.js | Full-stack framework |
+| Next.js | Full-stack Framework |
 | Prisma | ORM |
 | Supabase | PostgreSQL Database |
 | GitHub | Version Control |
 | Vercel | Deployment |
-| Resend | Email Notifications (Future) |
-| Google reCAPTCHA v3 | Bot Protection (Future) |
+| Resend | Email Delivery (Future) |
+| Google reCAPTCHA v3 | Spam Protection (Future) |
 
 ---
 
-# 10. Security Boundaries
+# 12. Security Boundaries
 
 ## Public Access
 
-Visitors can:
+Visitors may:
 
 - Browse Portfolio
 - View Projects
@@ -434,113 +469,141 @@ Authentication is not required.
 
 ## Protected Access
 
-Administrators can:
+Administrators may:
 
 - Login
 - Access Dashboard
-- Manage Content
-- View Contact Messages
 - Manage Portfolio
 - Manage Blog
 - Manage Journey
-- Manage Settings
+- View Contact Messages
+- Update Settings
 
-Protected routes require successful authentication and authorization.
+Protected functionality requires:
+
+- JWT Authentication
+- RBAC Authorization
 
 ---
 
-# 11. Scalability Considerations
+# 13. Scalability Strategy
 
-The architecture is designed to support future enhancements without significant restructuring.
+The architecture supports future expansion without restructuring.
 
-Future capabilities include:
+Potential additions:
 
-- Content Management System (CMS)
-- Multi-Admin Support
+- CMS Integration
+- Newsletter
 - Analytics Dashboard
 - Visitor Insights
-- Newsletter
-- Blog Management
-- Portfolio Categories
+- Search
+- Media Library
+- Multi-Administrator Support
+- Public REST API
 - Mobile Application
-- REST APIs
-- Third-party Integrations
 
 ---
 
-# 12. Key Architectural Principles
+# 14. Caching Strategy
 
-The project follows these engineering principles:
+Version 1 intentionally relies on Next.js built-in caching.
 
-- Single Codebase Architecture
-- Separation of Concerns
-- Feature-Oriented Organization
-- Shared TypeScript Types
-- Shared Validation
-- Thin Route Handlers
-- Service Layer Pattern
-- Repository Pattern
-- Reusable Components
-- Configuration over Duplication
-- Security by Design
-- Performance by Default
+Preferred mechanisms:
+
+- `unstable_cache()`
+- `revalidateTag()`
+- `revalidatePath()`
+
+Business services depend only on a cache abstraction.
+
+A distributed cache (Redis) may be introduced later without changing business logic or repositories.
 
 ---
 
-# 13. Technology Stack
+# 15. Architectural Constraints
+
+The following rules are mandatory.
+
+- Route Handlers must not contain business logic.
+- Server Actions must remain thin coordinators.
+- Business logic belongs in feature services.
+- Feature services access data only through repositories.
+- Repositories are the only layer permitted to communicate with Prisma.
+- UI components must never import Prisma or repositories.
+- Shared infrastructure belongs inside `lib/`.
+- Features communicate through public interfaces rather than internal implementation details.
+- Validation schemas should be reusable across frontend and backend whenever practical.
+- Cross-feature dependencies should be minimized.
+
+Any violation of these constraints requires an Architecture Decision Record (ADR).
+
+---
+
+# 16. Technology Stack
 
 | Layer | Technology |
 |--------|------------|
-| Framework | Next.js (App Router) |
+| Framework | Next.js App Router |
 | Frontend | React |
 | Language | TypeScript |
 | Styling | Tailwind CSS |
+| UI Components | shadcn/ui |
+| Notifications | Sonner |
+| Forms | React Hook Form |
+| Validation | Zod |
 | ORM | Prisma |
 | Database | Supabase PostgreSQL |
 | Authentication | JWT |
 | Authorization | RBAC |
 | Deployment | Vercel |
-| Version Control | Git & GitHub |
 
 ---
 
-# 14. Architecture Decision Summary
+# 17. Architecture Decision Summary
 
 | Decision | Selected Option |
 |-----------|-----------------|
-| Repository Strategy | Monolithic Single Codebase |
-| Framework | Next.js App Router |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
+| Repository Strategy | Single Codebase |
+| Architecture Style | Layered + Feature-Oriented |
+| Domain Organization | Business Domains |
+| Business Logic | Feature Services |
+| Data Access | Feature Repositories |
 | Rendering | Hybrid (SSG + ISR + SSR) |
+| Validation | Zod |
 | ORM | Prisma |
 | Database | Supabase PostgreSQL |
 | Authentication | JWT |
 | Authorization | RBAC |
 | Deployment | Vercel |
-| Architecture Style | Layered + Feature-Oriented |
 
 ---
 
-# 15. Design Principles
+# 18. Engineering Principles
 
-The architecture is designed to satisfy the following engineering qualities:
+The architecture follows these engineering principles:
 
-- Maintainability
-- Scalability
-- Readability
-- Testability
-- Extensibility
-- Performance
-- Security
-- Reusability
-
-Every future implementation should align with these principles to ensure long-term project health and maintain production-quality standards.
+- Separation of Concerns
+- Single Responsibility Principle
+- High Cohesion
+- Low Coupling
+- Feature-Oriented Organization
+- Domain-Driven Thinking
+- Reusable Components
+- Shared Validation
+- Thin Route Handlers
+- Type Safety
+- Security by Design
+- Performance by Default
+- Configuration over Duplication
 
 ---
 
 # Document Status
 
-**Status:** Approved (Draft v1.0)
+**Status:** Approved (Architecture Baseline v1.0)
 
-This document serves as the architectural foundation for the project. All subsequent design artifacts—including frontend architecture, backend architecture, database design, API design, authentication strategy, and folder structure—must align with the decisions documented here.
+This document serves as the authoritative architectural foundation of the project.
+
+All implementation artifacts—including the application folder structure, feature organization, database schema, API routes, component hierarchy, deployment configuration, and future architectural decisions—**must be derived from and remain consistent with this approved v1.0 Architecture Baseline**.
+
+Future architectural changes that affect these decisions should be documented through a new Architecture Decision Record (ADR) before implementation.

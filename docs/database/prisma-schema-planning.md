@@ -342,25 +342,24 @@ Rules
 
 ---
 
-# Future Models
+# Core Models
+
+User
+Project
+Blog
+Journey
+Skill
+Technology
+Contact
+
+# Future Extension Models
 
 Newsletter
-
-Media
-
-Category
-
-Tag
-
 Analytics
-
-Visitor
-
 AuditLog
-
-Session
-
 Notification
+Media
+Session
 
 ---
 

@@ -215,6 +215,34 @@ Content
 
 ---
 
+# Mapping Domains to Features
+
+```text
+Portfolio
+↓
+
+features/portfolio
+
+Content
+↓
+
+features/blog
+features/journey
+
+Communication
+↓
+
+features/contact
+
+Administration
+↓
+
+features/dashboard
+features/auth
+```
+
+---
+
 # Domain Principles
 
 Each domain owns:
