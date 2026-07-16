@@ -190,25 +190,13 @@
 
 ---
 
-# Phase 1 Target
+# Implementation Scope
 
-The following components must be completed before Phase 1 is considered complete:
+This inventory tracks the implementation status of all reusable UI components.
 
-- Navbar
-- Footer
-- HeroSection
-- Section
-(Shared Component)
-- Button
-- Card
-- ProjectCard
-- SkillCard
-- ContactForm
-- SocialLinks
-- ScrollProgressBar
-- AboutSection
-- ProjectsSection
-- ContactSection
+The project implementation order, milestones, and checkpoints are maintained in:
+
+- docs/implementation-roadmap.md
 
 ---
 
