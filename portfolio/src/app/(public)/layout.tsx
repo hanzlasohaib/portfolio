@@ -1,7 +1,9 @@
-export default function PublicLayout({
+import { PublicLayout } from "@/components/public-layout";
+
+export default function PublicRouteLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return <PublicLayout>{children}</PublicLayout>;
 }
