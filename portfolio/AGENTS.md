@@ -10,6 +10,12 @@ docs/implementation-roadmap.md.
 
 Do not implement work from future phases unless explicitly instructed.
 
+Before marking a milestone complete, verify:
+
+- npm run lint
+- npm run typecheck
+- npm run build
+
 
 Configuration Rules
 

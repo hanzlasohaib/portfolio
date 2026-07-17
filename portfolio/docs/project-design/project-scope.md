@@ -59,7 +59,7 @@ Landing page sections may include About preview, Featured Projects, Skills previ
 - SEO
 - Sitemap
 - robots.txt
-- Dark/Light Theme
+- Dark/Light Theme (see Theme Strategy below)
 - Responsive Design
 - Prisma
 - Supabase (PostgreSQL hosting)
@@ -68,6 +68,19 @@ Landing page sections may include About preview, Featured Projects, Skills previ
 - Vercel Deployment
 - GitHub CI-ready Structure
 - Image fields as URL strings only (no file upload system)
+
+---
+
+## Theme Strategy
+
+| Decision | V1 Choice |
+|----------|-----------|
+| Default Theme | Dark |
+| Supported Themes | Dark, Light |
+| Theme Selection | User controlled |
+| Persistence | Remember the user's choice locally |
+| Initial Behavior | Use Dark unless a saved preference exists |
+| System Theme Detection | Not in V1 |
 
 ---
 
@@ -91,6 +104,7 @@ Landing page sections may include About preview, Featured Projects, Skills previ
 - Forgot Password / Password Reset
 - Separate Portfolio entity or `/portfolio` route
 - Separate Experience entity or `/experience` route
+- System theme detection (`prefers-color-scheme` / "follow system")
 
 ---
 
@@ -102,6 +116,7 @@ Reserved for later versions:
 - Skills dedicated page (`/skills`)
 - Services
 - Certifications
+- System theme detection
 - Resume page
 - Testimonials
 - Profile management (`/dashboard/profile`)

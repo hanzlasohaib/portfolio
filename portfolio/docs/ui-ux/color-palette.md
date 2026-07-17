@@ -25,9 +25,11 @@ Design goals:
 - Technology-focused
 - Not gaming/neon
 
+Theme strategy (default Dark, optional Light, user-controlled, no system detection in V1) is defined in `docs/project-design/project-scope.md`. The tokens below describe the **default Dark** palette. Light-theme tokens are defined when the Theme System milestone is implemented.
+
 ---
 
-# Primary Palette
+# Primary Palette (Dark — Default)
 
 ## Background
 

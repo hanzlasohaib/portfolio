@@ -156,8 +156,23 @@ v1.5-production-ready
 - [ ] Accessibility basics verified.
 
   Commands:
-   - npm run dev
    - npm run lint
+   - npm run typecheck
+   - npm run build
+
+### Verification Workflow
+
+Every milestone must pass the full verification pipeline:
+
+```text
+npm run lint
+npm run typecheck
+npm run build
+```
+
+If any command fails, fix the issue and re-run the complete pipeline. Do not commit failing code.
+
+Only after all verification commands succeed may the implementation proceed to Review and Commit.
 
 ---
 
@@ -172,8 +187,23 @@ v1.5-production-ready
 - [ ] Metadata configured.
 
   Commands:
-   - npm run dev
    - npm run lint
+   - npm run typecheck
+   - npm run build
+
+### Verification Workflow
+
+Every milestone must pass the full verification pipeline:
+
+```text
+npm run lint
+npm run typecheck
+npm run build
+```
+
+If any command fails, fix the issue and re-run the complete pipeline. Do not commit failing code.
+
+Only after all verification commands succeed may the implementation proceed to Review and Commit.
 
 ---
 
@@ -188,11 +218,28 @@ v1.5-production-ready
 - [ ] CRUD operations tested.
 
   Commands:
-   - npm run dev
    - npm run lint
+   - npm run typecheck
+   - npm run build
    - npx prisma validate
    - npx prisma generate
    - npx prisma migrate dev
+
+### Verification Workflow
+
+Every milestone must pass the full verification pipeline:
+
+```text
+npm run lint
+npm run typecheck
+npm run build
+```
+
+If any command fails, fix the issue and re-run the complete pipeline. Do not commit failing code.
+
+Only after all verification commands succeed may the implementation proceed to Review and Commit.
+
+Phase 3 also requires the Prisma commands listed above before proceeding.
 
 ---
 
@@ -206,8 +253,23 @@ v1.5-production-ready
 - [ ] Forms validated.
 
   Commands:
-   - npm run dev
    - npm run lint
+   - npm run typecheck
+   - npm run build
+
+### Verification Workflow
+
+Every milestone must pass the full verification pipeline:
+
+```text
+npm run lint
+npm run typecheck
+npm run build
+```
+
+If any command fails, fix the issue and re-run the complete pipeline. Do not commit failing code.
+
+Only after all verification commands succeed may the implementation proceed to Review and Commit.
 
 ---
 
@@ -222,8 +284,41 @@ v1.5-production-ready
 - [ ] Security checklist completed.
 
   Commands:
-   - npm run dev
    - npm run lint
+   - npm run typecheck
+   - npm run build
+
+### Verification Workflow
+
+Every milestone must pass the full verification pipeline:
+
+```text
+npm run lint
+npm run typecheck
+npm run build
+```
+
+If any command fails, fix the issue and re-run the complete pipeline. Do not commit failing code.
+
+Only after all verification commands succeed may the implementation proceed to Review and Commit.
+
+---
+
+## Milestone Completion Checklist
+
+Use this checklist before completing any implementation milestone
+(Global Styling, Layout System, Navigation, Theme System, etc.).
+
+- [ ] Scope matches the current roadmap milestone.
+- [ ] Relevant documentation reviewed.
+- [ ] Implementation completed.
+- [ ] `npm run lint` passes.
+- [ ] `npm run typecheck` passes.
+- [ ] `npm run build` passes.
+- [ ] Manual browser verification completed.
+- [ ] No unrelated files were modified.
+- [ ] Conventional Commit created.
+- [ ] Changes pushed to remote repository.
 
 ---
 
@@ -231,12 +326,15 @@ v1.5-production-ready
 
 A phase is considered complete only when:
 
-- All planned deliverables are implemented.
-- Verification checklist is fully completed.
+- Planned deliverables are implemented.
+- `npm run lint` passes.
+- `npm run typecheck` passes.
+- `npm run build` passes.
+- Manual browser verification is completed.
 - Documentation is updated.
 - Changes are committed and pushed.
-- A phase review has been performed.
-- An annotated Git tag has been created.
+- Phase Review is completed.
+- An annotated Git tag is created (major phase completion only).
 
 ---
 

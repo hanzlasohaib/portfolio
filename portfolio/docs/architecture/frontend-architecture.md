@@ -248,15 +248,20 @@ Every page must work across all supported breakpoints.
 
 # 12. Theme Architecture
 
+Authoritative V1 decisions: `docs/project-design/project-scope.md` (Theme Strategy).
+
 The application supports:
 
+- Dark Theme (default)
 - Light Theme
-- Dark Theme
-- System Theme
+
+Theme selection is user controlled. The user's choice is persisted locally. Dark is used unless a saved preference exists.
+
+System theme detection is **not** in V1.
 
 Requirements:
 
-- Theme persistence
+- Theme persistence (local)
 - Smooth transitions
 - Accessible color contrast
 
