@@ -35,14 +35,17 @@ Implemented:
 - `Text`
 - `Label`
 - `Divider`
+- `Button`
+- `IconButton`
+- `Badge`
+- `Link`
+- `ExternalLink`
 
 Planned:
 
-- `Button`
 - `Card`
 - `Input`
 - `Textarea`
-- `Badge`
 - `Avatar`
 - `Spinner`
 
