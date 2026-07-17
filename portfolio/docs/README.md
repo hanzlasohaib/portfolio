@@ -49,6 +49,7 @@ If two documents conflict: never merge; follow the higher-priority document; rep
 | Routing details | `docs/architecture/routing-strategy.md` |
 | Prisma models | `docs/database/prisma-schema-planning.md` |
 | Folder structure | `docs/architecture/folder-structure.md` |
+| Reusable component template | `docs/architecture/component-template.md` |
 | Feature-local logic | `docs/adr/ADR-008-feature-local-business-logic.md` |
 | Dependencies | `docs/architecture/dependency-graph.md` |
 | Environment variables | `docs/architecture/backend-architecture.md` § Environment Configuration |

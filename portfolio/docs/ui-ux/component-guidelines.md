@@ -4,7 +4,7 @@
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -285,19 +285,26 @@ All components must follow those conventions.
 
 # Folder Convention
 
-Each reusable component:
+Authoritative structure: `docs/architecture/component-template.md`.
 
+Each reusable component uses one kebab-case folder:
+
+```text
 components/
+└── button/
+    ├── button.tsx
+    ├── button.types.ts
+    ├── index.ts
+    ├── button.test.tsx      # optional — when testing is introduced
+    └── button.stories.tsx   # optional — if Storybook is adopted
+```
 
-Button/
+React component names remain **PascalCase**:
 
-Button.tsx
-
-Button.test.tsx
-
-Button.types.ts
-
-index.ts
+```ts
+// button/button.tsx
+export function Button() {}
+```
 
 ---
 

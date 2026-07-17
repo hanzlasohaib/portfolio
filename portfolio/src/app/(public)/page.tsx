@@ -1,6 +1,4 @@
-import { Container } from "@/components/container";
-import { PageWrapper } from "@/components/page-wrapper";
-import { Section } from "@/components/section";
+import { Container, PageWrapper, Section } from "@/components";
 
 /**
  * Temporary scaffold content. Public page content belongs to Phase 2.

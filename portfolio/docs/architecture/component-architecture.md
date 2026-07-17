@@ -4,7 +4,7 @@
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -200,13 +200,32 @@ All components must follow those conventions.
 
 # File Naming
 
-Component
+Authoritative rules: `docs/database/naming-conventions.md` and
+`docs/architecture/component-template.md`.
 
-Button.tsx
+Folders and filenames use **kebab-case**. React component names use **PascalCase**.
 
-Navbar.tsx
+```text
+components/
+└── button/
+    ├── button.tsx
+    ├── button.types.ts
+    └── index.ts
+```
 
-HeroSection.tsx
+```ts
+// button/button.tsx
+export function Button() {}
+```
+
+Examples:
+
+```text
+button/button.tsx
+navbar/navbar.tsx
+hero-section/hero-section.tsx
+project-card/project-card.tsx
+```
 
 Hook
 
