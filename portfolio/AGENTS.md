@@ -11,6 +11,19 @@ docs/implementation-roadmap.md.
 Do not implement work from future phases unless explicitly instructed.
 
 
+Configuration Rules
+
+Never hardcode credentials, secrets, API keys, tokens, database URLs, or other sensitive configuration in source code.
+
+All configuration values must be loaded from environment variables.
+
+If a required environment variable is missing, report it instead of inventing or hardcoding a value.
+
+The canonical list of environment variables is defined in:
+- `.env.example`
+- `docs/architecture/backend-architecture.md`
+
+
 Priority of Truth
 
 1. AGENTS.md

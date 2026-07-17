@@ -1,0 +1,172 @@
+/*
+ * Design Tokens
+ * Source of truth: docs/ui-ux/color-palette.md, design-system.md, typography.md, animations.md
+ *
+ * Color palette documents the dark aesthetic only.
+ * Light-theme values and theme switching belong to the Theme System milestone.
+ */
+
+:root {
+  /* -------------------------------------------------------------------------- */
+  /* Colors — Background                                                      */
+  /* -------------------------------------------------------------------------- */
+  --background: #040414;
+  --background-secondary: #0a0e19;
+  --surface: #0d1526;
+  --surface-hover: #121c30;
+
+  /* -------------------------------------------------------------------------- */
+  /* Colors — Text                                                            */
+  /* -------------------------------------------------------------------------- */
+  --text-primary: #e6eaf2;
+  --text-secondary: #9ca4b3;
+  --text-disabled: #6b7280;
+  --text-inverse: #040414;
+
+  /* -------------------------------------------------------------------------- */
+  /* Colors — Brand                                                           */
+  /* -------------------------------------------------------------------------- */
+  --primary: #3f8cff;
+  --primary-light: #6ac5ff;
+  --secondary: #22d3ee;
+
+  /* -------------------------------------------------------------------------- */
+  /* Colors — Semantic                                                        */
+  /* -------------------------------------------------------------------------- */
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #0ea5e9;
+
+  /* -------------------------------------------------------------------------- */
+  /* Colors — Borders                                                         */
+  /* -------------------------------------------------------------------------- */
+  --border: rgba(63, 140, 255, 0.2);
+  --border-strong: rgba(63, 140, 255, 0.4);
+
+  /* -------------------------------------------------------------------------- */
+  /* Colors — Glow                                                            */
+  /* -------------------------------------------------------------------------- */
+  --glow-primary: rgba(63, 140, 255, 0.2);
+  --glow-secondary: rgba(106, 197, 255, 0.2);
+
+  /* -------------------------------------------------------------------------- */
+  /* Gradients                                                                */
+  /* -------------------------------------------------------------------------- */
+  --gradient-primary: linear-gradient(90deg, #3f8cff, #6ac5ff);
+  --gradient-hero: linear-gradient(160deg, #040414, #0d1526);
+
+  /* -------------------------------------------------------------------------- */
+  /* Shadows (rgba values from color-palette; elevation recipes from design-system) */
+  /* Prefixed to avoid colliding with Tailwind --shadow-* theme keys            */
+  /* -------------------------------------------------------------------------- */
+  --elevation-soft: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --elevation-medium: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --elevation-large: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --elevation-glow-primary: 0 0 24px rgba(63, 140, 255, 0.2);
+  --elevation-glow-secondary: 0 0 24px rgba(106, 197, 255, 0.2);
+
+  /* -------------------------------------------------------------------------- */
+  /* Spacing — 8-point grid (design-system.md)                                */
+  /* -------------------------------------------------------------------------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* Layout */
+  --max-width: 1280px;
+  --content-width: 1200px;
+  --container-padding-mobile: 16px;
+  --container-padding-tablet: 24px;
+  --container-padding-desktop: 32px;
+  --section-padding-mobile: 64px;
+  --section-padding-desktop: 96px;
+  --nav-height: 72px;
+  --input-height: 48px;
+  --touch-target: 44px;
+
+  /* -------------------------------------------------------------------------- */
+  /* Border Radius (prefixed to avoid colliding with Tailwind --radius-* keys) */
+  /* -------------------------------------------------------------------------- */
+  --radius-token-sm: 8px;
+  --radius-token-md: 12px;
+  --radius-token-lg: 16px;
+  --radius-token-xl: 24px;
+  --radius-token-pill: 999px;
+
+  /* Borders */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+
+  /* -------------------------------------------------------------------------- */
+  /* Typography                                                               */
+  /* Font CSS vars (--font-orbitron etc.) are set by next/font on <html>.     */
+  /* -------------------------------------------------------------------------- */
+  --font-family-display: var(--font-orbitron), ui-sans-serif, system-ui, sans-serif;
+  --font-family-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-family-mono: var(--font-fira-code), ui-monospace, "Cascadia Code", monospace;
+
+  --size-hero: 64px;
+  --size-h1: 48px;
+  --size-h2: 36px;
+  --size-h3: 30px;
+  --size-h4: 24px;
+  --size-h5: 20px;
+  --size-h6: 18px;
+  --size-body-lg: 18px;
+  --size-body: 16px;
+  --size-small: 14px;
+  --size-caption: 12px;
+
+  --leading-heading: 1.2;
+  --leading-body: 1.6;
+  --leading-caption: 1.4;
+
+  --tracking-hero: 0.04em;
+  --tracking-heading: 0.02em;
+  --tracking-body: normal;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* -------------------------------------------------------------------------- */
+  /* Motion                                                                   */
+  /* -------------------------------------------------------------------------- */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --duration-page: 500ms;
+
+  --easing-default: ease-out;
+  --easing-entrance: ease-out;
+  --easing-exit: ease-in;
+
+  /* -------------------------------------------------------------------------- */
+  /* Elevation                                                                */
+  /* -------------------------------------------------------------------------- */
+  --z-background: 0;
+  --z-card: 1;
+  --z-dropdown: 2;
+  --z-modal: 3;
+  --z-nav: 10;
+
+  /* -------------------------------------------------------------------------- */
+  /* Accessibility                                                            */
+  /* -------------------------------------------------------------------------- */
+  --focus-ring-color: var(--primary);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --selection-bg: rgba(63, 140, 255, 0.35);
+  --selection-color: var(--text-primary);
+}

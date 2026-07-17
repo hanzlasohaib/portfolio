@@ -1,0 +1,433 @@
+/*
+ * Global Styles
+ *
+ * Sections:
+ * 1. Imports
+ * 2. Tailwind theme bridge (@theme)
+ * 3. Reset / base
+ * 4. Typography
+ * 5. Accessibility
+ * 6. Layout utilities
+ * 7. Surface utilities
+ * 8. Text utilities
+ * 9. Motion utilities
+ */
+
+/* -------------------------------------------------------------------------- */
+/* 1. Imports                                                                 */
+/* -------------------------------------------------------------------------- */
+@import "tailwindcss";
+@import "./variables.css";
+@import "./animations.css";
+
+/* -------------------------------------------------------------------------- */
+/* 2. Tailwind theme bridge                                                   */
+/* Maps CSS variables → Tailwind utilities (bg-*, text-*, rounded-*, etc.)    */
+/* -------------------------------------------------------------------------- */
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-family-body);
+  --font-display: var(--font-family-display);
+  --font-mono: var(--font-family-mono);
+
+  /* Colors — semantic */
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+
+  --color-foreground: var(--text-primary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-inverse: var(--text-inverse);
+
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-glow-primary: var(--glow-primary);
+  --color-glow-secondary: var(--glow-secondary);
+
+  /* Radius */
+  --radius-sm: var(--radius-token-sm);
+  --radius-md: var(--radius-token-md);
+  --radius-lg: var(--radius-token-lg);
+  --radius-xl: var(--radius-token-xl);
+  --radius-pill: var(--radius-token-pill);
+
+  /* Shadows */
+  --shadow-soft: var(--elevation-soft);
+  --shadow-medium: var(--elevation-medium);
+  --shadow-large: var(--elevation-large);
+  --shadow-glow-primary: var(--elevation-glow-primary);
+  --shadow-glow-secondary: var(--elevation-glow-secondary);
+
+  /* Spacing scale (8-point grid) */
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+  --spacing-20: var(--space-20);
+  --spacing-24: var(--space-24);
+
+  /* Typography sizes */
+  --text-hero: var(--size-hero);
+  --text-hero--line-height: var(--leading-heading);
+  --text-h1: var(--size-h1);
+  --text-h1--line-height: var(--leading-heading);
+  --text-h2: var(--size-h2);
+  --text-h2--line-height: var(--leading-heading);
+  --text-h3: var(--size-h3);
+  --text-h3--line-height: var(--leading-heading);
+  --text-h4: var(--size-h4);
+  --text-h4--line-height: var(--leading-heading);
+  --text-h5: var(--size-h5);
+  --text-h5--line-height: var(--leading-heading);
+  --text-h6: var(--size-h6);
+  --text-h6--line-height: var(--leading-heading);
+  --text-body-lg: var(--size-body-lg);
+  --text-body-lg--line-height: var(--leading-body);
+  --text-body: var(--size-body);
+  --text-body--line-height: var(--leading-body);
+  --text-small: var(--size-small);
+  --text-small--line-height: var(--leading-body);
+  --text-caption: var(--size-caption);
+  --text-caption--line-height: var(--leading-caption);
+
+  /* Motion */
+  --ease-default: var(--easing-default);
+  --ease-entrance: var(--easing-entrance);
+  --ease-exit: var(--easing-exit);
+  --animate-fade-in: fade-in var(--duration-normal) var(--easing-entrance) both;
+  --animate-fade-up: fade-up var(--duration-normal) var(--easing-entrance) both;
+  --animate-fade-down: fade-down var(--duration-normal) var(--easing-entrance) both;
+  --animate-scale-in: scale-in var(--duration-normal) var(--easing-entrance) both;
+  --animate-blob: blob-float 18s var(--easing-default) infinite;
+
+  /* Max widths */
+  --container-app: var(--max-width);
+  --container-content: var(--content-width);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. Reset / base                                                            */
+/* -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-family-body);
+  font-size: var(--size-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: var(--primary);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition:
+    color var(--duration-fast) var(--easing-default),
+    text-decoration-color var(--duration-fast) var(--easing-default);
+}
+
+a:hover {
+  color: var(--primary-light);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. Typography                                                              */
+/* -------------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(36px, 5vw, var(--size-h1));
+  font-weight: var(--font-weight-bold);
+}
+
+h2 {
+  font-size: clamp(30px, 4vw, var(--size-h2));
+  font-weight: var(--font-weight-bold);
+}
+
+h3 {
+  font-size: clamp(24px, 3vw, var(--size-h3));
+  font-weight: var(--font-weight-semibold);
+}
+
+h4 {
+  font-size: var(--size-h4);
+  font-weight: var(--font-weight-semibold);
+}
+
+h5 {
+  font-size: var(--size-h5);
+  font-weight: var(--font-weight-semibold);
+}
+
+h6 {
+  font-size: var(--size-h6);
+  font-weight: var(--font-weight-semibold);
+}
+
+p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-family-mono);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. Accessibility                                                           */
+/* -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-color);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.touch-target {
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. Layout utilities (design-system.md)                                     */
+/* -------------------------------------------------------------------------- */
+.container-app {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--container-padding-mobile);
+}
+
+.container-content {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: var(--container-padding-mobile);
+}
+
+@media (min-width: 768px) {
+  .container-app,
+  .container-content {
+    padding-inline: var(--container-padding-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-app,
+  .container-content {
+    padding-inline: var(--container-padding-desktop);
+  }
+}
+
+.section {
+  padding-block: var(--section-padding-mobile);
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-block: var(--section-padding-desktop);
+  }
+}
+
+.section-alt {
+  background: var(--background-secondary);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. Surface utilities                                                       */
+/* -------------------------------------------------------------------------- */
+.surface-card {
+  background: var(--surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-token-lg);
+  padding: var(--space-6);
+  box-shadow: var(--elevation-soft);
+  transition:
+    transform var(--duration-normal) var(--easing-default),
+    background-color var(--duration-normal) var(--easing-default),
+    box-shadow var(--duration-normal) var(--easing-default);
+}
+
+.surface-card:hover {
+  background: var(--surface-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--elevation-soft), var(--elevation-glow-primary);
+}
+
+.gradient-primary {
+  background-image: var(--gradient-primary);
+}
+
+.gradient-hero {
+  background-image: var(--gradient-hero);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 8. Text utilities                                                          */
+/* -------------------------------------------------------------------------- */
+.text-display {
+  font-family: var(--font-family-display);
+  letter-spacing: var(--tracking-heading);
+}
+
+.text-hero {
+  font-family: var(--font-family-display);
+  font-size: clamp(36px, 8vw, var(--size-hero));
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-hero);
+  color: var(--text-primary);
+}
+
+.text-body {
+  font-family: var(--font-family-body);
+  font-size: var(--size-body);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.text-body-lg {
+  font-family: var(--font-family-body);
+  font-size: var(--size-body-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.text-small {
+  font-size: var(--size-small);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.text-caption {
+  font-size: var(--size-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-disabled);
+}
+
+.text-mono {
+  font-family: var(--font-family-mono);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 9. Motion utilities                                                        */
+/* -------------------------------------------------------------------------- */
+.transition-fast {
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--easing-default);
+}
+
+.transition-normal {
+  transition-duration: var(--duration-normal);
+  transition-timing-function: var(--easing-default);
+}
+
+.transition-slow {
+  transition-duration: var(--duration-slow);
+  transition-timing-function: var(--easing-default);
+}
+
+.hover-lift {
+  transition:
+    transform var(--duration-normal) var(--easing-default),
+    box-shadow var(--duration-normal) var(--easing-default);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--elevation-medium);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
