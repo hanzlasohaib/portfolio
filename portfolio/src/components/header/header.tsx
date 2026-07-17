@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import type { HeaderProps } from "./header.types";
 
 /**
- * Semantic header shell. Navigation mounts here in a later milestone.
+ * Semantic header shell for site and dashboard layouts.
  */
 export function Header({ className, children, ...props }: HeaderProps) {
   return (

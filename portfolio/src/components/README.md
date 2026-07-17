@@ -26,8 +26,8 @@ These define structure, spacing, and semantic landmarks. They must not contain b
 
 ## Base UI Components
 
-Reusable UI primitives. Typography primitives are available now; remaining
-controls arrive in later Base Components work.
+Reusable UI primitives including typography, controls, loading states,
+cards, and navigation.
 
 Implemented:
 
@@ -40,14 +40,28 @@ Implemented:
 - `Badge`
 - `Link`
 - `ExternalLink`
+- `Input`
+- `Textarea`
+- `Select`
+- `Checkbox`
+- `Radio`
+- `Spinner`
+- `Skeleton`
+- `Card`
+- `Navbar`
+- `NavbarBrand`
+- `NavLinks`
+- `NavLink`
+- `NavItem`
+- `MobileMenu`
+- `MobileNav`
+- `DashboardSidebar`
+- `DashboardNav`
+- `Breadcrumb`
 
 Planned:
 
-- `Card`
-- `Input`
-- `Textarea`
 - `Avatar`
-- `Spinner`
 
 Keep these generic and reusable across features.
 
