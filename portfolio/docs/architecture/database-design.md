@@ -1,10 +1,10 @@
 # Database Design
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
-> Status: Draft
+> Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -14,7 +14,12 @@
 
 # Purpose
 
-This document defines the logical database architecture, entities, relationships, constraints, indexing strategy, and naming conventions for the Portfolio application.
+This document defines the logical database architecture for the Portfolio website.
+
+**Authoritative model definitions (types, nullability, indexes, `@@map`):**  
+`docs/database/prisma-schema-planning.md`
+
+There is no Portfolio entity and no Experience entity. Use `Project` and `Journey`.
 
 The database is designed for:
 
@@ -264,4 +269,6 @@ All components must follow those conventions.
 
 # Document Status
 
-Approved (Draft v1.0)
+**Status:** Approved
+
+Detailed Prisma models live in `docs/database/prisma-schema-planning.md`.

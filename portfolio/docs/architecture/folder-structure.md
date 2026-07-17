@@ -1,41 +1,28 @@
 # Folder Structure
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
 > Category: Architecture
->
-> **Architecture Baseline:** Frozen (v1.0)
 
 ---
 
 # Architecture Baseline
 
-This folder structure is **derived from the approved v1.0 Architecture Baseline** documented under the `docs/` directory.
+This folder structure is the authoritative reference for the application's directory layout.
 
-The architecture defines the implementation—not the other way around.
+Any structural change affecting architectural boundaries **must first be reflected in this documentation** and, where applicable, recorded through a new Architecture Decision Record (ADR).
 
-All implementation decisions must conform to the approved architecture, including:
+Aligned with:
 
-- Functional Requirements
-- Non-Functional Requirements
-- System Architecture
-- Frontend Architecture
-- Backend Architecture
-- Domain Model
-- Dependency Graph
-- Component Architecture
-- Routing Strategy
-- Authentication & Authorization
-- Database Design
-- Security Architecture
-
-Any structural change affecting architectural boundaries **must first be reflected in the appropriate documentation** and, where applicable, recorded through a new **Architecture Decision Record (ADR)** before implementation.
+- `docs/adr/ADR-008-feature-local-business-logic.md`
+- `docs/architecture/dependency-graph.md`
+- `docs/architecture/routing-strategy.md`
 
 ---
 
@@ -63,10 +50,10 @@ The project follows a **Feature-Oriented Modular Architecture**.
 portfolio/
 │
 ├── docs/                 # Architecture & project documentation
-├── prisma/               # Prisma schema and migrations
+├── prisma/               # Prisma schema and migrations (Phase 3+)
 ├── public/               # Static assets
 ├── src/                  # Application source code
-├── middleware.ts         # Global Next.js middleware
+├── middleware.ts         # Global Next.js middleware (Phase 4+)
 ├── next.config.ts
 ├── package.json
 ├── tsconfig.json
@@ -81,60 +68,57 @@ portfolio/
 ```text
 src/
 │
-├── app/                  # Next.js App Router
-│
-├── features/             # Business domains/features
+├── app/                  # Next.js App Router (routing only)
 │
 ├── components/           # Shared reusable UI
 │
-├── lib/                  # Shared infrastructure
+├── constants/            # Shared constants
 │
-├── validation/           # Shared validation schemas
-│
-├── constants/            # Single Source of Truth
-│
-├── config/               # Typed configuration
+├── features/             # Business domains / features
 │
 ├── hooks/                # Shared React hooks
 │
-├── providers/            # React providers
+├── lib/                  # Shared infrastructure
 │
-├── types/                # Shared TypeScript types
+├── providers/            # React providers
 │
 ├── styles/               # Global styling
 │
-└── middleware/           # Custom middleware utilities
+├── types/                # Shared TypeScript types
+│
+└── config/               # Typed configuration
 ```
+
+**Do not** introduce top-level `core/`, `shared/`, global `services/`, or global `repositories/` directories.
+
+Shared validation helpers that span multiple features may live under `lib/validators/` or feature-local `schemas/`. Feature-specific Zod schemas belong inside the feature.
 
 ---
 
 # Architectural Philosophy
 
-The project adopts a **Feature-First Architecture**.
-
 Each business feature owns its:
 
 - Components
-- Business Logic
-- Validation
+- Business Logic (`service.ts`)
+- Data Access (`repository.ts`)
+- Validation (`schemas/`)
 - Types
-- Repository
-- Service
+- Hooks
+- Constants
 - Utilities
 
-Business logic should remain **close to the feature it belongs to**.
+Business logic must remain **close to the feature it belongs to**.
 
 Cross-feature infrastructure remains inside **lib/**.
 
-This approach minimizes coupling while maximizing cohesion.
+`app/` contains **only** routing concerns. Business logic never belongs inside `app/`.
 
 ---
 
 # app/
 
-The `app/` directory contains only Next.js routing concerns.
-
-Examples:
+The `app/` directory contains only Next.js routing concerns:
 
 - Layouts
 - Pages
@@ -142,13 +126,49 @@ Examples:
 - Metadata
 - Loading UI
 - Error UI
-- Server Components
 
 The App Router **must remain thin**.
 
-Business logic must never live inside route handlers or page components.
+Route handlers and pages delegate work to feature services.
 
-Instead, route handlers delegate work to feature services.
+## Route Groups (Intentional)
+
+Route groups organize layouts and **must not** affect URLs.
+
+```text
+src/app/
+│
+├── layout.tsx                 # Root layout
+├── globals.css
+│
+├── (public)/                  # Public pages
+│   ├── layout.tsx
+│   ├── page.tsx               # /
+│   ├── about/page.tsx
+│   ├── projects/
+│   │   ├── page.tsx
+│   │   └── [slug]/page.tsx
+│   ├── journey/page.tsx
+│   └── contact/page.tsx
+│
+├── (auth)/                    # Auth pages (public)
+│   ├── layout.tsx
+│   └── login/page.tsx         # /login
+│
+├── (dashboard)/               # Protected admin
+│   ├── layout.tsx
+│   ├── page.tsx               # /dashboard
+│   ├── projects/page.tsx
+│   ├── journey/page.tsx
+│   ├── messages/page.tsx
+│   └── settings/page.tsx
+│
+└── api/                       # Route Handlers (Phase 3+)
+    ├── contact/route.ts
+    └── auth/login/route.ts
+```
+
+Do **not** remove these route groups. They are required for layout separation.
 
 ---
 
@@ -156,12 +176,23 @@ Instead, route handlers delegate work to feature services.
 
 Each business domain owns its implementation.
 
-Example:
+V1 feature modules:
 
 ```text
 features/
+├── home/
+├── about/
+├── projects/
+├── journey/
+├── contact/
+├── authentication/
+└── dashboard/
+```
 
-contact/
+## Feature Internal Shape
+
+```text
+features/projects/
 │
 ├── components/
 ├── schemas/
@@ -169,28 +200,16 @@ contact/
 ├── repository.ts
 ├── types.ts
 ├── utils.ts
+├── hooks/
+├── constants/
 └── index.ts
-
-blog/
-│
-├── components/
-├── schemas/
-├── service.ts
-├── repository.ts
-├── types.ts
-└── ...
-
-portfolio/
-projects/
-journey/
-authentication/
-dashboard/
-newsletter/
 ```
 
-Each feature is independently maintainable.
+Use flat `service.ts` and `repository.ts` (not global or nested `services/` / `repositories/` directories at `src/` root).
 
-Features communicate through well-defined interfaces rather than directly accessing each other's internals.
+Feature-local `repository.ts` **may** import Prisma Client. Feature UI components and hooks **must not** import Prisma Client.
+
+Future features (not V1): `blog`, `newsletter`, etc.
 
 ---
 
@@ -198,7 +217,7 @@ Features communicate through well-defined interfaces rather than directly access
 
 Contains only reusable UI components.
 
-Examples
+Examples:
 
 ```text
 Button
@@ -214,6 +233,7 @@ Footer
 ThemeToggle
 Section
 Container
+JourneyTimeline
 ```
 
 Components must remain presentation-focused.
@@ -226,31 +246,18 @@ Business logic belongs inside features.
 
 Contains shared infrastructure used across multiple features.
 
-Example
-
 ```text
 lib/
-
-auth/
-cache/
-email/
-logger/
-prisma/
-request-id/
-seo/
-utils/
-validators/
+├── auth/
+├── cache/
+├── email/
+├── logger/
+├── prisma/
+├── request-id/
+├── seo/
+├── utils/
+└── validators/
 ```
-
-Examples include
-
-- Prisma Client
-- JWT utilities
-- Logger
-- Request Correlation IDs
-- Cache Provider
-- Email utilities
-- Date helpers
 
 No feature-specific business logic belongs here.
 
@@ -260,55 +267,13 @@ No feature-specific business logic belongs here.
 
 Global `services/` and `repositories/` directories are intentionally **avoided**.
 
-Business services should remain **feature-local** whenever practical.
+Business services and repositories remain **feature-local**.
 
-Examples:
-
-```text
-features/contact/service.ts
-
-features/blog/service.ts
-
-features/authentication/service.ts
-```
-
-Global abstractions should only exist when they genuinely span multiple features.
-
-Examples:
-
-- Email Service
-- Cache Provider
-- Logger
-- Search Service
-- SEO Service
-
-This follows the architecture defined in **ADR-008 Feature Local Business Logic**.
-
----
-
-# validation/
-
-Contains reusable validation shared between multiple features.
-
-Examples
-
-```text
-email.ts
-
-pagination.ts
-
-common.ts
-```
-
-Feature-specific validation belongs inside the respective feature.
+This follows **ADR-008 Feature Local Business Logic**.
 
 ---
 
 # constants/
-
-Single Source of Truth.
-
-Examples
 
 ```text
 personal.ts
@@ -319,24 +284,11 @@ routes.ts
 site.ts
 ```
 
-Personal information such as:
-
-- Full Name
-- Email
-- Resume
-- LinkedIn
-- GitHub
-- Portfolio URL
-
-must exist only once.
+Personal information (name, email, resume, LinkedIn, GitHub, site URL) must exist only once.
 
 ---
 
 # config/
-
-Contains typed configuration.
-
-Examples
 
 ```text
 env.ts
@@ -345,57 +297,36 @@ theme.ts
 metadata.ts
 ```
 
-Configuration should never be scattered across the application.
-
 ---
 
 # providers/
 
-Contains React Providers.
-
-Examples
-
 ```text
 ThemeProvider
 ToastProvider
-QueryProvider
-SessionProvider
 ```
 
-Providers should remain lightweight.
+Providers should remain lightweight. Do not add `SessionProvider` unless a library requiring it is adopted.
 
 ---
 
 # hooks/
 
-Contains reusable custom React Hooks.
+Shared hooks only (for example `useTheme`, `useMediaQuery`, `useDebounce`).
 
-Examples
-
-```text
-useTheme()
-useMediaQuery()
-useDebounce()
-useScrollSpy()
-```
-
-Feature-specific hooks belong inside their respective feature.
+Feature-specific hooks belong inside their feature.
 
 ---
 
 # types/
 
-Contains shared application-wide TypeScript types.
+Shared application-wide TypeScript types.
 
 Feature-specific types remain inside each feature.
 
 ---
 
 # styles/
-
-Contains global styling resources.
-
-Examples
 
 ```text
 globals.css
@@ -409,17 +340,12 @@ variables.css
 
 ```text
 public/
-
-images/
-icons/
-fonts/
-resume/
-favicons/
+├── images/
+├── icons/
+├── fonts/
+├── resume/
+└── favicons/
 ```
-
-Static assets only.
-
-No generated files should be committed here.
 
 ---
 
@@ -428,92 +354,68 @@ No generated files should be committed here.
 Allowed dependency flow:
 
 ```text
-app
-        ↓
-features
-        ↓
-lib
-        ↓
-Prisma
-        ↓
-Supabase PostgreSQL
+app/
+  → features/* (pages/layouts call feature modules)
+  → components/
+  → providers/
+  → constants/
+  → config/
+  → types/
+  → lib/
+
+features/*/service.ts
+  → features/*/repository.ts
+  → features/*/schemas/
+  → lib/
+  → config/
+  → types/
+  → constants/
+
+features/*/repository.ts
+  → lib/prisma
+  → types/
+
+components/
+  → hooks/
+  → constants/
+  → types/
 ```
 
 Forbidden:
 
-- Features importing UI from other features
-- Repositories importing UI
-- Route Handlers containing business logic
-- Components directly accessing the database
+- Features importing UI internals from other features
+- Components importing Prisma or repositories
+- Route handlers / pages containing business logic
+- Global `src/services/` or `src/repositories/`
 - Circular dependencies
+- `core/` or `shared/` top-level directories
 
----
-
-# Folder Design Principles
-
-The folder structure follows these principles:
-
-- Feature First
-- Business Logic Colocation
-- Shared Infrastructure
-- Thin Route Handlers
-- Separation of Concerns
-- Single Responsibility Principle
-- Dependency Inversion
-- Repository Pattern
-- Service Layer
-- Shared Validation
-- Predictable Organization
-- Clear Ownership
+See `docs/architecture/dependency-graph.md`.
 
 ---
 
 # Future Growth
 
-The architecture is intentionally designed to support future expansion without restructuring.
+Planned without restructuring:
 
-Planned future capabilities include:
-
-- Blog Management
-- Journey Timeline
+- Blog feature module
 - Newsletter
-- Contact Dashboard
 - Analytics
-- Admin Panel
-- Search
-- Media Library
-- CMS Integration
-- Redis-backed Distributed Cache
-- Background Jobs
-- Multi-role Authorization
+- Media library
+- Redis-backed cache
+- Multi-role authorization
 
 ---
 
 # Related Documents
 
-- `docs/architecture/system-architecture.md`
-- `docs/architecture/frontend-architecture.md`
-- `docs/architecture/backend-architecture.md`
-- `docs/architecture/domain-model.md`
+- `docs/adr/ADR-008-feature-local-business-logic.md`
 - `docs/architecture/dependency-graph.md`
 - `docs/architecture/routing-strategy.md`
-- `docs/architecture/component-architecture.md`
-- `docs/architecture/state-management.md`
-- `docs/architecture/database-design.md`
-- `docs/architecture/security-architecture.md`
-- `docs/adr/ADR-008-feature-local-business-logic.md`
-- `docs/adr/ADR-009-cache-strategy.md`
+- `docs/project-design/project-scope.md`
 
 ---
 
 # Status
 
-**Version:** v1.0
-
-**Architecture Status:** Approved
-
-**Baseline:** Frozen
-
-This document is part of the **v1.0 Architecture Baseline** and serves as the authoritative reference for the application's directory structure.
-
-Implementation should follow this structure unless superseded by a future approved Architecture Decision Record (ADR) or a new architecture baseline.
+**Status:** Approved

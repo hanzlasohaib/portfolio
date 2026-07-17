@@ -1,10 +1,10 @@
 # API Response Format
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
-> Status: Draft
+> Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -41,7 +41,7 @@ Example:
   "success": true,
   "message": "Contact message submitted successfully.",
   "data": {
-    "id": 15
+    "id": "9f2d6c0d-4b1a-4e2f-8c3a-1b2c3d4e5f6a"
   },
   "requestId": "req_9f2d6c0d"
 }

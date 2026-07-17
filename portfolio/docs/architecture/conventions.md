@@ -58,15 +58,17 @@ generateSlug.ts
 
 kebab-case
 
+Authoritative V1 inventory: `docs/project-design/project-scope.md`
+
 ```text
 /projects
-
-/blog
-
-/my-journey
-
+/journey
 /contact
+/login
+/dashboard
 ```
+
+Future (not V1): `/blog`
 
 ---
 
@@ -219,4 +221,4 @@ Self-documenting code is preferred.
 
 # Status
 
-Approved (Draft v1.0)
+**Status:** Approved

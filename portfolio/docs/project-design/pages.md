@@ -1,10 +1,10 @@
 # Pages
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -12,9 +12,13 @@
 
 ---
 
+**Authoritative V1 routes:** `docs/project-design/project-scope.md`
+
+---
+
 # Public Pages
 
-## Home (/)
+## Home (`/`)
 
 Purpose:
 
@@ -25,28 +29,28 @@ Sections:
 - Hero
 - About Preview
 - Featured Projects
-- Skills
-- Experience Timeline
+- Skills Preview
+- Journey Timeline Preview
 - Contact CTA
 - Footer
 
 ---
 
-## About (/about)
+## About (`/about`)
 
 Sections:
 
 - Introduction
 - Professional Summary
 - Education
-- Experience
+- Journey Summary
 - Skills
 - Technologies
 - Interests
 
 ---
 
-## Projects (/projects)
+## Projects (`/projects`)
 
 Features:
 
@@ -57,7 +61,7 @@ Features:
 
 Each project includes:
 
-- Cover Image
+- Cover Image (URL string; no file upload in V1)
 - Description
 - Tech Stack
 - GitHub Link
@@ -65,7 +69,21 @@ Each project includes:
 
 ---
 
-## Contact (/contact)
+## Project Details (`/projects/[slug]`)
+
+Displays a single project by slug.
+
+---
+
+## Journey (`/journey`)
+
+Displays the professional Journey timeline.
+
+Component example: `JourneyTimeline`
+
+---
+
+## Contact (`/contact`)
 
 Contains:
 
@@ -80,7 +98,9 @@ Contains:
 
 # Authentication
 
-## Login
+## Login (`/login`)
+
+Public route (no auth required to view).
 
 Fields:
 
@@ -90,20 +110,22 @@ Fields:
 Actions:
 
 - Login
-- Forgot Password
+
+Forgot Password is **out of scope** for V1 (see project scope and authentication docs).
 
 ---
 
 # Dashboard
 
-Private Route.
+Private routes under `/dashboard/**`.
 
-Contains:
-
-- Overview
-- Projects Management
-- Contact Messages
-- Settings
+| Module | Route |
+|--------|-------|
+| Overview | `/dashboard` |
+| Projects Management | `/dashboard/projects` |
+| Journey Management | `/dashboard/journey` |
+| Contact Messages | `/dashboard/messages` |
+| Settings | `/dashboard/settings` |
 
 ---
 
@@ -128,6 +150,7 @@ Links:
 - Home
 - About
 - Projects
+- Journey
 - Contact
 
 Desktop:
@@ -178,7 +201,6 @@ Lazy load:
 
 - Images
 - Heavy sections
-- Charts
 - Dashboard modules
 
 ---
@@ -209,9 +231,18 @@ No horizontal scrolling.
 
 # Future Pages
 
-Reserved:
+Reserved (not V1):
 
 - Blog
-- Journey
+- Skills (dedicated page)
+- Services
+- Certifications
 - Resume
 - Testimonials
+- `/portfolio` (not used; Projects is the showcase entity)
+
+---
+
+# Status
+
+**Status:** Approved

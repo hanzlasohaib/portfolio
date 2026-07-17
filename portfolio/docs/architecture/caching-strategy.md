@@ -49,7 +49,9 @@ Caching
 
 ---
 
-## Portfolio Projects
+## Projects
+
+Public project listing and detail pages use ISR / tag revalidation.
 
 Rendering
 
@@ -161,10 +163,11 @@ revalidateTag("blog")
 ```
 
 ```
-Portfolio Updated
+Projects Updated
 
 ↓
 
+revalidateTag("projects")
 revalidatePath("/")
 ```
 
@@ -188,9 +191,9 @@ force-cache
 
 Examples
 
-- Portfolio information
+- Site / about information
 - Skills
-- Experience
+- Journey
 - Public projects
 
 ---

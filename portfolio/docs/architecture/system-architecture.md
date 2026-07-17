@@ -161,10 +161,10 @@ Contains business rules.
 Examples:
 
 - Submit Contact Form
-- Publish Blog
 - Update Project
+- Create Journey entry
 - Authenticate Admin
-- Manage Portfolio Content
+- Manage Project Content
 
 Feature services coordinate workflows and delegate persistence to repositories.
 
@@ -258,7 +258,7 @@ The application follows a hybrid rendering model.
 | Home | SSG | Performance + SEO |
 | About | SSG | Static Content |
 | Skills | SSG | Static Content |
-| Experience | SSG | Static Content |
+| Journey | SSG | Static / CMS-backed content |
 | Portfolio | SSG → ISR | Future Content Updates |
 | Projects | SSG → ISR | SEO |
 | Blog | ISR | Frequently Updated |
@@ -460,9 +460,8 @@ These modules must remain framework-agnostic whenever practical.
 
 Visitors may:
 
-- Browse Portfolio
+- Browse the portfolio website
 - View Projects
-- Read Blog
 - View Journey
 - Download Resume
 - Submit Contact Form
@@ -477,8 +476,7 @@ Administrators may:
 
 - Login
 - Access Dashboard
-- Manage Portfolio
-- Manage Blog
+- Manage Projects
 - Manage Journey
 - View Contact Messages
 - Update Settings

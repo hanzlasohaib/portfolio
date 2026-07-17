@@ -1,10 +1,10 @@
 # Domain Model
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -14,253 +14,158 @@
 
 # Purpose
 
-This document defines the business domains of the Portfolio application.
+This document defines the business domains of the Portfolio website.
 
 The project is organized around business capabilities rather than database tables.
 
-This approach improves:
+**Terminology:** “Portfolio” means the website. The showcase data entity is **Project**. The timeline entity is **Journey** (not Experience).
 
-- Maintainability
-- Scalability
-- Separation of Concerns
-- Team Collaboration
-- Feature Ownership
+Authoritative schema: `docs/database/prisma-schema-planning.md`
+
+Authoritative routes: `docs/project-design/project-scope.md`
 
 ---
 
 # Domain Overview
 
-The application consists of four primary business domains.
-
 ```text
-Portfolio
+Portfolio Website
 │
 ├── Projects
-├── Skills
 ├── Journey
-├── Education
-├── Resume
+├── About
+├── Contact
+├── Skills (content on landing/about; no dedicated /skills route in V1)
 └── Personal Information
-
-Content
-│
-├── Blog
-├── Journey
-└── SEO Content
 
 Communication
 │
 ├── Contact Form
-├── Direct Email
 ├── Contact Messages
-└── Email Notifications
+└── Direct Email (static links)
 
 Administration
 │
 ├── Authentication
 ├── Authorization
 ├── Dashboard
-├── Settings
-└── Content Management
+├── Manage Projects
+├── Manage Journey
+├── Manage Messages
+└── Settings
 ```
 
+**Future domain (not V1):** Content / Blog
+
 ---
 
-# Portfolio Domain
+# Portfolio Website Domain
 
-Purpose
+Purpose: Professional information visible to visitors.
 
-Represents professional information visible to visitors.
-
-Responsibilities
+Responsibilities:
 
 - Projects
-- Skills
 - Journey
-- Resume
+- About / Hero
+- Skills content
+- Resume (static)
 - Social Links
-- Hero Section
-- About Section
 
-Public Access
+Public Access: Yes
 
-Yes
-
-Admin Managed
-
-Yes
-
----
-
-# Content Domain
-
-Purpose
-
-Manages long-form content.
-
-Responsibilities
-
-- Blog
-- Journey
-- Articles
-- Storytelling
-- SEO Metadata
-
-Public Access
-
-Yes
-
-Admin Managed
-
-Yes
+Admin Managed: Yes (Projects, Journey)
 
 ---
 
 # Communication Domain
 
-Purpose
+Purpose: Visitor outreach.
 
-Handles all visitor communication.
-
-Responsibilities
+Responsibilities:
 
 - Contact Form
 - Contact Messages
-- Email Notifications
-- Spam Protection
-- reCAPTCHA
-- Message Status
 
-Public Access
+Public Access: Submit only
 
-Partially
-
-Admin Managed
-
-Messages only
+Admin Managed: Yes (messages)
 
 ---
 
 # Administration Domain
 
-Purpose
+Purpose: Secure content and message management.
 
-Provides secure management tools.
+Responsibilities:
 
-Responsibilities
-
-- Login
-- JWT Authentication
-- RBAC
+- Authentication (JWT)
+- Authorization (RBAC)
 - Dashboard
-- Content Management
 - Settings
 
-Public Access
+Public Access: Login page only
 
-No
-
----
-
-# Shared Domain
-
-Some functionality is shared across every domain.
-
-Examples
-
-- Theme
-- Navigation
-- SEO
-- Logger
-- Request IDs
-- Environment Variables
-- Error Handling
-- Toast Notifications
-
-These belong in shared infrastructure.
+Admin Managed: Yes
 
 ---
 
-# Domain Ownership
+# Shared Kernel
 
-| Domain | Owner |
-|----------|--------|
-| Portfolio | Public Website |
-| Content | CMS |
-| Communication | Contact System |
-| Administration | Dashboard |
+Cross-cutting concerns:
 
----
+- Authentication utilities
+- Logging
+- Caching
+- Configuration
+- SEO helpers
 
-# Domain Interaction
-
-```text
-Visitor
-   │
-   ▼
-Portfolio
-
-Visitor
-   │
-   ▼
-Communication
-
-Admin
-   │
-   ▼
-Administration
-      │
-      ▼
-Portfolio
-
-Administration
-      │
-      ▼
-Content
-```
+These belong in shared infrastructure (`lib/`, `config/`).
 
 ---
 
 # Mapping Domains to Features
 
 ```text
-Portfolio
+Portfolio Website
 ↓
-
-features/portfolio
-
-Content
-↓
-
-features/blog
+features/home
+features/about
+features/projects
 features/journey
 
 Communication
 ↓
-
 features/contact
 
 Administration
 ↓
-
+features/authentication
 features/dashboard
-features/auth
+```
+
+There is **no** `features/portfolio` module. Projects are owned by `features/projects`.
+
+Future:
+
+```text
+features/blog
 ```
 
 ---
 
 # Domain Principles
 
-Each domain owns:
+Each feature owns:
 
 - Components
-- Services
-- Validation
+- Service
+- Validation schemas
 - Types
 - Repository
-- API Logic
+- Feature-local API / action coordination
 
-Domains communicate through services.
+Features communicate through well-defined interfaces.
 
 Direct coupling should be avoided.
 
@@ -268,19 +173,16 @@ Direct coupling should be avoided.
 
 # Future Domains
 
-Possible future additions
-
+- Blog / Content
 - Newsletter
 - Analytics
 - Search
 - Media Library
-- Comments
-- CMS
 
-These can be introduced without restructuring the project.
+These can be introduced without restructuring.
 
 ---
 
 # Status
 
-Approved (Draft v1.0)
+**Status:** Approved

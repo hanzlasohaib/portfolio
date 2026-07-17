@@ -2,21 +2,19 @@
 
 ## Version
 
-Architecture Baseline
-
-**v1.0**
+Architecture Baseline **v1.1** (Documentation Reconciliation — 2026-07-17)
 
 ---
 
 ## Status
 
-Frozen
+Approved
 
 ---
 
 ## Purpose
 
-This documentation represents the approved architectural baseline for Version 1 of the Portfolio application.
+This documentation is the approved baseline for Version 1 of the Portfolio website.
 
 All implementation should conform to these documents.
 
@@ -26,85 +24,71 @@ Architectural changes after this point should be introduced through:
 - Documentation updates
 - Versioned revisions
 
-rather than modifying the baseline without justification.
+---
+
+## Priority of Truth
+
+Defined in `AGENTS.md`:
+
+1. `AGENTS.md`
+2. `docs/project-design/project-scope.md`
+3. `docs/database/prisma-schema-planning.md`
+4. `docs/architecture/routing-strategy.md`
+5. `docs/implementation-roadmap.md`
+
+If two documents conflict: never merge; follow the higher-priority document; report the conflict.
 
 ---
 
-## Scope
+## Canonical Sources (V1)
 
-This baseline defines:
-
-- Functional Requirements
-- Non-Functional Requirements
-- System Architecture
-- Frontend Architecture
-- Backend Architecture
-- Database Design
-- Security
-- API Design
-- Deployment
-- Coding Standards
-- UI/UX Standards
-- Testing Strategy
+| Concern | Source of Truth |
+|---------|-----------------|
+| V1 routes & scope | `docs/project-design/project-scope.md` |
+| Page content outline | `docs/project-design/pages.md` |
+| Routing details | `docs/architecture/routing-strategy.md` |
+| Prisma models | `docs/database/prisma-schema-planning.md` |
+| Folder structure | `docs/architecture/folder-structure.md` |
+| Feature-local logic | `docs/adr/ADR-008-feature-local-business-logic.md` |
+| Dependencies | `docs/architecture/dependency-graph.md` |
+| Environment variables | `docs/architecture/backend-architecture.md` § Environment Configuration |
+| Validation rules | `docs/architecture/validation-strategy.md` |
+| Implementation phases | `docs/implementation-roadmap.md` |
 
 ---
 
-## Change Management
+## Documentation Structure
 
-Any architectural change must:
-
-1. Update the relevant documentation.
-2. Create a new ADR if the decision affects architecture.
-3. Keep documentation synchronized with implementation.
-
----
-
-# Documentation Structure
-
-architecture/
-Database, frontend, backend, security...
-
-ui-ux/
-Design system, typography, color palette...
-
-database/
-Schema and naming conventions...
-
-adr/
-Architecture Decision Records
-
-requirements/
-Functional and non-functional requirements
+```text
+docs/
+├── project-design/     # Scope, pages, quality
+├── architecture/       # System, frontend, backend, routing, folders
+├── database/           # Prisma planning, naming
+├── api/                # Response format, endpoints
+├── adr/                # Architecture Decision Records
+├── ui-ux/              # Design system
+├── deployment/         # Deploy docs (many Deferred)
+├── testing/            # Testing docs (many Deferred)
+└── security/           # Threat model, checklist
+```
 
 ---
 
-# Reading Order
+## Reading Order (Phase 1)
 
-1. README.md
-2. Functional Requirements
-3. Non-Functional Requirements
-4. System Architecture
-5. Frontend Architecture
-6. Backend Architecture
-7. Folder Structure
-8. UI/UX
-9. Database
-10. ADRs
-
----
-
-## Documentation Standards
-
-All documents follow the metadata template defined in:
-
-docs/documentation-standards.md
+1. `AGENTS.md`
+2. `docs/project-design/project-scope.md`
+3. `docs/implementation-roadmap.md`
+4. `docs/architecture/folder-structure.md`
+5. `docs/architecture/routing-strategy.md`
+6. `docs/ui-ux/design-system.md`
 
 ---
 
 ## Baseline Tag
 
-Version: **v1.0 Architecture Baseline**
+Version: **v1.1 Documentation Reconciliation**
 
 Status: **Approved**
 
-Ready for implementation.
+Ready for Phase 1 implementation from a documentation consistency standpoint.

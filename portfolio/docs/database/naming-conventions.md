@@ -1,10 +1,10 @@
 # Naming Conventions
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -146,9 +146,10 @@ Examples
 
 ```
 UserRole
-ProjectStatus
-MessageStatus
+ContactStatus
 ```
+
+(`ProjectStatus` / `MessageStatus` are not V1 enums. Use `ContactStatus` for contact messages.)
 
 ---
 
@@ -219,17 +220,25 @@ repositoryUrl
 
 # Routes
 
-Use lowercase.
+Use lowercase with a leading slash.
+
+Authoritative V1 inventory: `docs/project-design/project-scope.md`
 
 Examples
 
-```
+```text
 /
-about
+/about
 /projects
+/projects/[slug]
+/journey
 /contact
 /login
 /dashboard
+/dashboard/projects
+/dashboard/journey
+/dashboard/messages
+/dashboard/settings
 ```
 
 ---
@@ -247,52 +256,48 @@ personal.ts
 seo.ts
 site.ts
 theme.ts
+```
 
----
-
-## Environment Variables
-
-```md
 ---
 
 # Environment Variables
 
 Use uppercase snake_case.
 
-Examples
+**Authoritative catalog:** `docs/architecture/backend-architecture.md` § Environment Configuration
+
+V1 examples:
 
 ```text
 DATABASE_URL
 DIRECT_URL
 JWT_SECRET
 NEXT_PUBLIC_SITE_URL
-NEXT_PUBLIC_GITHUB_URL
+NODE_ENV
+```
 
----
+Do not invent additional required V1 variables here.
 
-## API Endpoints
-
-```md
 ---
 
 # API Endpoints
 
 Use lowercase kebab-case.
 
-Examples
+V1 examples:
 
 ```text
 /api/contact
-/api/projects
-/api/blog
 /api/auth/login
-/api/dashboard/messages
+```
 
----
+Future examples (not V1):
 
-## Server Actions
+```text
+/api/blog
+/api/projects
+```
 
-```md
 ---
 
 # Server Actions
@@ -305,7 +310,8 @@ Examples
 submitContactAction
 loginAction
 updateProjectAction
-publishBlogAction
+createJourneyAction
+```
 
 ---
 
@@ -422,14 +428,16 @@ Do not introduce aliases such as:
 ```
 PortfolioCard
 ↓
-
 ProjectCard
 ```
+
+There is no Portfolio entity. Use `ProjectCard` for showcase items.
+
+Also prefer `JourneyTimeline` / `JourneyCard` — never `ExperienceTimeline` / `ExperienceCard`.
 
 ```
 HeroBanner
 ↓
-
 HeroSection
 ```
 

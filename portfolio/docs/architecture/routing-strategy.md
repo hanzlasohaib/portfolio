@@ -1,10 +1,10 @@
 # Routing Strategy
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
-> Status: Draft
+> Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -14,7 +14,7 @@
 
 # 1. Purpose
 
-This document defines the routing strategy for the Portfolio application.
+This document defines the routing strategy for the Portfolio website.
 
 The routing strategy aims to provide:
 
@@ -25,6 +25,10 @@ The routing strategy aims to provide:
 - Clean navigation
 - Maintainable route hierarchy
 
+**Authoritative V1 route inventory:** `docs/project-design/project-scope.md`
+
+This document must not list V1 routes that contradict project scope.
+
 ---
 
 # 2. Routing Principles
@@ -32,7 +36,7 @@ The routing strategy aims to provide:
 The application follows these principles:
 
 - Human-readable URLs
-- RESTful API endpoints
+- RESTful API endpoints where Route Handlers are required
 - Feature-oriented routing
 - Protected administrative routes
 - Static generation whenever possible
@@ -41,80 +45,66 @@ The application follows these principles:
 
 ---
 
-# 3. Public Routes
+# 3. Public Routes (V1)
 
 Public routes require no authentication.
 
+`/login` is public so unauthenticated admins can sign in.
+
 | Route | Purpose |
 |--------|---------|
-| / | Landing Page |
-| /about | About Me |
-| /skills | Skills |
-| /experience | Experience |
-| /projects | Projects |
-| /projects/[slug] | Project Details |
-| /portfolio | Portfolio |
-| /portfolio/[slug] | Portfolio Item |
-| /journey | Professional Journey |
-| /blog | Blog |
-| /blog/[slug] | Blog Post |
-| /contact | Contact |
+| `/` | Landing Page |
+| `/about` | About |
+| `/projects` | Projects |
+| `/projects/[slug]` | Project Details |
+| `/journey` | Journey |
+| `/contact` | Contact |
+| `/login` | Admin Login |
 
 ---
 
-# 4. Protected Routes
+# 4. Protected Routes (V1)
 
 Accessible only to authenticated administrators.
 
 | Route | Purpose |
 |--------|---------|
-| /login | Admin Login |
-| /dashboard | Dashboard |
-| /dashboard/profile | Profile |
-| /dashboard/projects | Project Management |
-| /dashboard/blog | Blog Management |
-| /dashboard/journey | Journey Management |
-| /dashboard/messages | Contact Messages |
-| /dashboard/settings | Application Settings |
+| `/dashboard` | Dashboard Overview |
+| `/dashboard/projects` | Manage Projects |
+| `/dashboard/journey` | Manage Journey |
+| `/dashboard/messages` | Contact Messages |
+| `/dashboard/settings` | Settings |
 
 ---
 
-# 5. API Routes
+# 5. API Routes (V1)
 
-All backend APIs are exposed under:
+Backend APIs are exposed under:
 
 ```text
 /api/*
 ```
 
-Examples:
+V1 Route Handler examples:
 
 ```text
-/api/contact
+POST /api/contact
 
-/api/auth/login
-
-/api/projects
-
-/api/blog
-
-/api/journey
-
-/api/messages
+POST /api/auth/login
 ```
+
+Admin mutations primarily use Server Actions (see `docs/architecture/server-actions.md`). Additional admin REST endpoints may be added only when required.
 
 ---
 
 # 6. Dynamic Routes
 
-Dynamic routes should use meaningful identifiers.
+Dynamic routes should use meaningful identifiers (slugs).
 
 Preferred:
 
 ```text
 /projects/portfolio-redesign
-
-/blog/nextjs-app-router-guide
 ```
 
 Avoid exposing database IDs unless required.
@@ -125,27 +115,30 @@ Avoid exposing database IDs unless required.
 
 Authentication middleware should protect:
 
-- Dashboard
+- `/dashboard` and all nested dashboard routes
 - Admin APIs
-- Settings
-- Content Management
+- Admin Server Actions
 
-Public routes should remain accessible without authentication.
+Public routes (including `/login`) remain accessible without authentication.
+
+Unauthenticated access to `/dashboard/**` redirects to `/login`.
 
 ---
 
 # 8. Route Groups
 
-Route groups are used only for organization and should not affect URLs.
+Route groups are used only for organization and **must not** affect URLs.
 
-Example:
+Intentional V1 route groups:
 
 ```text
-(public)
-(admin)
-(auth)
-(api)
+app/
+├── (public)/       # Public pages: /, about, projects, journey, contact
+├── (auth)/         # Auth pages: login
+└── (dashboard)/    # Protected admin: dashboard/**
 ```
+
+These route groups are routing concerns only. Business logic never belongs inside `app/`.
 
 ---
 
@@ -153,16 +146,21 @@ Example:
 
 The landing page contains a sticky navigation bar.
 
+V1 Navbar links:
+
+- Home (`/`)
+- About (`/about`)
+- Projects (`/projects`)
+- Journey (`/journey`)
+- Contact (`/contact`)
+
 Navigation supports:
 
-- Smooth scrolling to sections
+- Smooth scrolling to landing sections where applicable
 - Active section highlighting
 - Responsive mobile navigation
 - Theme toggle
-- Resume download
 - Contact CTA
-
-Each landing section includes a button linking to its dedicated page for additional details.
 
 ---
 
@@ -187,23 +185,11 @@ Use:
 - kebab-case
 - descriptive slugs
 
-Examples:
-
-```text
-/full-stack-projects
-
-/google-authentication
-
-/contact
-```
-
 Never use:
 
 ```text
 /myProjects
-
 /PageOne
-
 /project_01
 ```
 
@@ -217,23 +203,23 @@ The application provides:
 - Global Error Page
 - Route Error Pages
 
-These ensure graceful handling of navigation failures.
-
 ---
 
-# 13. Future Routing
+# 13. Future Routing (Not V1)
 
-The routing strategy supports future modules including:
+Reserved for later versions. Do not implement in V1:
 
-- CMS
-- Newsletter
-- Analytics
-- Admin Roles
-- Portfolio Categories
-- Blog Categories
-- Search
-
-No breaking URL changes should be required.
+| Route | Purpose |
+|--------|---------|
+| `/skills` | Dedicated Skills page |
+| `/experience` | Deprecated alias — use `/journey` |
+| `/portfolio` | Not used — Projects is the showcase entity |
+| `/portfolio/[slug]` | Not used |
+| `/blog` | Blog listing |
+| `/blog/[slug]` | Blog post |
+| `/dashboard/blog` | Blog management |
+| `/dashboard/profile` | Profile management |
+| Resume / Testimonials pages | Future |
 
 ---
 
@@ -244,16 +230,15 @@ No breaking URL changes should be required.
 | Framework | Next.js App Router |
 | Route Style | Feature-Oriented |
 | Dynamic Routes | Slug-Based |
-| API Prefix | /api |
-| Admin Area | /dashboard |
-| Authentication | Middleware Protected |
+| API Prefix | `/api` |
+| Admin Area | `/dashboard` |
+| Login | Public `/login` |
+| Authentication | Middleware protects `/dashboard/**` |
 | SEO | Metadata API |
-| Navigation | Sticky + Smooth Scroll |
+| Route Groups | `(public)`, `(auth)`, `(dashboard)` |
 
 ---
 
-# Document Status
+# Status
 
-**Status:** Approved (Draft v1.0)
-
-This routing strategy defines the public navigation, protected administration area, API organization, URL conventions, and route protection mechanisms for the portfolio application.
+**Status:** Approved

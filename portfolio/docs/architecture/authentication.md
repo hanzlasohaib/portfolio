@@ -1,10 +1,10 @@
 # Authentication Architecture
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -85,21 +85,24 @@ Redirect Login
 
 ---
 
-# Protected Resources
+# Protected Resources (V1)
 
-- Dashboard
-- Blog Management
-- Journey Management
-- Projects
-- Messages
-- Settings
+- `/dashboard`
+- `/dashboard/projects`
+- `/dashboard/journey`
+- `/dashboard/messages`
+- `/dashboard/settings`
+
+`/login` is public.
+
+Validation rules for login fields: `docs/architecture/validation-strategy.md`.
 
 ---
 
 # Password Security
 
 - bcrypt hashing
-- minimum length policy
+- minimum length: 8 characters (see validation strategy)
 - no plaintext passwords
 
 ---

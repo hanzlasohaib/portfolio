@@ -232,7 +232,9 @@ Example
 
 /projects
 
-/blog
+/journey
+
+Future (not V1): `/blog`
 
 ---
 
@@ -334,4 +336,4 @@ Every reusable component must
 
 # Status
 
-Approved (Draft v1.0)
+**Status:** Approved

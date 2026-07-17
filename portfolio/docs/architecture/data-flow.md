@@ -297,4 +297,6 @@ Should not block the HTTP response.
 
 # Status
 
-Approved (Draft v1.0)
+# Status
+
+**Status:** Approved

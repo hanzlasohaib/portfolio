@@ -1,10 +1,10 @@
 # ADR-008: Feature-Local Business Logic
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -16,13 +16,14 @@
 
 The application will continue growing with additional features such as:
 
-- Blog
+- Projects
 - Journey
 - Contact Management
 - Dashboard
 - Authentication
-- Analytics
-- Newsletter
+- Blog (Future)
+- Analytics (Future)
+- Newsletter (Future)
 
 A traditional layered folder structure places all services, repositories, and schemas into global directories.
 
@@ -45,8 +46,8 @@ The project adopts a Feature-Oriented Architecture.
 Each business feature owns its own:
 
 - Components
-- Services
-- Repositories
+- Service (`service.ts`)
+- Repository (`repository.ts`)
 - Schemas
 - Types
 - Hooks
@@ -54,33 +55,44 @@ Each business feature owns its own:
 
 Shared infrastructure remains under the `lib/` directory.
 
+There are **no** global `src/services/` or `src/repositories/` directories.
+
+Canonical source layout:
+
+```text
+src/
+├── app/
+├── components/
+├── constants/
+├── features/
+├── hooks/
+├── lib/
+├── providers/
+├── styles/
+├── types/
+└── config/
+```
+
+`app/` contains **only** routing concerns (including intentional route groups `(public)`, `(auth)`, `(dashboard)`). Business logic never belongs inside `app/`.
+
 ---
 
 # Example
 
 ```text
 features/
-
-communication/
-
-contact/
-
-components/
-
-schemas/
-
-services/
-
-repositories/
-
-hooks/
-
-types.ts
-
-constants.ts
-
-index.ts
+└── contact/
+    ├── components/
+    ├── schemas/
+    ├── service.ts
+    ├── repository.ts
+    ├── hooks/
+    ├── types.ts
+    ├── constants.ts
+    └── index.ts
 ```
+
+Do not nest features under artificial domain folders (for example `features/communication/contact/`) unless a future ADR explicitly requires it.
 
 ---
 
@@ -98,7 +110,7 @@ index.ts
 
 # Consequences
 
-Advantages
+## Advantages
 
 - Easier maintenance
 - Scalable architecture
@@ -106,12 +118,12 @@ Advantages
 - Improved modularity
 - Better separation of concerns
 
-Trade-offs
+## Trade-offs
 
 - Slight duplication of small utility files across features
 - Developers must understand feature boundaries
 
-The advantages outweigh the trade-offs for medium to large applications.
+The advantages outweigh the trade-offs for this application.
 
 ---
 
@@ -121,11 +133,8 @@ The advantages outweigh the trade-offs for medium to large applications.
 
 ```text
 services/
-
 repositories/
-
 schemas/
-
 components/
 ```
 
@@ -136,22 +145,18 @@ Rejected because:
 - Difficult navigation
 - Large shared directories
 
----
-
 ## Domain-Driven Design (DDD)
 
 Considered but rejected.
 
-Reason
-
 The project size does not justify the additional complexity of aggregates, bounded contexts, factories, and domain events.
-
-The chosen feature-oriented architecture provides sufficient modularity while remaining approachable.
 
 ---
 
-# Related ADRs
+# Related Documents
 
+- `docs/architecture/folder-structure.md`
+- `docs/architecture/dependency-graph.md`
 - ADR-001 Next.js App Router
 - ADR-002 Prisma ORM
 - ADR-003 Supabase PostgreSQL
@@ -164,10 +169,10 @@ The chosen feature-oriented architecture provides sufficient modularity while re
 
 # Decision Summary
 
-The project will organize business logic around self-contained feature modules while keeping shared infrastructure under the `lib/` directory.
-
-This architecture balances simplicity, scalability, and maintainability for the expected growth of the portfolio application.
+The project organizes business logic around self-contained feature modules while keeping shared infrastructure under `lib/`.
 
 ---
 
-Status: Accepted
+# Status
+
+**Status:** Approved

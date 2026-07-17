@@ -1,10 +1,10 @@
 # Feature Template
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -16,7 +16,11 @@
 
 This document defines the standard structure every feature must follow.
 
-Every new feature should use this template.
+Aligned with:
+
+- `docs/architecture/folder-structure.md`
+- `docs/adr/ADR-008-feature-local-business-logic.md`
+- `docs/architecture/dependency-graph.md`
 
 ---
 
@@ -26,7 +30,6 @@ Each feature should be:
 
 - Self-contained
 - Independent
-- Reusable
 - Testable
 - Easy to maintain
 
@@ -35,23 +38,29 @@ Each feature should be:
 # Standard Structure
 
 ```text
-feature-name/
-
-components/
-hooks/
-schemas/
-services/
-repositories/
-types/
-constants/
-utils/
-
-actions/
-route-handlers/
-
-index.ts
-README.md
+features/<feature-name>/
+├── components/
+├── hooks/
+├── schemas/
+├── service.ts
+├── repository.ts
+├── types.ts
+├── constants/
+├── utils.ts
+└── index.ts
 ```
+
+Optional (when needed):
+
+```text
+├── actions/              # Server Actions (thin coordinators)
+```
+
+Route Handlers live under `app/api/**`, not inside the feature folder. They call `service.ts`.
+
+Do **not** create global `src/services/` or `src/repositories/`.
+
+Do **not** nest features under domain folders (for example `features/communication/contact/`) unless a future ADR requires it.
 
 ---
 
@@ -59,171 +68,79 @@ README.md
 
 ## components/
 
-React UI only.
-
-No database access.
-
----
+React UI only. No database access. No Prisma.
 
 ## hooks/
 
-Feature-specific hooks.
-
----
+Feature-specific hooks. No Prisma.
 
 ## schemas/
 
-Zod validation schemas.
+Zod validation schemas. Shared by frontend and backend where possible.
 
-Shared by frontend and backend where possible.
+Rules source: `docs/architecture/validation-strategy.md`
 
----
+## service.ts
 
-## services/
+Business logic. Coordinates workflows. Calls `repository.ts`. Never imports React UI.
 
-Business logic.
+## repository.ts
 
-Coordinates repositories and validation.
+Data access only. May import Prisma Client via `lib/prisma`.
 
----
+## types.ts / constants / utils.ts
 
-## repositories/
-
-Database access only.
-
-Uses Prisma.
-
-No business rules.
-
----
-
-## types/
-
-Feature-specific TypeScript types.
-
----
-
-## constants/
-
-Configuration specific to the feature.
-
----
-
-## utils/
-
-Pure helper functions.
-
-No side effects.
-
----
-
-## actions/
-
-Server Actions (when applicable).
-
----
-
-## route-handlers/
-
-API endpoints for the feature.
-
-Thin controllers only.
-
----
+Feature-local types, constants, and helpers.
 
 ## index.ts
 
-Public API for the feature.
-
-Expose only what other modules need.
+Public API of the feature. Pages and other features should import from here when possible.
 
 ---
 
-# Dependency Rules
-
-Allowed:
+# Example: contact
 
 ```text
-components
-    ↓
-hooks
-    ↓
-services
-    ↓
-repositories
-    ↓
-Prisma
-```
-
-Forbidden:
-
-- Components → Prisma
-- Components → Repositories
-- Repositories → Components
-- Services → React UI
-- Repositories → Route Handlers
-
----
-
-# Example
-
-```text
-features/
-
-communication/
-
-contact/
-
-components/
-ContactForm.tsx
-ContactInfo.tsx
-
-hooks/
-useContact.ts
-
-schemas/
-contact.schema.ts
-
-services/
-contact.service.ts
-
-repositories/
-contact.repository.ts
-
-types/
-contact.types.ts
-
-constants/
-contact.constants.ts
-
-utils/
-contact.mapper.ts
-
-actions/
-submit-contact.ts
-
-route-handlers/
-contact.route.ts
-
-index.ts
-README.md
+features/contact/
+├── components/
+│   └── contact-form.tsx
+├── schemas/
+│   └── contact-form-schema.ts
+├── service.ts
+├── repository.ts
+├── types.ts
+└── index.ts
 ```
 
 ---
 
-# Checklist
+# V1 Features
 
-Before creating a feature, verify:
+| Feature | Module |
+|---------|--------|
+| Home | `features/home` |
+| About | `features/about` |
+| Projects | `features/projects` |
+| Journey | `features/journey` |
+| Contact | `features/contact` |
+| Authentication | `features/authentication` |
+| Dashboard | `features/dashboard` |
 
-- Clear ownership
-- Validation defined
-- Service layer identified
-- Repository required?
-- Shared code extracted?
-- Tests planned?
+There is no `features/portfolio` module.
+
+Future: `features/blog`
+
+---
+
+# Forbidden
+
+- Business logic in `app/`
+- Prisma in components or hooks
+- Global services/repositories directories
+- Cross-feature deep imports of repositories
 
 ---
 
 # Status
 
-Approved (Draft v1.0)
+**Status:** Approved

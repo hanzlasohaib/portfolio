@@ -14,21 +14,56 @@ Implementation Roadmap
 ├── Phase 2 – Public Pages
 │      □ Hero
 │      □ About
-│      □ Skills
 │      □ Projects
 │      □ Journey
 │      □ Contact
 │      ✓ Phase Review
 │      ✓ Git Tag
 │
-├── Phase 3 – Backend Foundation
-│      ...
+│      Note: Skills may appear as a landing/about section.
+│      There is no dedicated /skills route in V1
+│      (see project-scope.md).
 │
-├── Phase 4 – Dashboard
-│
-├── Phase 5 – Quality
-│
-└── Phase 6 – Release
+
+## Phase 3 – Backend Foundation
+
+Status:
+Deferred until Phase 2 is completed.
+
+This phase will be planned after the UI Foundation and Public Pages
+have been implemented and verified.
+
+The implementation order and tasks will be defined before Phase 3 begins.
+
+## Phase 4 – Dashboard
+
+Status:
+Deferred until Phase 3 is completed.
+
+This phase will be planned after the UI Foundation and Public Pages
+have been implemented and verified.
+
+The implementation order and tasks will be defined before Phase 4 begins.
+
+## Phase 5 – Quality
+
+Status:
+Deferred until Phase 4 is completed.
+
+This phase will be planned after the UI Foundation and Public Pages
+have been implemented and verified.
+
+The implementation order and tasks will be defined before Phase 5 begins.
+
+## Phase 6 – Release
+
+Status:
+Deferred until Phase 5 is completed.
+
+This phase will be planned after the UI Foundation and Public Pages
+have been implemented and verified.
+
+The implementation order and tasks will be defined before Phase 6 begins.
 
 ---
 

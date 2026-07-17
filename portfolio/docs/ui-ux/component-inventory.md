@@ -95,7 +95,8 @@
 | Card | Generic card | ⬜ |
 | ProjectCard | Portfolio project | ⬜ |
 | SkillCard | Skill display | ⬜ |
-| JourneyCard | Experience timeline | ⬜ |
+| JourneyCard | Journey timeline card | ⬜ |
+| JourneyTimeline | Journey timeline section | ⬜ |
 | ContactCard | Contact information | ⬜ |
 
 ---

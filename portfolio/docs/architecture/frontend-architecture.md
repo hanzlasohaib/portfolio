@@ -152,11 +152,11 @@ Specific to a feature.
 
 Examples:
 
-Portfolio
+Projects
 
-- Portfolio Grid
-- Portfolio Card
-- Portfolio Filters
+- Projects Grid
+- Project Card
+- Project Filters
 
 Projects
 
@@ -389,6 +389,6 @@ The frontend follows:
 
 # Document Status
 
-**Status:** Approved (Draft v1.0)
+**Status:** Approved
 
 This document defines the frontend architecture and serves as the foundation for component organization, rendering strategy, state management, UI design, and frontend implementation standards.

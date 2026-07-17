@@ -1,10 +1,10 @@
 # Backend Architecture
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -172,9 +172,9 @@ The service layer contains all business logic.
 Examples:
 
 - Create Contact Message
-- Publish Blog
 - Update Project
-- Create Portfolio Item
+- Create Project
+- Create Journey entry
 - Authenticate User
 
 Services coordinate workflows and call repositories when data access is required.
@@ -385,19 +385,36 @@ Business logic should remain independent of Prisma APIs.
 
 # 11. Environment Configuration
 
-Configuration should be loaded from environment variables.
+**This section is the single source of truth for environment variables.**
 
-Examples:
-
-- DATABASE_URL
-- DIRECT_URL
-- JWT_SECRET
-- NEXT_PUBLIC_SUPABASE_URL
-- NEXT_PUBLIC_SUPABASE_ANON_KEY
-- SUPABASE_SERVICE_ROLE_KEY
-- RESEND_API_KEY
+Configuration must be loaded from environment variables via a typed `config/env.ts` module.
 
 Environment variables must never be hardcoded.
+
+`.env.example` must match this table exactly.
+
+## V1 Required
+
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `DATABASE_URL` | Yes | Prisma pooled connection string (Supabase PostgreSQL) |
+| `DIRECT_URL` | Yes | Prisma direct connection string for migrations |
+| `JWT_SECRET` | Yes | Signing secret for admin JWT cookies |
+| `NEXT_PUBLIC_SITE_URL` | Yes | Canonical site URL (SEO, absolute links) |
+| `NODE_ENV` | Yes | Runtime environment (`development` / `production` / `test`) |
+
+## Deferred (Not Required for V1)
+
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Deferred | Only if a Supabase JS client is adopted later |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Deferred | Only if a Supabase JS client is adopted later |
+| `SUPABASE_SERVICE_ROLE_KEY` | Deferred | Server-side Supabase admin operations (not V1) |
+| `RESEND_API_KEY` | Deferred | Transactional email (password reset / notifications — out of V1) |
+| `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | Deferred | Bot protection (not V1) |
+| `RECAPTCHA_SECRET_KEY` | Deferred | Bot protection (not V1) |
+
+V1 uses Supabase as **hosted PostgreSQL** accessed through Prisma. Supabase client SDK keys are deferred unless a future ADR requires them.
 
 ---
 
@@ -572,6 +589,6 @@ The backend follows these principles:
 
 # Document Status
 
-**Status:** Approved (Draft v1.0)
+**Status:** Approved
 
 This document defines the backend architecture for the portfolio application. It establishes the responsibilities of each backend layer, standardizes API behavior, and provides the architectural foundation for authentication, authorization, database access, validation, and future backend development.

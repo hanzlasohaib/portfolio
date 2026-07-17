@@ -1,10 +1,10 @@
 # Authorization (RBAC)
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -16,61 +16,57 @@
 
 Define authorization rules independently from authentication.
 
-Authentication answers:
+Authentication answers: Who are you?
 
-Who are you?
-
-Authorization answers:
-
-What are you allowed to do?
+Authorization answers: What are you allowed to do?
 
 ---
 
 # Current Roles
 
-Visitor
-
-Admin
+| Role | Storage |
+|------|---------|
+| Visitor | Unauthenticated user (no JWT). Not a database role. |
+| Admin | Authenticated user with `UserRole.ADMIN` |
 
 ---
 
 # Future Roles
 
-Editor
-
-Moderator
+- Editor
+- Moderator
 
 ---
 
-# Visitor Permissions
+# Visitor Permissions (V1)
 
-✓ View Portfolio
+✓ View portfolio website (public pages)
 
-✓ Contact
+✓ View Projects and Project Details
 
-✓ Read Blog
+✓ View Journey
 
-✓ Download Resume
+✓ Submit Contact form
+
+✓ Download Resume (static asset, if published)
 
 ✗ Dashboard
 
+✗ Admin mutations
+
 ---
 
-# Admin Permissions
+# Admin Permissions (V1)
 
-✓ Full Dashboard
+✓ Full Dashboard (`/dashboard`)
 
-✓ Manage Projects
+✓ Manage Projects (`/dashboard/projects`)
 
-✓ Manage Blog
+✓ Manage Journey (`/dashboard/journey`)
 
-✓ Manage Journey
+✓ View / manage Contact Messages (`/dashboard/messages`)
 
-✓ View Messages
-
-✓ Update Portfolio
-
-✓ Settings
+✓ Settings (`/dashboard/settings`)
 
 ---
 
@@ -78,17 +74,11 @@ Moderator
 
 ```text
 JWT Verified
-
-↓
-
+    ↓
 Extract Role
-
-↓
-
+    ↓
 Permission Check
-
-↓
-
+    ↓
 Allow / Deny
 ```
 
@@ -96,21 +86,21 @@ Allow / Deny
 
 # Middleware
 
-Responsibilities
+Responsibilities:
 
-- Verify role
-- Redirect unauthorized
-- Return 403
+- Verify role for `/dashboard/**`
+- Redirect unauthenticated users to `/login`
+- Return 403 for authenticated users lacking permission (future multi-role)
+
+`/login` is public and must not be treated as a protected route.
 
 ---
 
 # Principles
 
-Least privilege
-
-Centralized authorization
-
-No duplicated permission checks
+- Least privilege
+- Centralized authorization
+- No duplicated permission checks
 
 ---
 
@@ -118,13 +108,13 @@ No duplicated permission checks
 
 | Feature | Visitor | Editor | Admin |
 |----------|----------|---------|--------|
-| Blog | Read | Edit | Full |
 | Projects | Read | Edit | Full |
 | Journey | Read | Edit | Full |
-| Contact Messages | No | No | Yes |
+| Contact Messages | Submit only | No | Yes |
+| Blog | Read (Future) | Edit (Future) | Full (Future) |
 
 ---
 
 # Status
 
-Approved
+**Status:** Approved

@@ -1,10 +1,10 @@
 # Prisma Schema Planning
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
-> Status: Draft
+> Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -14,39 +14,42 @@
 
 # Purpose
 
-This document defines the complete Prisma data model before implementation.
+This document defines the implementation-ready Prisma data model for Version 1.
 
-The goal is to avoid unnecessary migration churn by designing the database schema first.
+Do **not** invent a separate Portfolio or Experience model.
+
+| Concept | Model |
+|---------|--------|
+| Showcase work | `Project` |
+| Professional timeline | `Journey` |
+| Contact submissions | `Contact` |
+| Admin auth | `User` |
+
+Image fields (`thumbnail`, `coverImage`, `icon`) store **URL strings** only. No file upload system in V1.
+
+This document is documentation only. Do not generate `schema.prisma` or migrations from this task alone — implement schema in Phase 3 per the roadmap.
 
 ---
 
 # Design Principles
 
-- UUID primary keys
+- UUID primary keys (`String` `@id` `@default(uuid())`)
 - Explicit relationships
 - Database normalization
-- Future extensibility
 - Type safety
-- Soft deletes only when required
-- Auditable timestamps
+- Soft deletes only when required (none in V1 core models)
+- Auditable timestamps (`createdAt`, `updatedAt`)
+- `@@map` for snake_case table names where the Prisma model name differs from the table name
 
 ---
 
 # Enums
 
-## UserRole
-
 ```prisma
 enum UserRole {
   ADMIN
 }
-```
 
----
-
-## ContactStatus
-
-```prisma
 enum ContactStatus {
   NEW
   READ
@@ -57,289 +60,242 @@ enum ContactStatus {
 
 ---
 
-## Models
+# Models
 
-# User
+## User
 
-Purpose
+Purpose: Administrative authentication.
 
-Administrative authentication.
+```prisma
+model User {
+  id           String   @id @default(uuid())
+  fullName     String
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(ADMIN)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-Fields
-
-```text
-id UUID PK
-fullName
-email UNIQUE
-passwordHash
-role UserRole
-isActive Boolean
-createdAt
-updatedAt
-```
-
-Indexes
-
-- email
-
----
-
-# Contact
-
-Purpose
-
-Store contact form submissions.
-
-Fields
-
-```text
-id UUID PK
-fullName
-email
-subject
-message
-status ContactStatus
-ipAddress
-userAgent
-createdAt
-updatedAt
-```
-
-Indexes
-
-- email
-- status
-- createdAt
-
----
-
-# Project
-
-```text
-id UUID PK
-slug UNIQUE
-title
-shortDescription
-description
-thumbnail
-repositoryUrl
-liveUrl
-featured
-published
-displayOrder
-createdAt
-updatedAt
-```
-
-Indexes
-
-- slug
-- featured
-- published
-- displayOrder
-
----
-
-# Technology
-
-```text
-id UUID PK
-name UNIQUE
-icon
-color
-createdAt
-updatedAt
-```
-
-Indexes
-
-- name
-
----
-
-# ProjectTechnology
-
-Many-to-many bridge.
-
-Fields
-
-```text
-projectId
-technologyId
-```
-
-Composite Key
-
-```text
-projectId + technologyId
+  @@index([email])
+  @@map("users")
+}
 ```
 
 ---
 
-# Blog
+## Contact
 
-```text
-id UUID PK
-slug UNIQUE
-title
-excerpt
-content
-coverImage
-readingTime
-published
-publishedAt
-createdAt
-updatedAt
+Purpose: Store contact form submissions.
+
+```prisma
+model Contact {
+  id        String        @id @default(uuid())
+  fullName  String
+  email     String
+  subject   String
+  message   String        @db.Text
+  status    ContactStatus @default(NEW)
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+  @@map("contact_messages")
+}
 ```
-
-Indexes
-
-- slug
-- published
-- publishedAt
 
 ---
 
-# Journey
+## Project
 
-```text
-id UUID PK
-title
-organization
-description
-location
-startDate
-endDate
-displayOrder
-createdAt
-updatedAt
+Purpose: Portfolio website showcase items (the Project entity).
+
+```prisma
+model Project {
+  id               String              @id @default(uuid())
+  slug             String              @unique
+  title            String
+  shortDescription String
+  description      String              @db.Text
+  thumbnail        String?
+  repositoryUrl    String?
+  liveUrl          String?
+  featured         Boolean             @default(false)
+  published        Boolean             @default(false)
+  displayOrder     Int                 @default(0)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  technologies     ProjectTechnology[]
+
+  @@index([slug])
+  @@index([featured])
+  @@index([published])
+  @@index([displayOrder])
+  @@map("projects")
+}
 ```
-
-Indexes
-
-- displayOrder
 
 ---
 
-# Skill
+## Technology
 
-```text
-id UUID PK
-name
-category
-icon
-displayOrder
-createdAt
-updatedAt
+```prisma
+model Technology {
+  id        String              @id @default(uuid())
+  name      String              @unique
+  icon      String?
+  color     String?
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  projects  ProjectTechnology[]
+
+  @@index([name])
+  @@map("technologies")
+}
 ```
 
-Indexes
+---
 
-- category
-- displayOrder
+## ProjectTechnology
+
+Many-to-many bridge between Project and Technology.
+
+```prisma
+model ProjectTechnology {
+  projectId    String
+  technologyId String
+  project      Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, technologyId])
+  @@map("project_technologies")
+}
+```
+
+---
+
+## Journey
+
+Purpose: Professional timeline (canonical name for what was previously called Experience).
+
+```prisma
+model Journey {
+  id           String    @id @default(uuid())
+  title        String
+  organization String?
+  description  String?   @db.Text
+  location     String?
+  startDate    DateTime
+  endDate      DateTime?
+  displayOrder Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([displayOrder])
+  @@map("journeys")
+}
+```
+
+---
+
+## Skill
+
+Purpose: Skills shown on landing/about content. No dedicated `/skills` route in V1.
+
+```prisma
+model Skill {
+  id           String   @id @default(uuid())
+  name         String
+  category     String?
+  icon         String?
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([category])
+  @@index([displayOrder])
+  @@map("skills")
+}
+```
+
+---
+
+## Blog (Future — not V1 routes)
+
+Kept for schema readiness. Do not expose `/blog` or `/dashboard/blog` in V1.
+
+```prisma
+model Blog {
+  id          String    @id @default(uuid())
+  slug        String    @unique
+  title       String
+  excerpt     String?
+  content     String    @db.Text
+  coverImage  String?
+  readingTime Int?
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([published])
+  @@index([publishedAt])
+  @@map("blog_posts")
+}
+```
 
 ---
 
 # Relationships
 
 ```text
-User
-
-(no ownership required currently)
+User          — independent (admin auth)
 
 Project
+  └── ProjectTechnology ── Technology
 
-Project
-    │
-    └─────────────< ProjectTechnology >─────────────Technology
+Contact       — independent
 
-Contact
+Journey       — independent
 
-Independent
+Skill         — independent
 
-Blog
-
-Independent
-
-Journey
-
-Independent
-
-Skill
-
-Independent
+Blog          — independent (Future UI)
 ```
 
----
-
-# Constraints
-
-User
-
-- email unique
-
-Project
-
-- slug unique
-
-Blog
-
-- slug unique
-
-Technology
-
-- name unique
-
-Contact
-
-- status default NEW
+No Portfolio model. No Experience model.
 
 ---
 
-# Default Values
+# Constraints Summary
 
-createdAt
-
-Current Timestamp
-
-updatedAt
-
-Auto Updated
-
-status
-
-NEW
-
-published
-
-false
-
-featured
-
-false
-
-displayOrder
-
-0
+| Model | Constraints |
+|-------|-------------|
+| User | `email` unique; `role` default `ADMIN`; `isActive` default `true` |
+| Contact | `status` default `NEW`; `message` Text; optional `ipAddress`, `userAgent` |
+| Project | `slug` unique; `featured`/`published` default `false`; `displayOrder` default `0`; optional URLs/thumbnail |
+| Technology | `name` unique |
+| ProjectTechnology | composite PK `(projectId, technologyId)`; cascade delete |
+| Journey | `title` required; `startDate` required; optional `endDate`, `organization`, `description`, `location` |
+| Skill | optional `category`, `icon` |
+| Blog | `slug` unique; Future UI only |
 
 ---
 
 # UUID Strategy
 
-All tables use UUID primary keys.
-
-Advantages
-
-- Better security
-- No enumeration
-- Easier distributed systems
-- Stable identifiers
+All tables use UUID string primary keys.
 
 ---
 
 # Migration Strategy
 
-Rules
+Rules (apply in Phase 3):
 
 - Never edit existing production migrations.
 - Every schema change gets a new migration.
@@ -348,27 +304,28 @@ Rules
 
 ---
 
-# Core Models
+# Core Models (V1 data)
 
-User
-Project
-Blog
-Journey
-Skill
-Technology
-Contact
+- User
+- Project
+- Technology
+- ProjectTechnology
+- Journey
+- Skill
+- Contact
 
 # Future Extension Models
 
-Newsletter
-Analytics
-AuditLog
-Notification
-Media
-Session
+- Blog (model defined above; UI deferred)
+- Newsletter
+- Analytics
+- AuditLog
+- Notification
+- Media
+- Session
 
 ---
 
 # Status
 
-Approved (Draft v1.0)
+**Status:** Approved

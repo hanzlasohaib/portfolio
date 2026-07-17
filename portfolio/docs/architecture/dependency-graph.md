@@ -1,10 +1,10 @@
 # Dependency Graph
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-17
 >
 > Owner: Project Team
 >
@@ -16,23 +16,23 @@
 
 This document defines the allowed dependencies between architectural layers.
 
-Maintaining these boundaries keeps the codebase modular, testable, and maintainable.
+Aligned with:
+
+- `docs/architecture/folder-structure.md`
+- `docs/adr/ADR-008-feature-local-business-logic.md`
 
 ---
 
 # High-Level Dependency Flow
 
 ```text
-Presentation Layer
+app/ (routing only)
         │
         ▼
-Application Layer
+features/* (UI composition + service + repository)
         │
         ▼
-Service Layer
-        │
-        ▼
-Repository Layer
+lib/ (shared infrastructure)
         │
         ▼
 Prisma ORM
@@ -45,6 +45,8 @@ Dependencies must always flow downward.
 
 Lower layers must never depend on higher layers.
 
+There are **no** global `src/services/` or `src/repositories/` directories. Services and repositories are **feature-local**.
+
 ---
 
 # Allowed Dependencies
@@ -53,106 +55,74 @@ Lower layers must never depend on higher layers.
 
 Can import
 
-- features
-- components
-- lib
-- config
-- services
-- validation
-- constants
-- types
+- `features/*` (public API / `index.ts`)
+- `components`
+- `providers`
+- `lib`
+- `config`
+- `constants`
+- `types`
 
 Cannot import
 
-- prisma directly
+- Prisma Client directly
+- `features/*/repository.ts` directly (prefer feature service or feature public API)
+
+`app/` must remain thin. No business logic in pages or route handlers.
 
 ---
 
 ## features/
 
+### Feature UI / hooks / components
+
 Can import
 
-- shared components
-- services
-- validation
-- lib
-- constants
-- types
+- `components` (shared UI)
+- sibling feature public APIs only when necessary (prefer avoid)
+- `lib` (non-Prisma utilities)
+- `constants`
+- `config`
+- `types`
+- feature-local `schemas`, `types`, `hooks`, `constants`
 
 Cannot import
 
 - Prisma Client
-- Route Handlers
+- Another feature's `repository.ts` or internal files
 
----
-
-## services/
+### Feature `service.ts`
 
 Can import
 
-- repositories
-- validation
-- lib
-- config
-- types
+- Feature-local `repository.ts`
+- Feature-local `schemas/`
+- `lib`
+- `config`
+- `types`
+- `constants`
 
 Cannot import
 
 - React
-- UI Components
-- Next.js Pages
+- UI components
+- Next.js pages / route handlers
 
----
-
-## repositories/
+### Feature `repository.ts`
 
 Can import
 
-- Prisma Client
-- Database Types
+- `lib/prisma` (Prisma Client)
+- Database / shared types
 
 Cannot import
 
 - React
-- Components
-- Services
-- Route Handlers
+- UI components
+- Feature services
+- Route handlers
 
-Repositories should only contain data access logic.
-
----
-
-## validation/
-
-Can import
-
-- Zod
-- Shared Types
-
-Cannot import
-
-- UI
-- Prisma
-- Services
-
-Validation must remain framework-independent.
-
----
-
-## lib/
-
-Contains shared infrastructure.
-
-Examples
-
-- prisma
-- jwt
-- logger
-- requestId
-- email
-- env
-
-Should not depend on feature modules.
+Repositories contain data access logic only.
 
 ---
 
@@ -160,15 +130,39 @@ Should not depend on feature modules.
 
 Can import
 
-- hooks
-- constants
-- types
+- `hooks`
+- `constants`
+- `types`
 
 Cannot import
 
-- repositories
+- Feature repositories
+- Prisma
+- Feature services
+
+---
+
+## lib/
+
+Contains shared infrastructure:
+
 - prisma
-- database
+- jwt
+- logger
+- request-id
+- email
+- env helpers
+- validators (shared only)
+
+Must not depend on feature modules.
+
+---
+
+## config / constants / types / providers / hooks
+
+May be imported by higher layers.
+
+Must remain free of feature business logic and Prisma access (except typed config that reads env).
 
 ---
 
@@ -176,47 +170,39 @@ Cannot import
 
 ## Rule 1
 
-Route Handlers are coordinators.
+Route Handlers and Server Actions are coordinators.
 
-They validate, call services, and return responses.
+They validate, call feature services, and return responses.
 
 No business logic.
 
----
-
 ## Rule 2
 
-Business logic belongs only in services.
-
----
+Business logic belongs only in feature `service.ts` files.
 
 ## Rule 3
 
-Repositories only communicate with Prisma.
-
----
+Only feature `repository.ts` files communicate with Prisma.
 
 ## Rule 4
 
 Prisma must never be imported into React components.
 
----
-
 ## Rule 5
 
-Services must not import React components.
-
----
+Feature services must not import React components.
 
 ## Rule 6
 
-Repositories must never import Route Handlers.
-
----
+Repositories must never import Route Handlers or Server Actions.
 
 ## Rule 7
 
-Validation schemas should be reusable by both frontend and backend.
+Validation schemas should be reusable by both frontend and backend (feature `schemas/` or shared `lib/validators/`).
+
+## Rule 8
+
+Do not create top-level `core/`, `shared/`, `services/`, or `repositories/` directories.
 
 ---
 
@@ -224,20 +210,20 @@ Validation schemas should be reusable by both frontend and backend.
 
 ```text
 app
-│
-▼
-features/*
-│
-▼
-feature service
-│
-▼
-feature repository
-│
-▼
+ │
+ ▼
+features/*/ (components, pages compose these)
+ │
+ ▼
+features/*/service.ts
+ │
+ ▼
+features/*/repository.ts
+ │
+ ▼
 lib/prisma
-│
-▼
+ │
+ ▼
 database
 ```
 
@@ -247,17 +233,15 @@ No reverse dependencies are allowed.
 
 # Cross-Cutting Modules
 
-These modules may be shared across multiple layers:
+Shared across layers when free of business logic:
 
 - config
 - constants
 - types
-- validation
 - lib/logger
-- lib/requestId
+- lib/request-id
 - lib/env
-
-They must remain free of business logic.
+- lib/validators
 
 ---
 
@@ -274,4 +258,4 @@ They must remain free of business logic.
 
 # Status
 
-Approved (Draft v1.0)
+**Status:** Approved
