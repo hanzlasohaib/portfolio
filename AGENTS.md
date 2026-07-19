@@ -261,4 +261,16 @@ Choose solutions that align with:
 - readability
 - future phases
 
-Avoid shortcuts that create technical debt. 
+Avoid shortcuts that create technical debt.
+
+---
+
+## Cursor Cloud specific instructions
+
+Stack: Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4, package manager is npm (Node 22 works). This is a single web app, not a monorepo.
+
+Commands (from `package.json`): `npm run dev` (dev server on http://localhost:3000), `npm run lint`, `npm run typecheck`, `npm run build`. Note `README.md` says `npm run type-check`, but the real script is `npm run typecheck` (no hyphen).
+
+No database, `.env`, or external services are required to run today. The backend (Prisma/Supabase/JWT/Zod) described in `README.md` and `docs/` is planned for later phases and is NOT yet implemented — there is no `prisma/schema.prisma`, no API route handlers, and no `.env.example`.
+
+Only two pages currently exist (Phase 1/2 per `docs/implementation-roadmap.md`): `/` (home, composed of Hero/About/Projects/Skills feature sections) and `/login`. Other routes (`/about`, `/projects`, `/journey`, `/contact`) return 404 by design, and `/login` renders `null` for now — these are not bugs.
