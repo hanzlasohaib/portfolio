@@ -1,0 +1,5 @@
+/*
+ * Next.js App Router entry for global CSS.
+ * Authoritative styles live in src/styles/ (see folder-structure.md).
+ */
+@import "../styles/globals.css";
