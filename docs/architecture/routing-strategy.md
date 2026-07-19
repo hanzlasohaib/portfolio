@@ -1,10 +1,10 @@
 # Routing Strategy
 
-> Version: 1.1.0
+> Version: 1.2.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-17
+> Last Updated: 2026-07-19
 >
 > Owner: Project Team
 >
@@ -144,23 +144,39 @@ These route groups are routing concerns only. Business logic never belongs insid
 
 # 9. Navigation Strategy
 
-The landing page contains a sticky navigation bar.
+The Home page (`/`) is the primary one-page landing experience. The
+Navbar performs **in-page anchor navigation only** — every Navbar link
+(other than Home itself) scrolls to a section on the Home page. It does
+not navigate to a different route.
 
 V1 Navbar links:
 
-- Home (`/`)
-- About (`/about`)
-- Projects (`/projects`)
-- Journey (`/journey`)
-- Contact (`/contact`)
+- Home → `/`
+- About → `/#about`
+- Projects → `/#projects`
+- Skills → `/#skills`
+- Journey → `/#journey`
+- Contact → `/#contact`
+
+Each target `id` (`hero`, `about`, `projects`, `skills`, `journey`,
+`contact`) is set on the corresponding Home section's root element.
+
+Dedicated pages (`/about`, `/projects`, `/projects/[slug]`, `/journey`,
+`/contact` — see § 3 Public Routes) remain real, independently routable
+pages. They are opened **only** through each Home section's own CTA (for
+example, the Projects preview's "View All Projects" button), never from
+the Navbar.
 
 Navigation supports:
 
-- Smooth scrolling to landing sections where applicable
-- Active section highlighting
+- Smooth scrolling to Home sections (CSS `scroll-behavior: smooth`,
+  respecting `prefers-reduced-motion`)
 - Responsive mobile navigation
 - Theme toggle
 - Contact CTA
+
+Active-section highlighting / scroll-spy is intentionally **not**
+implemented in V1.
 
 ---
 

@@ -1,20 +1,29 @@
-import { Container, PageWrapper, Section } from "@/components";
+import { PageWrapper } from "@/components";
+import { AboutSection } from "@/features/about";
+import { HeroSection } from "@/features/home";
+import { ProjectsSection } from "@/features/projects";
+import { SkillsSection } from "@/features/skills";
 
 /**
- * Temporary scaffold content. Public page content belongs to Phase 2.
- * Adjusted only so it composes with the Layout System (no nested <main>).
+ * Home (`/`) — docs/project-design/pages.md § Home.
+ *
+ * Page composes feature components only; no business logic here
+ * (docs/architecture/frontend-architecture.md § 6 Page Composition).
+ *
+ * TODO: Compose the remaining Home sections (Journey Timeline Preview,
+ * Contact CTA) once their owning features are implemented in later
+ * Phase 2 sprints.
+ * TODO: Add page-specific metadata (via `buildPageMetadata`) once real
+ * Home content/canonical URL requirements are finalized; the root layout's
+ * `defaultMetadata` applies in the meantime.
  */
 export default function Home() {
   return (
     <PageWrapper>
-      <Section>
-        <Container className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="text-display text-h1">Developing my Portfolio.</h1>
-          <p className="text-body-lg max-w-md">
-            I am implementing first phase of this project.
-          </p>
-        </Container>
-      </Section>
+      <HeroSection />
+      <AboutSection />
+      <ProjectsSection />
+      <SkillsSection />
     </PageWrapper>
   );
 }

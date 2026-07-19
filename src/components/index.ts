@@ -115,11 +115,20 @@ export type { RadioProps } from "./radio";
 export { Section } from "./section";
 export type { SectionProps } from "./section";
 
+export { SectionHeading } from "./section-heading";
+export type {
+  SectionHeadingAlign,
+  SectionHeadingProps,
+} from "./section-heading";
+
 export { Select } from "./select";
 export type { SelectProps } from "./select";
 
 export { Skeleton } from "./skeleton";
 export type { SkeletonProps } from "./skeleton";
+
+export { SocialLinks } from "./social-links";
+export type { SocialLinksProps } from "./social-links";
 
 export { Spinner } from "./spinner";
 export type { SpinnerProps, SpinnerSize, SpinnerVariant } from "./spinner";

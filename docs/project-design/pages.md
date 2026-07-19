@@ -1,10 +1,10 @@
 # Pages
 
-> Version: 1.1.0
+> Version: 1.2.0
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-17
+> Last Updated: 2026-07-19
 >
 > Owner: Project Team
 >
@@ -22,7 +22,10 @@
 
 Purpose:
 
-Introduce the developer and guide visitors.
+Introduce the developer and guide visitors. Home is the primary
+**one-page landing experience**: the Navbar scrolls within this page
+(see § Navbar), and every dedicated page below is reached only through
+that section's own CTA, never from the Navbar.
 
 Sections:
 
@@ -145,13 +148,23 @@ Footer
 
 # Navbar
 
-Links:
+The Home page is the primary one-page experience. Navbar links perform
+**in-page anchor navigation** to a Home section — they do not navigate
+to a different route. Authoritative behavior:
+`docs/architecture/routing-strategy.md` § 9.
 
-- Home
-- About
-- Projects
-- Journey
-- Contact
+Links (anchor targets on Home):
+
+- Home → `/`
+- About → `/#about`
+- Projects → `/#projects`
+- Skills → `/#skills`
+- Journey → `/#journey`
+- Contact → `/#contact`
+
+Dedicated pages (`/about`, `/projects`, `/journey`, `/contact`) are
+opened only through each Home section's own CTA (see each page's
+section above), never from the Navbar.
 
 Desktop:
 

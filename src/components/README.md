@@ -59,6 +59,8 @@ Implemented:
 - `DashboardNav`
 - `Breadcrumb`
 - `ThemeToggle`
+- `SocialLinks`
+- `SectionHeading`
 
 Planned:
 
