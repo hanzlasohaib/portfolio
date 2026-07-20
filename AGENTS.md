@@ -44,7 +44,15 @@ Before writing code:
 3. Understand the existing implementation.
 4. Reuse existing architecture whenever possible.
 
-Never skip documentation.
+Read only the documentation relevant to the requested feature.
+
+Do not read unrelated documentation.
+
+Documentation describes stable architectural decisions.
+
+If documentation conflicts with an explicit Architecture Decision Record (ADR), follow the ADR.
+
+If documentation is outdated and conflicts with the intended architecture, report the inconsistency rather than blindly following outdated documentation.
 
 ---
 
@@ -84,20 +92,29 @@ Shared UI belongs inside shared components.
 
 Feature-specific UI belongs inside feature folders.
 
+Architecture decisions take precedence over implementation convenience.
+
+Prefer consistency with the project's architecture over short-term optimizations.
+
 ---
 
 # Documentation Priority (Priority of Truth)
 
 1. AGENTS.md
-2. docs/project-design/project-scope.md
-3. docs/database/prisma-schema-planning.md
-4. docs/architecture/routing-strategy.md
+2. Architecture Decision Records (docs/architecture/adr/)
+3. docs/project-design/project-scope.md
+4. Other architecture documentation
 5. docs/implementation-roadmap.md
 
-If two documents conflict:
+If documentation conflicts:
 
-- Never merge both behaviors.
-- Follow the higher priority document.
+- Follow the most recent Architecture Decision Record (ADR).
+
+- If no ADR exists, follow the project owner's explicit architectural intent.
+
+- Report outdated documentation.
+
+- Never silently rewrite architecture.
 - Report the conflict.
 - Do not invent hybrid behavior.
 
@@ -140,7 +157,15 @@ Never:
 - disable ESLint
 - bypass type safety
 - leave placeholder implementations
-- leave TODOs as completed work
+Do not leave placeholder implementations pretending to be complete.
+
+TODO comments are acceptable only when:
+
+- work belongs to a future phase
+- implementation depends on unavailable information
+- implementation is intentionally deferred
+
+Remove obsolete TODOs whenever possible.
 
 Prefer:
 
@@ -164,11 +189,11 @@ Before creating:
 - constant
 - provider
 
-Search the project first.
+Search before creating.
 
-Reuse existing implementations whenever possible.
+Refactor before duplicating.
 
-Do not create duplicate abstractions.
+Create new abstractions only when duplication becomes meaningful.
 
 ---
 
@@ -245,6 +270,12 @@ Always explain:
 
 Never silently make architectural decisions.
 
+Search before creating.
+
+Refactor before duplicating.
+
+Create new abstractions only when duplication becomes meaningful.
+
 Always explain them.
 
 ---
@@ -261,4 +292,20 @@ Choose solutions that align with:
 - readability
 - future phases
 
-Avoid shortcuts that create technical debt. 
+Avoid shortcuts that create technical debt.
+
+---
+
+## Cursor Cloud specific instructions
+
+Stack: Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4, package manager is npm (Node 22 works). This is a single web app, not a monorepo.
+
+Commands (from `package.json`): `npm run dev` (dev server on http://localhost:3000), `npm run lint`, `npm run typecheck`, `npm run build`. Note `README.md` says `npm run type-check`, but the real script is `npm run typecheck` (no hyphen).
+
+No database, `.env`, or external services are required to run today. The backend (Prisma/Supabase/JWT/Zod) described in `README.md` and `docs/` is planned for later phases and is NOT yet implemented — there is no `prisma/schema.prisma`, no API route handlers, and no `.env.example`.
+
+Only two pages currently exist (Phase 1/2 per `docs/implementation-roadmap.md`): `/` (home, composed of Hero/About/Projects/Skills feature sections) and `/login`. Current implemented routes should always be inferred from the repository itself.
+
+Do not assume planned routes are already implemented.
+
+If documentation and repository differ, report the difference. and `/login` renders `null` for now — these are not bugs.
