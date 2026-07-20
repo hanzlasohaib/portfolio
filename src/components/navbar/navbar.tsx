@@ -1,9 +1,3 @@
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
-import { Link } from "@/components/link";
 import { MobileMenu } from "@/components/mobile-menu";
 import { NavLinks } from "@/components/nav-links";
 import { NavbarBrand } from "@/components/navbar-brand";
@@ -12,6 +6,13 @@ import { cn } from "@/lib/utils";
 
 import type { NavbarProps } from "./navbar.types";
 
+/**
+ * Public primary navigation.
+ *
+ * Intentionally omits any Admin Login entry point — `/login` remains a
+ * valid route for the portfolio owner, but visitors must not be shown a
+ * public CTA into the admin area.
+ */
 export function Navbar({ className, ...props }: NavbarProps) {
   return (
     <nav
@@ -28,18 +29,6 @@ export function Navbar({ className, ...props }: NavbarProps) {
 
       <div className="hidden items-center gap-2 md:flex">
         <ThemeToggle />
-        <Link
-          href="/login"
-          underline={false}
-          variant="inherit"
-          className={cn(
-            buttonBaseClassName,
-            buttonVariantClassName.primary,
-            buttonSizeClassName.sm,
-          )}
-        >
-          Login
-        </Link>
       </div>
 
       <MobileMenu />

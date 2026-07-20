@@ -44,7 +44,15 @@ Before writing code:
 3. Understand the existing implementation.
 4. Reuse existing architecture whenever possible.
 
-Never skip documentation.
+Read only the documentation relevant to the requested feature.
+
+Do not read unrelated documentation.
+
+Documentation describes stable architectural decisions.
+
+If documentation conflicts with an explicit Architecture Decision Record (ADR), follow the ADR.
+
+If documentation is outdated and conflicts with the intended architecture, report the inconsistency rather than blindly following outdated documentation.
 
 ---
 
@@ -84,20 +92,29 @@ Shared UI belongs inside shared components.
 
 Feature-specific UI belongs inside feature folders.
 
+Architecture decisions take precedence over implementation convenience.
+
+Prefer consistency with the project's architecture over short-term optimizations.
+
 ---
 
 # Documentation Priority (Priority of Truth)
 
 1. AGENTS.md
-2. docs/project-design/project-scope.md
-3. docs/database/prisma-schema-planning.md
-4. docs/architecture/routing-strategy.md
+2. Architecture Decision Records (docs/architecture/adr/)
+3. docs/project-design/project-scope.md
+4. Other architecture documentation
 5. docs/implementation-roadmap.md
 
-If two documents conflict:
+If documentation conflicts:
 
-- Never merge both behaviors.
-- Follow the higher priority document.
+- Follow the most recent Architecture Decision Record (ADR).
+
+- If no ADR exists, follow the project owner's explicit architectural intent.
+
+- Report outdated documentation.
+
+- Never silently rewrite architecture.
 - Report the conflict.
 - Do not invent hybrid behavior.
 
@@ -140,7 +157,15 @@ Never:
 - disable ESLint
 - bypass type safety
 - leave placeholder implementations
-- leave TODOs as completed work
+Do not leave placeholder implementations pretending to be complete.
+
+TODO comments are acceptable only when:
+
+- work belongs to a future phase
+- implementation depends on unavailable information
+- implementation is intentionally deferred
+
+Remove obsolete TODOs whenever possible.
 
 Prefer:
 
@@ -164,11 +189,11 @@ Before creating:
 - constant
 - provider
 
-Search the project first.
+Search before creating.
 
-Reuse existing implementations whenever possible.
+Refactor before duplicating.
 
-Do not create duplicate abstractions.
+Create new abstractions only when duplication becomes meaningful.
 
 ---
 
@@ -244,6 +269,12 @@ Always explain:
 - any tradeoffs
 
 Never silently make architectural decisions.
+
+Search before creating.
+
+Refactor before duplicating.
+
+Create new abstractions only when duplication becomes meaningful.
 
 Always explain them.
 
