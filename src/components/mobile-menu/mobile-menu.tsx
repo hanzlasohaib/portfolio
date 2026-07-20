@@ -2,13 +2,6 @@
 
 import { useId, useState } from "react";
 
-import NextLink from "next/link";
-
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
 import { Button } from "@/components/button";
 import { MobileNav } from "@/components/mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -39,6 +32,13 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
+/**
+ * Public mobile navigation disclosure.
+ *
+ * Intentionally omits any Admin Login entry point — `/login` remains a
+ * valid route for the portfolio owner, but visitors must not be shown a
+ * public CTA into the admin area.
+ */
 export function MobileMenu({ className, ...props }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuId = useId();
@@ -75,18 +75,6 @@ export function MobileMenu({ className, ...props }: MobileMenuProps) {
             <ThemeToggle />
           </div>
           <MobileNav onNavigate={closeMenu} />
-          <NextLink
-            href="/login"
-            className={cn(
-              buttonBaseClassName,
-              buttonVariantClassName.primary,
-              buttonSizeClassName.sm,
-              "w-full justify-center",
-            )}
-            onClick={closeMenu}
-          >
-            Login
-          </NextLink>
         </div>
       </div>
     </div>
