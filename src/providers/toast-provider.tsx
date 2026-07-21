@@ -4,12 +4,10 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
-import { createPortal } from "react-dom";
 
 import { cn } from "@/lib/utils";
 
@@ -48,13 +46,12 @@ export type ToastProviderProps = {
   children: ReactNode;
 };
 
+/**
+ * Renders the toast region in-tree (fixed positioning) so SSR and client
+ * markup match — no portal / mount effect required.
+ */
 export function ToastProvider({ children }: ToastProviderProps) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const dismiss = useCallback((id: string) => {
     setToasts((current) => current.filter((toast) => toast.id !== id));
@@ -101,40 +98,35 @@ export function ToastProvider({ children }: ToastProviderProps) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      {mounted
-        ? createPortal(
-            <div
-              className="pointer-events-none fixed inset-x-0 bottom-0 flex flex-col items-end gap-2 p-4 sm:p-6"
-              style={{ zIndex: "var(--z-toast)" }}
-              aria-live="polite"
-              aria-relevant="additions"
+      <div
+        className="pointer-events-none fixed inset-x-0 bottom-0 flex flex-col items-end gap-2 p-4 sm:p-6"
+        style={{ zIndex: "var(--z-toast)" }}
+        aria-live="polite"
+        aria-relevant="additions"
+      >
+        {toasts.map((item) => (
+          <div
+            key={item.id}
+            role={item.variant === "error" ? "alert" : "status"}
+            className={cn(
+              "pointer-events-auto w-full max-w-sm rounded-lg border px-4 py-3 shadow-medium",
+              variantClassName[item.variant],
+            )}
+          >
+            {item.title ? (
+              <p className="m-0 mb-1 text-small font-medium">{item.title}</p>
+            ) : null}
+            <p className="m-0 text-small">{item.message}</p>
+            <button
+              type="button"
+              className="mt-2 text-caption underline-offset-2 hover:underline"
+              onClick={() => dismiss(item.id)}
             >
-              {toasts.map((item) => (
-                <div
-                  key={item.id}
-                  role={item.variant === "error" ? "alert" : "status"}
-                  className={cn(
-                    "pointer-events-auto w-full max-w-sm rounded-lg border px-4 py-3 shadow-medium",
-                    variantClassName[item.variant],
-                  )}
-                >
-                  {item.title ? (
-                    <p className="m-0 mb-1 text-small font-medium">{item.title}</p>
-                  ) : null}
-                  <p className="m-0 text-small">{item.message}</p>
-                  <button
-                    type="button"
-                    className="mt-2 text-caption underline-offset-2 hover:underline"
-                    onClick={() => dismiss(item.id)}
-                  >
-                    Dismiss
-                  </button>
-                </div>
-              ))}
-            </div>,
-            document.body,
-          )
-        : null}
+              Dismiss
+            </button>
+          </div>
+        ))}
+      </div>
     </ToastContext.Provider>
   );
 }

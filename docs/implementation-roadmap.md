@@ -27,10 +27,12 @@ Implementation Roadmap
 
 ## Phase 3 – Backend Foundation
 
-Status: In Progress
+Status: Completed (2026-07-21)
 
 Auth and dashboard shell land inside Phase 3 (former Phase 4
 dashboard foundation). Quality and Release follow Phase 3.
+
+Git tag: `v1.2-backend` (initial) / `v1.3-phase3-complete` (close)
 
 ```text
 Phase 3.1 – Foundation + Auth + Seed
@@ -56,15 +58,38 @@ Phase 3.3+ – Feature data + CRUD
        └── About (static constants unless DB fields are required)
 ```
 
+Phase 3 verification (manual):
+
+- [x] Contact form persists via `POST /api/contact`
+- [x] Projects / Journey / Skills read from DB (with static fallback)
+- [x] Dashboard CRUD for projects, journey, messages
+- [x] Production login / dashboard session verified on Vercel
+
 ## Phase 4 – Quality
 
-Status:
-Deferred until Phase 3 is completed.
+Status: In Progress
+
+```text
+Phase 4 – Production readiness
+       ├── Security headers (Next.js)
+       ├── Manual / production smoke checklist
+       ├── Accessibility & SEO review
+       ├── Security checklist (V1-applicable items)
+       ├── Production admin (replace demo seed credentials)
+       └── Performance / Lighthouse pass
+```
+
+Deferred to later ADRs / not blocking Phase 4 close unless required:
+
+- Rate limiting
+- reCAPTCHA
+- Resend email delivery
 
 ## Phase 5 – Release
 
-Status:
-Deferred until Phase 4 is completed.
+Status: Deferred until Phase 4 is completed.
+
+Target tag: `v1.4-production-ready`
 
 ---
 
@@ -312,12 +337,13 @@ Only after all verification commands succeed may the implementation proceed to R
 
 ### Verification Checklist
 
-- [ ] All manual tests passed.
-- [ ] Performance targets achieved.
-- [ ] Accessibility reviewed.
-- [ ] SEO configured.
-- [ ] Security checklist completed.
-- [ ] Development seed / demo admin removed or replaced for production.
+- [ ] All manual tests passed (`docs/testing/quality-checklist.md`)
+- [ ] Performance targets achieved
+- [ ] Accessibility reviewed
+- [ ] SEO configured
+- [x] Baseline security headers (`next.config.ts`)
+- [ ] Security checklist V1 items completed (`docs/security/security-checklist.md`)
+- [ ] Development seed / demo admin removed or replaced for production
 
   Commands:
    - npm run lint

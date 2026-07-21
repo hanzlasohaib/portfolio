@@ -8,7 +8,7 @@ Built with a feature-based Next.js App Router architecture. Documentation in `do
 
 ## Current status
 
-**Phases 1–2 complete.** **Phase 3 (Backend) in progress / implemented locally.**
+**Phases 1–3 complete.** **Phase 4 (Quality) in progress.**
 
 | Route | Status |
 |-------|--------|
@@ -22,6 +22,19 @@ Built with a feature-based Next.js App Router architecture. Documentation in `do
 | `/projects/[slug]` | Planned (V1 scope; not implemented yet) |
 
 There is **no** dedicated `/skills` route in V1 — skills appear on Home and `/about`.
+
+### Production notes
+
+Required Vercel env vars (names must match — `POSTGRES_*` / `SUPABASE_*` alone are not enough):
+
+- `DATABASE_URL`
+- `DIRECT_URL`
+- `JWT_SECRET`
+- `NEXT_PUBLIC_SITE_URL` (production site URL)
+
+Do **not** set `SEED_ADMIN_*` or `NODE_ENV` on Vercel. Seed is local/dev only.
+
+**Replace the demo admin before treating production as locked down:** create a real admin (or update the seeded user’s email/password hash in Supabase), rotate `JWT_SECRET` if it was ever shared, and stop using `admin@example.com` / seed passwords.
 
 ---
 
