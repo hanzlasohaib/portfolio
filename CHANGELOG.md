@@ -20,7 +20,7 @@ The format follows Keep a Changelog principles.
 
 ### Status
 
-Post-V1 MFA available when `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `MFA_NOTIFY_EMAIL` are set.
+Post-V1 MFA available when `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `MFA_NOTIFY_EMAIL` are set. Owner-verified on production. Git tag: `v1.5-mfa`.
 
 ---
 

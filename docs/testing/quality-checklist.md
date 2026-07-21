@@ -81,5 +81,6 @@ Optional follow-ups (non-blocking):
 
 - Rate limiting
 - reCAPTCHA
-- Resend transactional email
 - Full CSP (add via ADR when needed)
+
+> Resend transactional email shipped in 1.5.0 for MFA OTP delivery (owner-verified on production).

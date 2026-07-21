@@ -87,7 +87,8 @@ Deferred to later ADRs / not blocking Phase 4 close unless required:
 
 - Rate limiting
 - reCAPTCHA
-- Resend email delivery
+
+> Resend email delivery shipped post-V1 in 1.5.0 for MFA OTP (`v1.5-mfa`).
 
 ## Phase 5 – Release
 
