@@ -51,8 +51,19 @@ export function LoginForm() {
         const response = await fetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          // Required so the browser stores the HTTP-only auth cookie.
+          credentials: "same-origin",
           body: JSON.stringify(parsed.data),
         });
+
+        const contentType = response.headers.get("content-type") ?? "";
+        if (!contentType.includes("application/json")) {
+          setFormError(
+            "Sign-in failed on the server. Check that DATABASE_URL, DIRECT_URL, and JWT_SECRET are set in Vercel, then redeploy.",
+          );
+          return;
+        }
+
         const payload = (await response.json()) as {
           success: boolean;
           message: string;
