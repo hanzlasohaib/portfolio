@@ -1,10 +1,10 @@
 # System Architecture
 
-> Version: 1.0.0
+> Version: 1.1.0
 >
-> Status: Approved (Architecture Baseline v1.0)
+> Status: Approved (Architecture Baseline v1.0 + post-V1 abuse protection)
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-07-21
 >
 > Owner: Project Team
 >
@@ -448,8 +448,11 @@ These modules must remain framework-agnostic whenever practical.
 | Supabase | PostgreSQL Database |
 | GitHub | Version Control |
 | Vercel | Deployment |
-| Resend | Email Delivery (Future) |
-| Google reCAPTCHA v3 | Spam Protection (Future) |
+| Resend | Email OTP MFA delivery (post-V1; optional when MFA env is set) |
+| Google reCAPTCHA v3 | Bot protection on login / MFA / contact (ADR-010; optional when keys are set) |
+| Upstash Redis | Distributed rate limiting only (ADR-010; optional when REST env is set) |
+
+Supabase client SDK keys remain deferred. Upstash is **not** used as a page/data cache (see §14 and ADR-009).
 
 ---
 
@@ -467,13 +470,19 @@ Visitors may:
 
 Authentication is not required.
 
+Public write endpoints (contact, login, MFA) apply abuse protection when configured (ADR-010):
+
+- Upstash IP rate limits
+- Google reCAPTCHA v3
+- Baseline security headers including Content-Security-Policy
+
 ---
 
 ## Protected Access
 
 Administrators may:
 
-- Login
+- Login (password + optional email OTP MFA when Resend/MFA env is set)
 - Access Dashboard
 - Manage Projects
 - Manage Journey
@@ -482,8 +491,9 @@ Administrators may:
 
 Protected functionality requires:
 
-- JWT Authentication
-- RBAC Authorization
+- JWT Authentication (HTTP-only cookie)
+- RBAC Authorization (Admin)
+- Optional MFA challenge after password (1.5.0)
 
 ---
 
@@ -507,7 +517,7 @@ Potential additions:
 
 # 14. Caching Strategy
 
-Version 1 intentionally relies on Next.js built-in caching.
+Version 1 intentionally relies on Next.js built-in caching (ADR-009).
 
 Preferred mechanisms:
 
@@ -517,7 +527,7 @@ Preferred mechanisms:
 
 Business services depend only on a cache abstraction.
 
-A distributed cache (Redis) may be introduced later without changing business logic or repositories.
+A distributed **cache** (Redis) may be introduced later without changing business logic or repositories. That is separate from Upstash Redis used for **rate limiting** only (ADR-010).
 
 ---
 
@@ -554,8 +564,11 @@ Any violation of these constraints requires an Architecture Decision Record (ADR
 | Validation | Zod |
 | ORM | Prisma |
 | Database | Supabase PostgreSQL |
-| Authentication | JWT |
+| Authentication | JWT (+ optional email OTP MFA) |
 | Authorization | RBAC |
+| Rate limiting | Upstash Redis (optional, ADR-010) |
+| Bot protection | Google reCAPTCHA v3 (optional, ADR-010) |
+| Transactional email | Resend (optional MFA OTP) |
 | Deployment | Vercel |
 
 ---
@@ -573,8 +586,10 @@ Any violation of these constraints requires an Architecture Decision Record (ADR
 | Validation | Zod |
 | ORM | Prisma |
 | Database | Supabase PostgreSQL |
-| Authentication | JWT |
+| Authentication | JWT (+ optional email OTP MFA) |
 | Authorization | RBAC |
+| Page/data cache | Next.js built-in (ADR-009; no Redis cache) |
+| Abuse protection | Upstash rate limits + reCAPTCHA v3 + CSP (ADR-010) |
 | Deployment | Vercel |
 
 ---
