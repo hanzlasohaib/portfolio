@@ -48,9 +48,9 @@ export function ProjectsSection() {
           variant="inherit"
           className={cn(
             buttonBaseClassName,
-            buttonVariantClassName.outline,
-            buttonSizeClassName.md,
-            "self-start",
+            buttonVariantClassName.primary,
+            buttonSizeClassName.lg,
+            "self-center",
           )}
         >
           View All Projects

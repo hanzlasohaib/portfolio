@@ -9,8 +9,11 @@ export type ButtonSize = "sm" | "md" | "lg";
 
 /** Shared variant styles for Button and IconButton. */
 export const buttonVariantClassName: Record<ButtonVariant, string> = {
+  // `text-on-primary` (not `text-text-inverse`) — see `--on-primary` in
+  // styles/variables.css. Hover/visited keep the same token so link-styled
+  // Primary CTAs do not pick up global anchor or body foreground colors.
   primary:
-    "gradient-primary text-text-inverse shadow-soft hover:opacity-90 active:opacity-95",
+    "gradient-primary text-on-primary hover:text-on-primary visited:text-on-primary shadow-soft hover:opacity-90 active:opacity-95",
   secondary:
     "border border-secondary/30 bg-secondary/10 text-secondary hover:bg-secondary/20 active:bg-secondary/25",
   outline:

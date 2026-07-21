@@ -6,7 +6,7 @@ import type { NavbarBrandProps } from "./navbar-brand.types";
 
 export function NavbarBrand({
   href = "/",
-  label = "Portfolio",
+  label = "Hanzla Sohaib",
   className,
   ...props
 }: NavbarBrandProps) {

@@ -112,6 +112,9 @@ export type { PublicLayoutProps } from "./public-layout";
 export { Radio } from "./radio";
 export type { RadioProps } from "./radio";
 
+export { ScrollProgressBar } from "./scroll-progress-bar";
+export type { ScrollProgressBarProps } from "./scroll-progress-bar";
+
 export { Section } from "./section";
 export type { SectionProps } from "./section";
 

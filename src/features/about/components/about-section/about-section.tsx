@@ -72,9 +72,9 @@ export function AboutSection() {
           variant="inherit"
           className={cn(
             buttonBaseClassName,
-            buttonVariantClassName.outline,
-            buttonSizeClassName.md,
-            "self-start",
+            buttonVariantClassName.primary,
+            buttonSizeClassName.lg,
+            "self-center",
           )}
         >
           More About Me

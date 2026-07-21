@@ -7,7 +7,11 @@ const linkVariantClassName: Record<LinkVariant, string> = {
   secondary: "text-secondary visited:text-secondary hover:text-primary-light",
   muted:
     "text-text-secondary visited:text-text-secondary hover:text-text-primary",
-  inherit: "text-inherit visited:text-inherit hover:text-inherit",
+  // Only set the base color — do not re-assert inherit on hover/visited.
+  // Those overrides undo explicit `text-*` utilities from button-as-link
+  // classNames (e.g. Primary CTA `text-on-primary`) and fall back to the
+  // body foreground, which looks grey on the primary gradient.
+  inherit: "text-inherit",
 };
 
 export function linkClassName(

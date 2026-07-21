@@ -3,11 +3,11 @@ import { cn } from "@/lib/utils";
 import type { TextProps, TextVariant } from "./text.types";
 
 const variantClassName: Record<TextVariant, string> = {
-  body: "text-body",
-  "body-lg": "text-body-lg",
-  small: "text-small",
-  caption: "text-caption",
-  mono: "text-mono text-small",
+  body: "text-body text-text-secondary",
+  "body-lg": "text-body-lg text-text-secondary",
+  small: "text-small text-text-secondary",
+  caption: "text-caption text-text-disabled",
+  mono: "text-mono text-small text-text-secondary",
 };
 
 export function Text({

@@ -11,6 +11,8 @@ import { Text } from "@/components/text";
 import { PERSONAL } from "@/constants/personal";
 import { cn } from "@/lib/utils";
 
+import { HeroScrollHint } from "./hero-scroll-hint";
+
 /**
  * Landing page Hero (docs/project-design/pages.md § Home,
  * docs/ui-ux/component-guidelines.md § Hero Section).
@@ -37,26 +39,23 @@ export function HeroSection() {
       />
       <div
         aria-hidden="true"
-        className="animate-blob absolute -right-16 bottom-0 -z-10 size-72 rounded-full bg-secondary/20 blur-3xl"
+        className="animate-blob-reverse absolute -right-16 bottom-0 -z-10 size-72 rounded-full bg-secondary/20 blur-3xl"
       />
 
       <Container className="flex min-h-[70vh] flex-col items-center justify-center gap-6 text-center">
-        <p className="animate-fade-up text-lg font-semibold text-primary-light sm:text-xl">
+        <p className="hero-entrance-role text-lg font-semibold text-primary-light sm:text-xl">
           {PERSONAL.role}
         </p>
 
-        <h1 className="text-hero stagger-1 max-w-3xl animate-fade-up">
+        <h1 className="text-hero hero-entrance-name max-w-3xl">
           {PERSONAL.name}
         </h1>
 
-        <Text
-          variant="body-lg"
-          className="stagger-2 max-w-xl animate-fade-up"
-        >
+        <Text variant="body-lg" className="hero-entrance-description max-w-xl">
           {PERSONAL.tagline}
         </Text>
 
-        <div className="stagger-3 flex animate-fade-up flex-col gap-4 sm:flex-row">
+        <div className="hero-entrance-cta flex flex-col gap-4 sm:flex-row">
           <Link
             href="/#projects"
             underline={false}
@@ -74,7 +73,7 @@ export function HeroSection() {
             download
             className={cn(
               buttonBaseClassName,
-              buttonVariantClassName.outline,
+              buttonVariantClassName.primary,
               buttonSizeClassName.lg,
             )}
           >
@@ -82,8 +81,10 @@ export function HeroSection() {
           </a>
         </div>
 
-        <SocialLinks className="stagger-4 animate-fade-up" />
+        <SocialLinks className="hero-entrance-social" />
       </Container>
+
+      <HeroScrollHint />
     </Section>
   );
 }

@@ -19,7 +19,7 @@ export function Footer({ className, children, ...props }: FooterProps) {
       {...props}
     >
       <Container className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        {children ?? <p className="text-caption m-0">© {year}</p>}
+        {children ?? <p className="text-caption text-text-disabled m-0">© {year}</p>}
       </Container>
     </footer>
   );

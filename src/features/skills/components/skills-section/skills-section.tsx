@@ -60,9 +60,9 @@ export function SkillsSection() {
           variant="inherit"
           className={cn(
             buttonBaseClassName,
-            buttonVariantClassName.outline,
-            buttonSizeClassName.md,
-            "self-start",
+            buttonVariantClassName.primary,
+            buttonSizeClassName.lg,
+            "self-center",
           )}
         >
           More About My Skills

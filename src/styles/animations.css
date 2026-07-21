@@ -82,6 +82,66 @@
   animation: blob-float 18s var(--easing-default) infinite;
 }
 
+.animate-blob-reverse {
+  animation: blob-float 20s var(--easing-default) infinite reverse;
+}
+
+/* Hero entrance — one-shot on load (animation-iteration-count: 1), ~1.2s total */
+@keyframes hero-blur-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes hero-fade-up-sm {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-fade-up-light {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-entrance-name {
+  animation: hero-blur-up 420ms var(--easing-entrance) 0ms 1 both;
+}
+
+.hero-entrance-role {
+  animation: hero-fade-up-sm 260ms var(--easing-entrance) 280ms 1 both;
+}
+
+.hero-entrance-description {
+  animation: hero-fade-up-light 240ms var(--easing-entrance) 520ms 1 both;
+}
+
+.hero-entrance-cta {
+  animation: fade-up 240ms var(--easing-entrance) 760ms 1 both;
+}
+
+.hero-entrance-social {
+  animation: fade-up 260ms var(--easing-entrance) 960ms 1 both;
+}
+
 /* Stagger children via animation-delay utilities */
 .stagger-1 {
   animation-delay: 50ms;
@@ -113,7 +173,16 @@
   .animate-fade-up,
   .animate-fade-down,
   .animate-scale-in,
-  .animate-blob {
+  .animate-blob,
+  .animate-blob-reverse,
+  .hero-entrance-name,
+  .hero-entrance-role,
+  .hero-entrance-description,
+  .hero-entrance-cta,
+  .hero-entrance-social {
     animation: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

@@ -2,6 +2,7 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { LayoutShell } from "@/components/layout-shell";
 import { Navbar } from "@/components/navbar";
+import { ScrollProgressBar } from "@/components/scroll-progress-bar";
 import { cn } from "@/lib/utils";
 
 import type { PublicLayoutProps } from "./public-layout.types";
@@ -23,6 +24,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
       }
       footer={<Footer />}
     >
+      <ScrollProgressBar />
       {children}
     </LayoutShell>
   );

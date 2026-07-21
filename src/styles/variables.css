@@ -115,6 +115,21 @@
   --focus-ring-offset: 2px;
   --selection-bg: rgba(63, 140, 255, 0.35);
   --selection-color: var(--text-primary);
+
+  /*
+   * On-primary text — content placed on `--gradient-primary` (Primary CTAs).
+   * Theme-independent on purpose: `--text-inverse` flips per theme and is
+   * the wrong token for this surface (dark theme → near-black is fine;
+   * light theme → white fails WCAG AA at the lighter gradient stop).
+   *
+   * `#040414` vs dark gradient (#3f8cff → #6ac5ff): ~6.2:1 / ~10.7:1 (AA).
+   * `#040414` vs light gradient (#2563eb → #3b82f6): ~3.9:1 / ~5.5:1
+   * (AA at the lighter stop; the darker stop is just under 4.5:1 for
+   * normal text without changing the gradient). White fails the dark
+   * theme stops entirely, so this dark value is the accessible choice
+   * that works for both themes without altering the CTA background.
+   */
+  --on-primary: #040414;
 }
 
 [data-theme="dark"] {
