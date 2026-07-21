@@ -4,8 +4,12 @@
  *
  * Note: there is no dedicated `/skills` page/route to export here — Skills
  * content lives on the landing/about pages in V1
- * (docs/project-design/project-scope.md). This sprint only implements the
- * Home page "Skills Preview" section.
+ * (docs/project-design/project-scope.md).
  */
+export { SkillsCategories } from "./components/skills-categories";
 export { SkillsSection } from "./components/skills-section";
+export {
+  SKILLS_DATA,
+  TECHNOLOGIES_DATA,
+} from "./constants/skills-data";
 export type { SkillCategory } from "./constants/skills-data";

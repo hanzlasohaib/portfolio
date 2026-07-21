@@ -62,3 +62,13 @@ export const SKILLS_DATA: SkillCategory[] = [
     ],
   },
 ];
+
+/**
+ * Flat technology inventory for the About page "Technologies" badge cloud
+ * (docs/project-design/pages.md § About). Derived from `SKILLS_DATA` so the
+ * categorized Skills grid and the flat Technologies cloud stay in sync
+ * without duplicating the list.
+ */
+export const TECHNOLOGIES_DATA: string[] = SKILLS_DATA.flatMap(
+  ({ technologies }) => technologies,
+);

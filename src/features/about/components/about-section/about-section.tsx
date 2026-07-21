@@ -22,7 +22,7 @@ import { ABOUT_CONTENT } from "../../constants/about-content";
  * Presentation-only — reads static content from `constants/personal.ts`
  * (shared identity) and the feature-local `about-content.ts` (biography,
  * strengths, current focus, education). No business logic, no data
- * fetching. The full `/about` page is out of scope for this sprint.
+ * fetching. The full `/about` page is composed by `AboutPage`.
  *
  * `id="about"` anchors this section for the one-page Navbar navigation
  * (see `constants/navigation.ts`).

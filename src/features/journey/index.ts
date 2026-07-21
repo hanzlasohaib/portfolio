@@ -10,4 +10,5 @@
 export { JourneyCard } from "./components/journey-card";
 export { JourneySection } from "./components/journey-section";
 export { JourneyTimeline } from "./components/journey-timeline";
+export { JOURNEY_DATA } from "./constants/journey-data";
 export type { JourneyEntry } from "./constants/journey-data";
