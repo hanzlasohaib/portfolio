@@ -1,6 +1,6 @@
 # Quality Checklist
 
-> Version: 1.4.0
+> Version: 1.4.1
 >
 > Status: Completed (Phase 4)
 >
@@ -33,11 +33,11 @@ Production host: `https://portfolio-eta-rust-yq70o12jnn.vercel.app`
 
 ## Performance
 
-- [x] Lighthouse on production (owner-reported): Performance **76**, Accessibility **100**, Best Practices **100**, SEO **100**
+- [x] Lighthouse on production (owner-reported): Performance **78**, Accessibility **100**, Best Practices **100**, SEO **100**
 - [x] Public pages are primarily Server Components (feature pages under `app/(public)`)
 - [x] No content `<img>` / `next/image` assets in V1 UI; OG image via `next/og` (`opengraph-image.tsx`)
 
-> Note: Performance 76 is accepted for V1 Phase 4 close. Further optimization (fonts, JS weight, caching) can follow as a non-blocking improvement.
+> Note: Performance 78 accepted for V1. Further optimization (fonts, JS weight, caching) remains optional.
 
 ## Accessibility
 
@@ -64,7 +64,7 @@ See also `docs/security/security-checklist.md`.
 - [x] Prisma migrations applied
 - [x] Baseline security headers observed on production (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`)
 - [x] Test Admin retained for V1 — dashboard login on Vercel uses the seeded User in Supabase
-- [ ] `JWT_SECRET` rotated if previously exposed (optional; owner decision — not a Phase 4 blocker)
+- [x] `JWT_SECRET` not rotated — owner confirmed it was never shared
 - [x] No debug/admin endpoints outside `/dashboard` + `/api/auth/*` + `/api/contact`
 
 ## Phase 4 closed
@@ -73,8 +73,7 @@ Completed 2026-07-21. Release tag: `v1.4-production-ready`.
 
 Optional follow-ups (non-blocking):
 
-- Rotate `JWT_SECRET` if it was ever shared
-- Improve Lighthouse Performance above 76
+- Improve Lighthouse Performance further if desired
 
 ## Deferred (documented, not Phase 4 blockers)
 

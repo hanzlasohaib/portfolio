@@ -69,7 +69,7 @@ Phase 3 verification (manual):
 
 Status: Completed (2026-07-21)
 
-Lighthouse (production): Performance 76 · Accessibility 100 · Best Practices 100 · SEO 100.
+Lighthouse (production): Performance 78 · Accessibility 100 · Best Practices 100 · SEO 100.
 
 Git tag: `v1.4-production-ready`
 
@@ -342,7 +342,7 @@ Only after all verification commands succeed may the implementation proceed to R
 ### Verification Checklist
 
 - [x] All manual tests passed (`docs/testing/quality-checklist.md`)
-- [x] Performance reviewed (Lighthouse Performance 76 — accepted for V1)
+- [x] Performance reviewed (Lighthouse Performance 78 — accepted for V1)
 - [x] Accessibility reviewed (Lighthouse Accessibility 100)
 - [x] SEO configured (Lighthouse SEO 100)
 - [x] Baseline security headers (`next.config.ts`)

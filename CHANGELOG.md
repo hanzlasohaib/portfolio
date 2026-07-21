@@ -21,7 +21,7 @@ The format follows Keep a Changelog principles.
 ### Status
 
 V1 production-ready.
-Lighthouse (production): Performance 76 · Accessibility 100 · Best Practices 100 · SEO 100.
+Lighthouse (production): Performance 78 · Accessibility 100 · Best Practices 100 · SEO 100.
 Git tags: `v1.2-backend`, `v1.3-phase3-complete`, `v1.4-production-ready`.
 
 ---
