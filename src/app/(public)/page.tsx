@@ -1,4 +1,8 @@
+import type { Metadata } from "next";
+
 import { PageWrapper } from "@/components";
+import { buildPageMetadata } from "@/config/metadata";
+import { SEO_DEFAULTS } from "@/constants/seo";
 import { AboutSection } from "@/features/about";
 import { ContactSection } from "@/features/contact";
 import { HeroSection } from "@/features/home";
@@ -11,15 +15,15 @@ import { SkillsSection } from "@/features/skills";
  *
  * Page composes feature components only; no business logic here
  * (docs/architecture/frontend-architecture.md § 6 Page Composition).
- *
- * All Home sections defined in docs/project-design/pages.md § Home are
- * now composed. Remaining work is the dedicated pages themselves
- * (/about, /projects, /journey, /contact) in later Phase 2 sprints.
- *
- * TODO: Add page-specific metadata (via `buildPageMetadata`) once real
- * Home content/canonical URL requirements are finalized; the root layout's
- * `defaultMetadata` applies in the meantime.
  */
+export const metadata: Metadata = buildPageMetadata({
+  path: "/",
+  title: {
+    absolute: SEO_DEFAULTS.defaultTitle,
+  },
+  description: SEO_DEFAULTS.description,
+});
+
 export default function Home() {
   return (
     <PageWrapper>

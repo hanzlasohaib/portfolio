@@ -159,6 +159,23 @@
   animation-delay: 250ms;
 }
 
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-enter {
+  animation: page-enter 280ms var(--easing-entrance) both;
+  /* Avoid leaving a persistent transform (breaks `position: fixed` descendants). */
+  animation-fill-mode: backwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -175,6 +192,7 @@
   .animate-scale-in,
   .animate-blob,
   .animate-blob-reverse,
+  .animate-page-enter,
   .hero-entrance-name,
   .hero-entrance-role,
   .hero-entrance-description,

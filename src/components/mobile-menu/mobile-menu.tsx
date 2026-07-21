@@ -64,10 +64,12 @@ export function MobileMenu({ className, ...props }: MobileMenuProps) {
       <div
         id={menuId}
         className={cn(
-          "absolute inset-x-0 top-full border-b border-border bg-surface transition-normal",
+          "absolute inset-x-0 top-full origin-top border-b border-border bg-surface",
+          "transition-[opacity,transform,visibility] duration-300 ease-[var(--easing-entrance)]",
+          "motion-reduce:transition-none",
           isOpen
-            ? "visible opacity-100"
-            : "pointer-events-none invisible opacity-0",
+            ? "visible translate-y-0 opacity-100"
+            : "pointer-events-none invisible -translate-y-2 opacity-0",
         )}
       >
         <div className="flex flex-col gap-4 p-4">

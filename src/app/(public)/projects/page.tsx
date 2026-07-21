@@ -12,6 +12,7 @@ import { ProjectsPage } from "@/features/projects";
  * `ProjectsExplorer`). Project detail (`/projects/[slug]`) is a later pass.
  */
 export const metadata: Metadata = buildPageMetadata({
+  path: "/projects",
   title: "Projects",
   description: `Projects by ${PERSONAL.name} — full-stack and AI work built with React, Next.js, FastAPI, and related technologies.`,
 });

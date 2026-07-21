@@ -11,6 +11,7 @@ import { AboutPage } from "@/features/about";
  * Static generation (no dynamic data / no `force-dynamic`).
  */
 export const metadata: Metadata = buildPageMetadata({
+  path: "/about",
   title: "About",
   description: `About ${PERSONAL.name} — ${PERSONAL.role}. ${PERSONAL.tagline}`,
 });

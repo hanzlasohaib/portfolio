@@ -10,11 +10,12 @@ export function NavLink({
   href,
   children,
   exact = false,
+  active,
   className,
   ...props
 }: NavLinkProps) {
   const pathname = usePathname();
-  const isActive = isNavLinkActive(pathname, href, exact);
+  const isActive = active ?? isNavLinkActive(pathname, href, exact);
 
   return (
     <NextLink

@@ -11,6 +11,7 @@ import { JourneyPage } from "@/features/journey";
  * Static generation (no dynamic data / no `force-dynamic`).
  */
 export const metadata: Metadata = buildPageMetadata({
+  path: "/journey",
   title: "Journey",
   description: `Professional journey of ${PERSONAL.name} — experience, internships, and full-stack development milestones.`,
 });

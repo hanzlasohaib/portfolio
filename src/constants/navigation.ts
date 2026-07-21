@@ -25,3 +25,13 @@ export const PUBLIC_NAV_LINKS: NavLinksItem[] = [
   { href: "/#journey", label: "Journey" },
   { href: "/#contact", label: "Contact" },
 ];
+
+/** Home section `id`s used for scroll-spy active nav highlighting. */
+export const HOME_SECTION_IDS = [
+  "hero",
+  "about",
+  "projects",
+  "skills",
+  "journey",
+  "contact",
+] as const;

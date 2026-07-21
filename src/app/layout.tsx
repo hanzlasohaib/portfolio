@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fira_Code, Inter, Orbitron } from "next/font/google";
 import Script from "next/script";
 
+import { JsonLd } from "@/components/json-ld";
 import { defaultMetadata } from "@/config/metadata";
 import { ThemeProvider } from "@/providers";
 
@@ -57,6 +58,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
+        <JsonLd />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

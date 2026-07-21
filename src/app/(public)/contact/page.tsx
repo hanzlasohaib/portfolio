@@ -12,6 +12,7 @@ import { ContactPage } from "@/features/contact";
  * arrives in Phase 3).
  */
 export const metadata: Metadata = buildPageMetadata({
+  path: "/contact",
   title: "Contact",
   description: `Contact ${PERSONAL.name} — get in touch about full-stack, AI, or collaboration opportunities.`,
 });

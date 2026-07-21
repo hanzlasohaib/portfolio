@@ -62,9 +62,14 @@ export function Footer({ className, children, ...props }: FooterProps) {
             </div>
 
             <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-              <p className="m-0 text-caption text-text-disabled">
-                © {year} {PERSONAL.name}. All rights reserved.
-              </p>
+              <div className="flex flex-col gap-1">
+                <p className="m-0 text-caption text-text-disabled">
+                  © {year} {PERSONAL.name}. All rights reserved.
+                </p>
+                <p className="m-0 text-caption text-text-disabled">
+                  Built with Next.js, React, and Tailwind CSS.
+                </p>
+              </div>
               <ScrollToTopControl className="self-start sm:self-auto" />
             </div>
           </>

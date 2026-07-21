@@ -69,6 +69,8 @@ export type { HeadingLevel, HeadingProps } from "./heading";
 export { IconButton } from "./icon-button";
 export type { IconButtonProps } from "./icon-button";
 
+export { JsonLd } from "./json-ld";
+
 export { Input } from "./input";
 export type { InputProps } from "./input";
 

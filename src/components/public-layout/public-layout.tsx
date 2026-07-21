@@ -24,10 +24,10 @@ export function PublicLayout({ children }: PublicLayoutProps) {
         </Header>
       }
       footer={<Footer />}
+      floating={<BackToTopButton />}
     >
       <ScrollProgressBar />
       {children}
-      <BackToTopButton />
     </LayoutShell>
   );
 }

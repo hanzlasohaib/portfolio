@@ -32,7 +32,7 @@ export const CONTACT_CONTENT = {
     "Message sending is coming soon. You can still reach me by email or social links in the meantime.",
   submitLabel: "Coming Soon",
 
-  homeCtaLabel: "Get In Touch",
+  homeCtaLabel: "View Contact Page",
   homeCtaHref: "/contact",
 
   /**
