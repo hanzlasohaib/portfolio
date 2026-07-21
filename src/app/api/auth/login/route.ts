@@ -1,6 +1,20 @@
-import { login, loginSchema } from "@/features/authentication";
+import {
+  authenticatePassword,
+  loginSchema,
+} from "@/features/authentication";
 import { apiError, apiSuccess, zodFieldErrors } from "@/lib/api/response";
-import { setAuthCookie } from "@/lib/auth";
+import {
+  clearMfaChallengeCookie,
+  setAuthCookie,
+  setMfaChallengeCookie,
+} from "@/lib/auth";
+
+function isSecureRequest(request: Request): boolean {
+  return (
+    process.env.NODE_ENV === "production" ||
+    request.url.startsWith("https://")
+  );
+}
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -21,22 +35,35 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await login(parsed.data);
+    const result = await authenticatePassword(parsed.data);
     if (!result.success) {
       return apiError(result.error, 401);
     }
 
-    const isSecure =
-      process.env.NODE_ENV === "production" ||
-      request.url.startsWith("https://");
+    const secure = isSecureRequest(request);
+    const data = result.data;
+
+    if ("token" in data) {
+      const response = apiSuccess(
+        {
+          needsMfa: false as const,
+          user: data.user,
+        },
+        "Signed in successfully.",
+      );
+      setAuthCookie(response, data.token, secure);
+      clearMfaChallengeCookie(response);
+      return response;
+    }
 
     const response = apiSuccess(
-      { user: result.data.user },
-      "Signed in successfully.",
+      {
+        needsMfa: true as const,
+        user: data.user,
+      },
+      "Verification code sent. Check your email.",
     );
-
-    setAuthCookie(response, result.data.token, isSecure);
-
+    setMfaChallengeCookie(response, data.challengeToken, secure);
     return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : "";

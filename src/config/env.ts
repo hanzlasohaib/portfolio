@@ -27,9 +27,16 @@ const seedSchema = z.object({
   SEED_ADMIN_NAME: z.string().min(1).optional(),
 });
 
+const mfaSchema = z.object({
+  RESEND_API_KEY: z.string().min(1),
+  RESEND_FROM_EMAIL: z.string().email(),
+  MFA_NOTIFY_EMAIL: z.string().email(),
+});
+
 export type ServerEnv = z.infer<typeof serverSchema>;
 export type ClientEnv = z.infer<typeof clientSchema>;
 export type SeedEnv = z.infer<typeof seedSchema>;
+export type MfaEnv = z.infer<typeof mfaSchema>;
 
 function readServerEnv(): ServerEnv {
   const parsed = serverSchema.safeParse({
@@ -103,6 +110,29 @@ export function getSeedEnv(): SeedEnv | null {
   }
 
   return parsed.data;
+}
+
+/**
+ * Email OTP MFA configuration.
+ * Returns null when incomplete — login stays password-only.
+ */
+export function getMfaEnv(): MfaEnv | null {
+  const parsed = mfaSchema.safeParse({
+    RESEND_API_KEY: process.env.RESEND_API_KEY || undefined,
+    RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL || undefined,
+    MFA_NOTIFY_EMAIL: process.env.MFA_NOTIFY_EMAIL || undefined,
+  });
+
+  if (!parsed.success) {
+    return null;
+  }
+
+  return parsed.data;
+}
+
+/** True when Resend + notify email are configured (MFA required after password). */
+export function isMfaConfigured(): boolean {
+  return getMfaEnv() !== null;
 }
 
 export function isProduction(): boolean {

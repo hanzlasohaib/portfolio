@@ -6,6 +6,24 @@ The format follows Keep a Changelog principles.
 
 ---
 
+## [1.5.0] - 2026-07-21
+
+### Added
+
+- Email OTP MFA after password login (Resend + `MFA_NOTIFY_EMAIL`)
+- `MfaChallenge` model and `/api/auth/mfa/verify` + `/api/auth/mfa/resend`
+- Login UI OTP step when MFA env is configured
+
+### Changed
+
+- Password-only login remains when Resend/MFA env is incomplete
+
+### Status
+
+Post-V1 MFA available when `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `MFA_NOTIFY_EMAIL` are set.
+
+---
+
 ## [1.4.0] - 2026-07-21
 
 ### Added
@@ -21,7 +39,7 @@ The format follows Keep a Changelog principles.
 ### Status
 
 V1 production-ready.
-Lighthouse (production): Performance 78 · Accessibility 100 · Best Practices 100 · SEO 100.
+Lighthouse (production): Performance 79 · Accessibility 100 · Best Practices 100 · SEO 100.
 Git tags: `v1.2-backend`, `v1.3-phase3-complete`, `v1.4-production-ready`.
 
 ---

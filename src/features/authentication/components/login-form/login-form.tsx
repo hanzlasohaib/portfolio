@@ -8,19 +8,30 @@ import { Button } from "@/components/button";
 import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Text } from "@/components/text";
-import { loginSchema } from "@/features/authentication";
+import { loginSchema, mfaCodeSchema } from "@/features/authentication";
 
 type FieldErrors = Record<string, string>;
+type LoginStep = "credentials" | "mfa";
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [step, setStep] = useState<LoginStep>("credentials");
   const [formError, setFormError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [maskedHint, setMaskedHint] = useState<string | null>(null);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function redirectToDashboard() {
+    const next = searchParams.get("next");
+    const destination =
+      next && next.startsWith("/dashboard") ? next : "/dashboard";
+    router.replace(destination);
+    router.refresh();
+  }
+
+  async function handleCredentialsSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setFormError(null);
     setSuccessMessage(null);
@@ -51,7 +62,6 @@ export function LoginForm() {
         const response = await fetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          // Required so the browser stores the HTTP-only auth cookie.
           credentials: "same-origin",
           body: JSON.stringify(parsed.data),
         });
@@ -68,6 +78,10 @@ export function LoginForm() {
           success: boolean;
           message: string;
           errors?: FieldErrors;
+          data?: {
+            needsMfa?: boolean;
+            user?: { fullName?: string; email?: string };
+          };
         };
 
         if (!response.ok || !payload.success) {
@@ -78,22 +92,181 @@ export function LoginForm() {
           return;
         }
 
+        if (payload.data?.needsMfa) {
+          setMaskedHint(
+            payload.data.user?.email
+              ? `Code sent to your MFA notify inbox (login: ${payload.data.user.email}).`
+              : "Code sent to your MFA notify inbox.",
+          );
+          setSuccessMessage(payload.message);
+          setStep("mfa");
+          return;
+        }
+
         setSuccessMessage("Signed in successfully. Redirecting…");
-        const next = searchParams.get("next");
-        const destination =
-          next && next.startsWith("/dashboard") ? next : "/dashboard";
-        router.replace(destination);
-        router.refresh();
+        redirectToDashboard();
       } catch {
         setFormError("Network error. Please try signing in again.");
       }
     });
   }
 
+  async function handleMfaSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setFormError(null);
+    setSuccessMessage(null);
+    setFieldErrors({});
+
+    const formData = new FormData(event.currentTarget);
+    const parsed = mfaCodeSchema.safeParse({
+      code: String(formData.get("code") ?? ""),
+    });
+
+    if (!parsed.success) {
+      const errors: FieldErrors = {};
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0] ?? "_form");
+        if (!errors[key]) {
+          errors[key] = issue.message;
+        }
+      }
+      setFieldErrors(errors);
+      setFormError("Enter the 6-digit code from your email.");
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const response = await fetch("/api/auth/mfa/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify(parsed.data),
+        });
+
+        const payload = (await response.json()) as {
+          success: boolean;
+          message: string;
+          errors?: FieldErrors;
+        };
+
+        if (!response.ok || !payload.success) {
+          if (payload.errors) {
+            setFieldErrors(payload.errors);
+          }
+          setFormError(payload.message || "Unable to verify code.");
+          return;
+        }
+
+        setSuccessMessage("Signed in successfully. Redirecting…");
+        redirectToDashboard();
+      } catch {
+        setFormError("Network error. Please try again.");
+      }
+    });
+  }
+
+  function handleResend() {
+    setFormError(null);
+    setSuccessMessage(null);
+    startTransition(async () => {
+      try {
+        const response = await fetch("/api/auth/mfa/resend", {
+          method: "POST",
+          credentials: "same-origin",
+        });
+        const payload = (await response.json()) as {
+          success: boolean;
+          message: string;
+        };
+        if (!response.ok || !payload.success) {
+          setFormError(payload.message || "Unable to resend code.");
+          return;
+        }
+        setSuccessMessage(payload.message);
+      } catch {
+        setFormError("Network error while resending code.");
+      }
+    });
+  }
+
+  if (step === "mfa") {
+    return (
+      <form
+        className="flex flex-col gap-5"
+        onSubmit={handleMfaSubmit}
+        noValidate
+      >
+        <div className="flex flex-col gap-2">
+          <Heading level="h1">Verify sign-in</Heading>
+          <Text variant="small">
+            Enter the 6-digit code sent to your MFA notify email.
+          </Text>
+          {maskedHint ? <Text variant="caption">{maskedHint}</Text> : null}
+        </div>
+
+        <Input
+          name="code"
+          type="text"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          label="Verification code"
+          placeholder="000000"
+          fullWidth
+          required
+          maxLength={6}
+          error={fieldErrors.code}
+        />
+
+        {formError ? (
+          <Alert variant="error" title="Verification failed">
+            {formError}
+          </Alert>
+        ) : null}
+
+        {successMessage ? (
+          <Alert variant="success" title="Success">
+            {successMessage}
+          </Alert>
+        ) : null}
+
+        <Button type="submit" size="lg" fullWidth disabled={isPending}>
+          {isPending ? "Verifying…" : "Verify and continue"}
+        </Button>
+
+        <div className="flex flex-wrap gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isPending}
+            onClick={handleResend}
+          >
+            Resend code
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={isPending}
+            onClick={() => {
+              setStep("credentials");
+              setFormError(null);
+              setSuccessMessage(null);
+              setFieldErrors({});
+            }}
+          >
+            Back to sign in
+          </Button>
+        </div>
+      </form>
+    );
+  }
+
   return (
     <form
       className="flex flex-col gap-5"
-      onSubmit={handleSubmit}
+      onSubmit={handleCredentialsSubmit}
       noValidate
     >
       <div className="flex flex-col gap-2">

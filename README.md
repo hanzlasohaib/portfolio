@@ -17,7 +17,7 @@ Built with a feature-based Next.js App Router architecture. Documentation in `do
 | `/projects` | Live (DB-backed with static fallback) |
 | `/journey` | Live (DB-backed with static fallback) |
 | `/contact` | Live — form posts to `POST /api/contact` |
-| `/login` | Live — JWT cookie auth |
+| `/login` | Live — JWT cookie auth (+ email OTP MFA when Resend env is set) |
 | `/dashboard/**` | Live — protected admin shell + CRUD panels |
 | `/projects/[slug]` | Live — project detail (DB-backed with static fallback) |
 
@@ -35,6 +35,14 @@ Required Vercel env vars (names must match — `POSTGRES_*` / `SUPABASE_*` alone
 Do **not** set `NODE_ENV` on Vercel (Vercel sets `production` automatically).
 
 **Test Admin on Vercel (intentional for V1):** Login uses the `User` row in Supabase, not `SEED_ADMIN_*` env vars. Point Vercel `DATABASE_URL` / `DIRECT_URL` at the same database you seeded locally, then sign in at `/login` with the same email/password you used for seed (`SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`). You do **not** need to add `SEED_ADMIN_*` on Vercel for dashboard login to work — those vars are only for running `npx prisma db seed` (locally, against that DB). Seed still refuses to run when `NODE_ENV=production`.
+
+**Email OTP MFA (optional):** When all three are set on the host, password login requires a code emailed to your real inbox:
+
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL`
+- `MFA_NOTIFY_EMAIL`
+
+Login identity stays the Test Admin email; codes go to `MFA_NOTIFY_EMAIL`, not `admin@example.com`. Without these vars, login stays password-only.
 
 ---
 

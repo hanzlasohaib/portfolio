@@ -33,11 +33,13 @@ Production host: `https://portfolio-eta-rust-yq70o12jnn.vercel.app`
 
 ## Performance
 
-- [x] Lighthouse on production (owner-reported): Performance **78**, Accessibility **100**, Best Practices **100**, SEO **100**
+- [x] Lighthouse on production (owner-reported):
+  - Public: Performance **79**, Accessibility **100**, Best Practices **100**, SEO **100**
+  - Dashboard: Performance **93**, Accessibility **100**, Best Practices **100**, SEO **58** (expected — `/dashboard` is `noindex` / disallowed in robots.txt)
 - [x] Public pages are primarily Server Components (feature pages under `app/(public)`)
-- [x] No content `<img>` / `next/image` assets in V1 UI; OG image via `next/og` (`opengraph-image.tsx`)
+- [x] Project media only rendered when files exist under `public/` (missing thumbnail.webp no longer 404)
 
-> Note: Performance 78 accepted for V1. Further optimization (fonts, JS weight, caching) remains optional.
+> Note: Public Performance 79 accepted for V1. Further optimization remains optional. Dashboard SEO is intentionally low.
 
 ## Accessibility
 

@@ -17,25 +17,58 @@ import {
   upsertTechnologyByName,
   type UpsertProjectData,
 } from "./repository";
+import { resolvePublicAssetUrl } from "./utils/resolve-public-asset";
 
 function toFeaturedProject(project: ProjectWithTechnologies): FeaturedProject {
+  const thumbnail = resolvePublicAssetUrl(project.thumbnail);
+  const previewSrc = resolvePublicAssetUrl(
+    `/projects/${project.slug}/preview.mp4`,
+  );
+  const previewPoster = thumbnail;
+
   return {
     slug: project.slug,
     title: project.title,
     shortDescription: project.shortDescription,
     description: project.description,
     technologies: project.technologies.map((row) => row.technology.name),
-    thumbnail: project.thumbnail ?? undefined,
+    thumbnail,
     repositoryUrl: project.repositoryUrl ?? undefined,
     liveUrl: project.liveUrl ?? undefined,
-    preview: project.thumbnail
+    preview: previewSrc
       ? {
           type: "video",
-          src: `/projects/${project.slug}/preview.mp4`,
-          poster: project.thumbnail,
+          src: previewSrc,
+          poster: previewPoster,
         }
       : undefined,
   };
+}
+
+function sanitizeFeaturedProject(project: FeaturedProject): FeaturedProject {
+  const thumbnail = resolvePublicAssetUrl(project.thumbnail);
+  const previewSrc = resolvePublicAssetUrl(project.preview?.src);
+  const previewPoster = resolvePublicAssetUrl(project.preview?.poster);
+
+  return {
+    ...project,
+    thumbnail,
+    preview: previewSrc
+      ? {
+          type: project.preview?.type ?? "video",
+          src: previewSrc,
+          poster: previewPoster,
+          provider: project.preview?.provider,
+          alt: project.preview?.alt,
+        }
+      : undefined,
+  };
+}
+
+function sanitizeFeaturedProjects(
+  projects: FeaturedProject[],
+): FeaturedProject[] {
+  return projects.map(sanitizeFeaturedProject);
 }
 
 async function withProjectFallback(
@@ -44,11 +77,11 @@ async function withProjectFallback(
   try {
     const projects = await loader();
     if (projects.length === 0) {
-      return PROJECTS_DATA;
+      return sanitizeFeaturedProjects(PROJECTS_DATA);
     }
     return projects.map(toFeaturedProject);
   } catch {
-    return PROJECTS_DATA;
+    return sanitizeFeaturedProjects(PROJECTS_DATA);
   }
 }
 
@@ -77,7 +110,7 @@ export async function getPublishedProjectBySlugForUi(
   }
 
   const fallback = PROJECTS_DATA.find((project) => project.slug === slug);
-  return fallback ?? null;
+  return fallback ? sanitizeFeaturedProject(fallback) : null;
 }
 
 export async function getPublishedProjectSlugs(): Promise<string[]> {

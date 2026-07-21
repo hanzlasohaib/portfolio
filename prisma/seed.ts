@@ -83,7 +83,6 @@ async function seedTechnologiesAndProjects() {
       description:
         "A full-stack travel booking platform for browsing and booking trips.",
       liveUrl: "https://rhombix-technologies-task-3.vercel.app/",
-      thumbnail: "/projects/travel-booking-system/thumbnail.webp",
       featured: true,
       published: true,
       displayOrder: 0,
@@ -95,7 +94,6 @@ async function seedTechnologiesAndProjects() {
       shortDescription: "A full-stack ride-sharing platform.",
       description: "A full-stack ride-sharing platform.",
       liveUrl: "https://corider-finder.vercel.app/",
-      thumbnail: "/projects/coride-finder/thumbnail.webp",
       featured: true,
       published: true,
       displayOrder: 1,
@@ -108,7 +106,6 @@ async function seedTechnologiesAndProjects() {
         "A responsive, backend-heavy Learning Management System with a local database for user data and course materials.",
       description:
         "A responsive, backend-heavy Learning Management System with a local database for user data and course materials.",
-      thumbnail: "/projects/numl-lms/thumbnail.webp",
       featured: true,
       published: true,
       displayOrder: 2,
@@ -121,7 +118,20 @@ async function seedTechnologiesAndProjects() {
       where: { slug: project.slug },
     });
     if (existing) {
-      console.log(`Project exists: ${project.slug} — skipping.`);
+      // Clear broken local thumbnail paths that were seeded before assets existed.
+      if (
+        existing.thumbnail &&
+        existing.thumbnail.startsWith("/projects/") &&
+        existing.thumbnail.endsWith(".webp")
+      ) {
+        await prisma.project.update({
+          where: { id: existing.id },
+          data: { thumbnail: null },
+        });
+        console.log(`Cleared missing thumbnail for: ${project.slug}`);
+      } else {
+        console.log(`Project exists: ${project.slug} — skipping.`);
+      }
       continue;
     }
 
@@ -132,7 +142,7 @@ async function seedTechnologiesAndProjects() {
         shortDescription: project.shortDescription,
         description: project.description,
         liveUrl: "liveUrl" in project ? project.liveUrl : null,
-        thumbnail: project.thumbnail,
+        thumbnail: null,
         featured: project.featured,
         published: project.published,
         displayOrder: project.displayOrder,

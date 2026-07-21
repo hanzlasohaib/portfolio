@@ -10,9 +10,8 @@
  * Sourced from `public/resume/Hanzla-Sohaib-Resume.pdf` § Projects —
  * existing project information, not invented.
  *
- * `repositoryUrl` / `liveUrl` / `thumbnail` remain optional for Phase 2 Home
- * preview. `preview` is future-proofed (video/image/embed) while today's
- * implementation renders local video when available.
+ * `repositoryUrl` / `liveUrl` / `thumbnail` / `preview` remain optional.
+ * Only set media paths when files exist under `public/`.
  */
 
 export type ProjectPreview = {
@@ -45,11 +44,6 @@ export const PROJECTS_DATA: FeaturedProject[] = [
     description:
       "A full-stack travel booking platform for browsing and booking trips. Built to practice end-to-end booking flows, API integration, and responsive UI.",
     technologies: ["React", "Node.js", "MongoDB"],
-    preview: {
-      type: "video",
-      src: "/projects/travel-booking-system/preview.mp4",
-      poster: "/projects/travel-booking-system/thumbnail.webp",
-    },
     liveUrl: "https://rhombix-technologies-task-3.vercel.app/",
   },
   {
@@ -59,11 +53,6 @@ export const PROJECTS_DATA: FeaturedProject[] = [
     description:
       "A full-stack ride-sharing platform connecting riders and drivers. Focused on search, matching, and a clean React + FastAPI architecture with PostgreSQL.",
     technologies: ["React", "FastAPI", "PostgreSQL"],
-    preview: {
-      type: "video",
-      src: "/projects/coride-finder/preview.mp4",
-      poster: "/projects/coride-finder/thumbnail.webp",
-    },
     liveUrl: "https://corider-finder.vercel.app/",
   },
   {
@@ -74,10 +63,5 @@ export const PROJECTS_DATA: FeaturedProject[] = [
     description:
       "A responsive, backend-heavy Learning Management System with a local database for user data and course materials. Emphasizes authentication, course content delivery, and maintainable FastAPI services.",
     technologies: ["React", "FastAPI", "Python"],
-    preview: {
-      type: "video",
-      src: "/projects/numl-lms/preview.mp4",
-      poster: "/projects/numl-lms/thumbnail.webp",
-    },
   },
 ];
