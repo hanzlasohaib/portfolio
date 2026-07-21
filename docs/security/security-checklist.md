@@ -19,7 +19,7 @@
 - [x] Secure cookies (`httpOnly`, `secure` in production, `sameSite=lax`)
 - [ ] JWT secret rotated for production if the development secret was ever shared
 - [x] Prisma migrations applied
-- [x] Security headers configured (`next.config.ts`)
+- [x] Security headers configured (`next.config.ts`) — verified on production response
 - [x] Test Admin retained for V1 — can sign in on Vercel via the seeded DB user (SEED_ADMIN_* not required as Vercel runtime env)
 - [ ] No secrets committed (`.env` gitignored; only `.env.example` tracked)
 

@@ -67,7 +67,9 @@ Phase 3 verification (manual):
 
 ## Phase 4 – Quality
 
-Status: In Progress
+Status: In Progress (automated smoke + SEO pass 2026-07-21)
+
+Remaining before Phase 4 close: Lighthouse Performance, contrast spot-check, one manual CRUD→public confirm.
 
 ```text
 Phase 4 – Production readiness
