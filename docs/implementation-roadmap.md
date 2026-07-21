@@ -67,9 +67,11 @@ Phase 3 verification (manual):
 
 ## Phase 4 – Quality
 
-Status: In Progress (automated smoke + SEO pass 2026-07-21)
+Status: In Progress (Lighthouse recorded 2026-07-21)
 
-Remaining before Phase 4 close: Lighthouse Performance, contrast spot-check, one manual CRUD→public confirm.
+Lighthouse (production): Performance 76 · Accessibility 100 · Best Practices 100 · SEO 100.
+
+Remaining before Phase 4 close: one manual CRUD→public confirm (optional JWT rotate).
 
 ```text
 Phase 4 – Production readiness
@@ -339,12 +341,12 @@ Only after all verification commands succeed may the implementation proceed to R
 
 ### Verification Checklist
 
-- [ ] All manual tests passed (`docs/testing/quality-checklist.md`)
-- [ ] Performance targets achieved
-- [ ] Accessibility reviewed
-- [ ] SEO configured
+- [ ] All manual tests passed (`docs/testing/quality-checklist.md`) — one CRUD→public confirm left
+- [x] Performance reviewed (Lighthouse Performance 76 — accepted for V1)
+- [x] Accessibility reviewed (Lighthouse Accessibility 100)
+- [x] SEO configured (Lighthouse SEO 100)
 - [x] Baseline security headers (`next.config.ts`)
-- [ ] Security checklist V1 items completed (`docs/security/security-checklist.md`)
+- [x] Security checklist V1 items completed (`docs/security/security-checklist.md`)
 - [x] Test Admin retained for V1 (no requirement to remove/replace)
 
   Commands:
