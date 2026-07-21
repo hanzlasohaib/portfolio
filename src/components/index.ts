@@ -87,6 +87,9 @@ export type { MobileMenuProps } from "./mobile-menu";
 export { MobileNav } from "./mobile-nav";
 export type { MobileNavProps } from "./mobile-nav";
 
+export { Modal } from "./modal";
+export type { ModalProps } from "./modal";
+
 export { Navbar } from "./navbar";
 export type { NavbarProps } from "./navbar";
 

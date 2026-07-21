@@ -104,7 +104,8 @@
   --z-background: 0;
   --z-card: 1;
   --z-dropdown: 2;
-  --z-modal: 3;
+  /* Above sticky nav/progress overlays; consumed by shared Modal. */
+  --z-modal: 70;
   --z-nav: 10;
 
   /* -------------------------------------------------------------------------- */

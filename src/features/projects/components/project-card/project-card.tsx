@@ -18,19 +18,21 @@ import type { FeaturedProject } from "../../constants/projects-data";
 
 export type ProjectCardProps = {
   project: FeaturedProject;
+  onPreview: (
+    project: FeaturedProject,
+    trigger: HTMLButtonElement,
+  ) => void;
 };
 
 /**
  * Feature-local card for a single project (docs/database/naming-conventions.md
  * § Component Names — `ProjectCard`, never `PortfolioCard`).
  *
- * GitHub/live-demo buttons render only when the corresponding URL is
- * documented on the project (see `constants/projects-data.ts`).
+ * Home preview actions are intentionally limited to Preview + Live Demo.
+ * GitHub is deferred to the dedicated `/projects` page.
  */
-export function ProjectCard({ project }: ProjectCardProps) {
-  const { title, shortDescription, technologies, repositoryUrl, liveUrl } =
-    project;
-  const hasActions = Boolean(repositoryUrl || liveUrl);
+export function ProjectCard({ project, onPreview }: ProjectCardProps) {
+  const { title, shortDescription, technologies, liveUrl } = project;
 
   return (
     <Card hover className="h-full">
@@ -39,7 +41,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         <CardDescription>{shortDescription}</CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="flex-1">
         <ul className="flex flex-wrap gap-2">
           {technologies.map((technology) => (
             <li key={technology}>
@@ -49,38 +51,47 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </ul>
       </CardContent>
 
-      {hasActions ? (
-        <CardFooter>
-          {repositoryUrl ? (
-            <a
-              href={repositoryUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                buttonBaseClassName,
-                buttonVariantClassName.outline,
-                buttonSizeClassName.sm,
-              )}
-            >
-              GitHub
-            </a>
-          ) : null}
-          {liveUrl ? (
-            <a
-              href={liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                buttonBaseClassName,
-                buttonVariantClassName.primary,
-                buttonSizeClassName.sm,
-              )}
-            >
-              Live Demo
-            </a>
-          ) : null}
-        </CardFooter>
-      ) : null}
+      <CardFooter className="mt-auto justify-center gap-3 pt-2">
+        <button
+          type="button"
+          className={cn(
+            buttonBaseClassName,
+            buttonVariantClassName.primary,
+            buttonSizeClassName.sm,
+          )}
+          onClick={(event) => {
+            onPreview(project, event.currentTarget);
+          }}
+        >
+          Preview
+        </button>
+        {liveUrl ? (
+          <a
+            href={liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              buttonBaseClassName,
+              buttonVariantClassName.primary,
+              buttonSizeClassName.sm,
+            )}
+          >
+            Live Demo
+          </a>
+        ) : (
+          <span
+            className={cn(
+              buttonBaseClassName,
+              buttonVariantClassName.primary,
+              buttonSizeClassName.sm,
+              "cursor-not-allowed opacity-50",
+            )}
+            aria-disabled="true"
+          >
+            Live Demo
+          </span>
+        )}
+      </CardFooter>
     </Card>
   );
 }

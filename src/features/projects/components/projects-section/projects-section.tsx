@@ -1,3 +1,7 @@
+"use client";
+
+import { useRef, useState } from "react";
+
 import {
   buttonBaseClassName,
   buttonSizeClassName,
@@ -9,8 +13,12 @@ import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { cn } from "@/lib/utils";
 
-import { PROJECTS_DATA } from "../../constants/projects-data";
+import {
+  PROJECTS_DATA,
+  type FeaturedProject,
+} from "../../constants/projects-data";
 import { ProjectCard } from "../project-card";
+import { ProjectPreviewModal } from "../project-preview-modal";
 
 /**
  * Home page "Featured Projects Preview" (docs/project-design/pages.md §
@@ -26,6 +34,24 @@ import { ProjectCard } from "../project-card";
  * navigation (see `constants/navigation.ts`).
  */
 export function ProjectsSection() {
+  const [selectedProject, setSelectedProject] = useState<FeaturedProject | null>(
+    null,
+  );
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const previewTriggerRef = useRef<HTMLButtonElement | null>(null);
+
+  function handlePreview(project: FeaturedProject, trigger: HTMLButtonElement) {
+    previewTriggerRef.current = trigger;
+    setSelectedProject(project);
+    setIsPreviewOpen(true);
+  }
+
+  function handleClosePreview() {
+    setIsPreviewOpen(false);
+    setSelectedProject(null);
+    previewTriggerRef.current?.focus();
+  }
+
   return (
     <Section id="projects" aria-label="Featured Projects">
       <Container className="flex flex-col gap-10">
@@ -37,7 +63,7 @@ export function ProjectsSection() {
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {PROJECTS_DATA.map((project) => (
             <li key={project.slug}>
-              <ProjectCard project={project} />
+              <ProjectCard project={project} onPreview={handlePreview} />
             </li>
           ))}
         </ul>
@@ -55,6 +81,12 @@ export function ProjectsSection() {
         >
           View All Projects
         </Link>
+
+        <ProjectPreviewModal
+          open={isPreviewOpen}
+          project={selectedProject}
+          onClose={handleClosePreview}
+        />
       </Container>
     </Section>
   );

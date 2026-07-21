@@ -8,5 +8,6 @@
  * This sprint only implements the Home page "Featured Projects Preview".
  */
 export { ProjectCard } from "./components/project-card";
+export { ProjectPreviewModal } from "./components/project-preview-modal";
 export { ProjectsSection } from "./components/projects-section";
 export type { FeaturedProject } from "./constants/projects-data";
