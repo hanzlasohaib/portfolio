@@ -18,9 +18,8 @@ import { JourneyTimeline } from "../journey-timeline";
  * (`JourneySection`).
  *
  * Presentation-only — reads static content from
- * `constants/journey-data.ts`. No full `/journey` page and no per-entry
- * detail view (out of scope for this sprint) — this is only the Home
- * preview.
+ * `constants/journey-data.ts`. The full `/journey` page is composed by
+ * `JourneyPage`; this is only the Home preview.
  *
  * `id="journey"` anchors this section for the one-page Navbar navigation
  * (see `constants/navigation.ts`, which already links to `/#journey`).

@@ -1,6 +1,9 @@
 export { AuthLayout } from "./auth-layout";
 export type { AuthLayoutProps } from "./auth-layout";
 
+export { BackToTopButton } from "./back-to-top-button";
+export type { BackToTopButtonProps } from "./back-to-top-button";
+
 export { Badge } from "./badge";
 export type { BadgeProps, BadgeVariant } from "./badge";
 
@@ -117,6 +120,9 @@ export type { RadioProps } from "./radio";
 
 export { ScrollProgressBar } from "./scroll-progress-bar";
 export type { ScrollProgressBarProps } from "./scroll-progress-bar";
+
+export { ScrollToTopControl } from "./scroll-to-top-control";
+export type { ScrollToTopControlProps } from "./scroll-to-top-control";
 
 export { Section } from "./section";
 export type { SectionProps } from "./section";

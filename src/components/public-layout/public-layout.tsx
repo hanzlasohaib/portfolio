@@ -1,3 +1,4 @@
+import { BackToTopButton } from "@/components/back-to-top-button";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { LayoutShell } from "@/components/layout-shell";
@@ -26,6 +27,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
     >
       <ScrollProgressBar />
       {children}
+      <BackToTopButton />
     </LayoutShell>
   );
 }

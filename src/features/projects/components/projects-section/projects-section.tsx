@@ -26,8 +26,8 @@ import { ProjectPreviewModal } from "../project-preview-modal";
  * (`ProjectsSection`).
  *
  * Presentation-only — reads static content from
- * `constants/projects-data.ts`. No filtering/search/categories (out of
- * scope for this sprint) and no full `/projects` page — this is only the
+ * `constants/projects-data.ts`. Search/filter live on the dedicated
+ * `/projects` page (`ProjectsPage` / `ProjectsExplorer`); this is only the
  * curated Home preview.
  *
  * `id="projects"` anchors this section for the one-page Navbar

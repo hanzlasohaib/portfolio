@@ -7,38 +7,38 @@ import { Container } from "@/components/container";
 import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
-import { SocialLinks } from "@/components/social-links";
 import { cn } from "@/lib/utils";
 
+import { CONTACT_CONTENT } from "../../constants/contact-content";
+import { ContactForm } from "../contact-form";
+import { ContactInfo } from "../contact-info";
+
 /**
- * Home page "Contact CTA" (docs/project-design/pages.md § Home; naming
- * per docs/database/naming-conventions.md § Component Names
- * (`ContactSection`)).
+ * Home page Contact section (docs/project-design/pages.md § Home).
  *
- * UI only — no contact form, validation, email sending, or API calls.
- * The full `/contact` page (Contact Form, Success Message, Validation —
- * docs/project-design/pages.md § Contact) is out of scope for this
- * sprint; this section only closes the one-page Home experience with a
- * CTA into that future page, reusing the existing `SocialLinks` component
- * for the Email/LinkedIn/GitHub links already documented for Contact.
+ * Includes a frontend-only contact form plus direct channels, and a CTA
+ * to the dedicated `/contact` page (FAQ + full contact experience) — same
+ * pattern as About / Projects / Journey section CTAs.
  *
- * `id="contact"` anchors this section for the one-page Navbar navigation
- * (see `constants/navigation.ts`, which already links to `/#contact`).
+ * `id="contact"` anchors Navbar one-page navigation
+ * (`constants/navigation.ts`).
  */
 export function ContactSection() {
   return (
     <Section id="contact" alt aria-label="Contact">
-      <Container className="flex flex-col items-center gap-8 text-center">
+      <Container className="flex flex-col gap-10">
         <SectionHeading
-          align="center"
-          title="Let's Work Together"
-          description="Have a project in mind or just want to say hello? I'd love to hear from you."
+          title={CONTACT_CONTENT.heading}
+          description={CONTACT_CONTENT.introduction}
         />
 
-        <SocialLinks />
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-start">
+          <ContactForm />
+          <ContactInfo />
+        </div>
 
         <Link
-          href="/contact"
+          href={CONTACT_CONTENT.homeCtaHref}
           underline={false}
           variant="inherit"
           className={cn(
@@ -48,7 +48,7 @@ export function ContactSection() {
             "self-center",
           )}
         >
-          Get In Touch
+          {CONTACT_CONTENT.homeCtaLabel}
         </Link>
       </Container>
     </Section>

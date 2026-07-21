@@ -135,9 +135,9 @@ export const ABOUT_CONTENT = {
     description:
       "I'm always interested in collaborating on impactful software projects, AI-powered solutions, and innovative web applications. Whether you're looking for a developer, collaborator, or simply want to connect, I'd be happy to hear from you.",
     primaryLabel: "View Projects",
-    primaryHref: "/#projects",
+    primaryHref: "/projects",
     secondaryLabel: "Contact Me",
-    secondaryHref: "/#contact",
+    secondaryHref: "/contact",
   } satisfies AboutCta,
 } as const;
 

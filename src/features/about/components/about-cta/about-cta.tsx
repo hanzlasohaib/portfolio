@@ -14,8 +14,7 @@ import { ABOUT_CONTENT } from "../../constants/about-content";
 
 /**
  * Closing CTA — Projects + Contact next steps (not a duplicate Contact
- * form). Links target Home section anchors until dedicated `/projects`
- * and `/contact` routes ship in later Phase 2 sprints.
+ * form). Links to `/projects` and `/contact`.
  */
 export function AboutCta() {
   const {
