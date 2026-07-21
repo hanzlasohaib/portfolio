@@ -304,8 +304,4 @@ Commands (from `package.json`): `npm run dev` (dev server on http://localhost:30
 
 No database, `.env`, or external services are required to run today. The backend (Prisma/Supabase/JWT/Zod) described in `README.md` and `docs/` is planned for later phases and is NOT yet implemented — there is no `prisma/schema.prisma`, no API route handlers, and no `.env.example`.
 
-Only two pages currently exist (Phase 1/2 per `docs/implementation-roadmap.md`): `/` (home, composed of Hero/About/Projects/Skills feature sections) and `/login`. Current implemented routes should always be inferred from the repository itself.
-
-Do not assume planned routes are already implemented.
-
-If documentation and repository differ, report the difference. and `/login` renders `null` for now — these are not bugs.
+Only two pages currently exist (Phase 1/2 per `docs/implementation-roadmap.md`): `/` (home, composed of Hero/About/Projects/Skills feature sections) and `/login`. Other routes (`/about`, `/projects`, `/journey`, `/contact`) return 404 by design, and `/login` renders `null` for now — these are not bugs.
