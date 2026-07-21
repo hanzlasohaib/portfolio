@@ -5,6 +5,11 @@ import {
   setMfaChallengeCookie,
   verifyMfaChallengeToken,
 } from "@/lib/auth";
+import { enforceRateLimit } from "@/lib/rate-limit";
+import {
+  extractRecaptchaToken,
+  verifyRecaptchaToken,
+} from "@/lib/recaptcha";
 
 function isSecureRequest(request: Request): boolean {
   return (
@@ -14,6 +19,30 @@ function isSecureRequest(request: Request): boolean {
 }
 
 export async function POST(request: Request) {
+  const rate = await enforceRateLimit(request, "auth:mfa");
+  if (rate.limited) {
+    return apiError(rate.message, 429);
+  }
+
+  let body: unknown = {};
+
+  try {
+    const text = await request.text();
+    if (text.trim().length > 0) {
+      body = JSON.parse(text) as unknown;
+    }
+  } catch {
+    return apiError("Invalid JSON body.", 400);
+  }
+
+  const captcha = await verifyRecaptchaToken(
+    extractRecaptchaToken(body),
+    "mfa_resend",
+  );
+  if (!captcha.ok) {
+    return apiError(captcha.message, 400);
+  }
+
   const challengeCookie = readMfaChallengeTokenFromRequest(request);
   if (!challengeCookie) {
     return apiError("Verification session expired. Sign in again.", 401);

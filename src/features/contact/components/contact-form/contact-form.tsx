@@ -53,10 +53,13 @@ export function ContactForm() {
 
     startTransition(async () => {
       try {
+        const { getRecaptchaToken } = await import("@/lib/recaptcha/client");
+        const recaptchaToken = await getRecaptchaToken("contact");
+
         const response = await fetch("/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(parsed.data),
+          body: JSON.stringify({ ...parsed.data, recaptchaToken }),
         });
         const payload = (await response.json()) as {
           success: boolean;

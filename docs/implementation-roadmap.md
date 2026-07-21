@@ -85,10 +85,10 @@ Phase 4 – Production readiness
 
 Deferred to later ADRs / not blocking Phase 4 close unless required:
 
-- Rate limiting
-- reCAPTCHA
+_(Cleared — see post-V1 notes below.)_
 
 > Resend email delivery shipped post-V1 in 1.5.0 for MFA OTP (`v1.5-mfa`).
+> Upstash rate limiting, reCAPTCHA v3, and CSP shipped in 1.6.0 (ADR-010).
 
 ## Phase 5 – Release
 

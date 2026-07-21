@@ -403,16 +403,27 @@ Environment variables must never be hardcoded.
 | `NEXT_PUBLIC_SITE_URL` | Yes | Canonical site URL (SEO, absolute links) |
 | `NODE_ENV` | Yes | Runtime environment (`development` / `production` / `test`) |
 
-## Deferred (Not Required for V1)
+## Post-V1 optional (abuse protection — ADR-010)
+
+Enabled when each set is complete. Incomplete sets are skipped (local/dev convenience).
+
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `UPSTASH_REDIS_REST_URL` | Optional set | Upstash Redis REST URL (rate limiting) |
+| `UPSTASH_REDIS_REST_TOKEN` | Optional set | Upstash Redis REST token |
+| `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | Optional set | Google reCAPTCHA v3 site key |
+| `RECAPTCHA_SECRET_KEY` | Optional set | Google reCAPTCHA v3 secret key |
+| `RESEND_API_KEY` | Optional set | Resend API key (MFA OTP email) |
+| `RESEND_FROM_EMAIL` | Optional set | Verified Resend from address |
+| `MFA_NOTIFY_EMAIL` | Optional set | Inbox that receives MFA codes |
+
+## Deferred
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
 | `NEXT_PUBLIC_SUPABASE_URL` | Deferred | Only if a Supabase JS client is adopted later |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Deferred | Only if a Supabase JS client is adopted later |
-| `SUPABASE_SERVICE_ROLE_KEY` | Deferred | Server-side Supabase admin operations (not V1) |
-| `RESEND_API_KEY` | Deferred | Transactional email (password reset / notifications — out of V1) |
-| `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | Deferred | Bot protection (not V1) |
-| `RECAPTCHA_SECRET_KEY` | Deferred | Bot protection (not V1) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Deferred | Server-side Supabase admin operations |
 
 V1 uses Supabase as **hosted PostgreSQL** accessed through Prisma. Supabase client SDK keys are deferred unless a future ADR requires them.
 

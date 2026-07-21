@@ -6,6 +6,11 @@ import {
   setAuthCookie,
   verifyMfaChallengeToken,
 } from "@/lib/auth";
+import { enforceRateLimit } from "@/lib/rate-limit";
+import {
+  extractRecaptchaToken,
+  verifyRecaptchaToken,
+} from "@/lib/recaptcha";
 
 function isSecureRequest(request: Request): boolean {
   return (
@@ -15,12 +20,25 @@ function isSecureRequest(request: Request): boolean {
 }
 
 export async function POST(request: Request) {
+  const rate = await enforceRateLimit(request, "auth:mfa");
+  if (rate.limited) {
+    return apiError(rate.message, 429);
+  }
+
   let body: unknown;
 
   try {
     body = await request.json();
   } catch {
     return apiError("Invalid JSON body.", 400);
+  }
+
+  const captcha = await verifyRecaptchaToken(
+    extractRecaptchaToken(body),
+    "mfa_verify",
+  );
+  if (!captcha.ok) {
+    return apiError(captcha.message, 400);
   }
 
   const parsed = mfaCodeSchema.safeParse(body);

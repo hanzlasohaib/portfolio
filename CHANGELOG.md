@@ -6,6 +6,24 @@ The format follows Keep a Changelog principles.
 
 ---
 
+## [1.6.0] - 2026-07-21
+
+### Added
+
+- ADR-010 abuse protection: Upstash Redis rate limiting on login / MFA / contact
+- Google reCAPTCHA v3 on login, MFA verify/resend, and contact (when keys configured)
+- `Content-Security-Policy` header alongside existing security headers
+
+### Changed
+
+- Rate limiting and reCAPTCHA skip when their env sets are incomplete (local/dev)
+
+### Status
+
+Post-V1 hardening available when Upstash and/or reCAPTCHA env vars are set on the host.
+
+---
+
 ## [1.5.0] - 2026-07-21
 
 ### Added

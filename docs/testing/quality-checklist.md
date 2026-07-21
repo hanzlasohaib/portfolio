@@ -79,8 +79,7 @@ Optional follow-ups (non-blocking):
 
 ## Deferred (documented, not Phase 4 blockers)
 
-- Rate limiting
-- reCAPTCHA
-- Full CSP (add via ADR when needed)
+None remaining from the original Phase 4 deferrals.
 
 > Resend transactional email shipped in 1.5.0 for MFA OTP delivery (owner-verified on production).
+> Rate limiting (Upstash), reCAPTCHA v3, and CSP shipped in 1.6.0 (ADR-010).

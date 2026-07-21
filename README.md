@@ -44,6 +44,14 @@ Do **not** set `NODE_ENV` on Vercel (Vercel sets `production` automatically).
 
 Login identity stays the Test Admin email; codes go to `MFA_NOTIFY_EMAIL`, not `admin@example.com`. Without these vars, login stays password-only.
 
+**Abuse protection (ADR-010, optional sets):**
+
+- **Rate limiting** — set `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` (Upstash Redis). Limits: login 5/15m, MFA 10/15m, contact 5/hour per IP.
+- **reCAPTCHA v3** — set `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` + `RECAPTCHA_SECRET_KEY`. Enforced on login, MFA, and contact when both are present.
+- **CSP** — shipped in `next.config.ts` (allows Google reCAPTCHA hosts).
+
+Without Upstash / reCAPTCHA env, those checks are skipped so local development still works.
+
 ---
 
 ## Stack
@@ -55,6 +63,9 @@ Login identity stays the Test Admin email; codes go to `MFA_NOTIFY_EMAIL`, not `
 - **Prisma** + **Supabase PostgreSQL**
 - **Zod** validation
 - **JWT** (HTTP-only cookie) + **bcryptjs**
+- **Upstash Redis** (optional rate limiting)
+- **Google reCAPTCHA v3** (optional bot protection)
+- **Resend** (optional MFA email)
 
 ---
 

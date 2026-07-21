@@ -33,10 +33,22 @@ const mfaSchema = z.object({
   MFA_NOTIFY_EMAIL: z.string().email(),
 });
 
+const upstashSchema = z.object({
+  UPSTASH_REDIS_REST_URL: z.string().url(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
+});
+
+const recaptchaSchema = z.object({
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().min(1),
+  RECAPTCHA_SECRET_KEY: z.string().min(1),
+});
+
 export type ServerEnv = z.infer<typeof serverSchema>;
 export type ClientEnv = z.infer<typeof clientSchema>;
 export type SeedEnv = z.infer<typeof seedSchema>;
 export type MfaEnv = z.infer<typeof mfaSchema>;
+export type UpstashEnv = z.infer<typeof upstashSchema>;
+export type RecaptchaEnv = z.infer<typeof recaptchaSchema>;
 
 function readServerEnv(): ServerEnv {
   const parsed = serverSchema.safeParse({
@@ -133,6 +145,55 @@ export function getMfaEnv(): MfaEnv | null {
 /** True when Resend + notify email are configured (MFA required after password). */
 export function isMfaConfigured(): boolean {
   return getMfaEnv() !== null;
+}
+
+/**
+ * Upstash Redis REST credentials for distributed rate limiting (ADR-010).
+ * Returns null when incomplete — rate limiting is skipped.
+ */
+export function getUpstashEnv(): UpstashEnv | null {
+  const parsed = upstashSchema.safeParse({
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL || undefined,
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN || undefined,
+  });
+
+  if (!parsed.success) {
+    return null;
+  }
+
+  return parsed.data;
+}
+
+export function isRateLimitConfigured(): boolean {
+  return getUpstashEnv() !== null;
+}
+
+/**
+ * Google reCAPTCHA v3 keys (ADR-010).
+ * Returns null when incomplete — verification is skipped.
+ */
+export function getRecaptchaEnv(): RecaptchaEnv | null {
+  const parsed = recaptchaSchema.safeParse({
+    NEXT_PUBLIC_RECAPTCHA_SITE_KEY:
+      process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || undefined,
+    RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || undefined,
+  });
+
+  if (!parsed.success) {
+    return null;
+  }
+
+  return parsed.data;
+}
+
+export function isRecaptchaConfigured(): boolean {
+  return getRecaptchaEnv() !== null;
+}
+
+/** Public site key for client forms; null when reCAPTCHA is not configured. */
+export function getRecaptchaSiteKey(): string | null {
+  const key = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+  return key && key.length > 0 ? key : null;
 }
 
 export function isProduction(): boolean {

@@ -59,11 +59,14 @@ export function LoginForm() {
 
     startTransition(async () => {
       try {
+        const { getRecaptchaToken } = await import("@/lib/recaptcha/client");
+        const recaptchaToken = await getRecaptchaToken("login");
+
         const response = await fetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "same-origin",
-          body: JSON.stringify(parsed.data),
+          body: JSON.stringify({ ...parsed.data, recaptchaToken }),
         });
 
         const contentType = response.headers.get("content-type") ?? "";
@@ -137,11 +140,14 @@ export function LoginForm() {
 
     startTransition(async () => {
       try {
+        const { getRecaptchaToken } = await import("@/lib/recaptcha/client");
+        const recaptchaToken = await getRecaptchaToken("mfa_verify");
+
         const response = await fetch("/api/auth/mfa/verify", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "same-origin",
-          body: JSON.stringify(parsed.data),
+          body: JSON.stringify({ ...parsed.data, recaptchaToken }),
         });
 
         const payload = (await response.json()) as {
@@ -171,9 +177,14 @@ export function LoginForm() {
     setSuccessMessage(null);
     startTransition(async () => {
       try {
+        const { getRecaptchaToken } = await import("@/lib/recaptcha/client");
+        const recaptchaToken = await getRecaptchaToken("mfa_resend");
+
         const response = await fetch("/api/auth/mfa/resend", {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
           credentials: "same-origin",
+          body: JSON.stringify({ recaptchaToken }),
         });
         const payload = (await response.json()) as {
           success: boolean;
