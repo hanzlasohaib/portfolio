@@ -8,7 +8,7 @@ Built with a feature-based Next.js App Router architecture. Documentation in `do
 
 ## Current status
 
-**Phases 1–3 complete.** **Phase 4 (Quality) in progress.**
+**Phases 1–5 complete (V1).** Production-ready tag: `v1.4-production-ready`.
 
 | Route | Status |
 |-------|--------|

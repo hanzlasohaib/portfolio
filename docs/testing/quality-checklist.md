@@ -1,8 +1,8 @@
 # Quality Checklist
 
-> Version: 1.3.0
+> Version: 1.4.0
 >
-> Status: In Progress (Phase 4)
+> Status: Completed (Phase 4)
 >
 > Last Updated: 2026-07-21
 >
@@ -28,7 +28,7 @@ Production host: `https://portfolio-eta-rust-yq70o12jnn.vercel.app`
 - [x] Contact form creates a message (`POST /api/contact` → 201; smoke id `ba7e27c9-55c7-4df3-8876-f83c3561a119` — safe to archive/delete in dashboard)
 - [x] Login → dashboard → refresh keeps session → logout (owner-verified on production)
 - [x] Guests hitting `/dashboard` redirect to `/login` (HTTP 307 → `/login?next=%2Fdashboard`)
-- [ ] Projects / Journey CRUD in dashboard reflects on public pages (manual confirm in dashboard once)
+- [x] Projects / Journey CRUD in dashboard reflects on public pages (owner-verified 2026-07-21)
 - [x] Theme toggle present with accessible label (`ThemeToggle` aria-label); spot-check mobile layout in browser
 
 ## Performance
@@ -64,14 +64,17 @@ See also `docs/security/security-checklist.md`.
 - [x] Prisma migrations applied
 - [x] Baseline security headers observed on production (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`)
 - [x] Test Admin retained for V1 — dashboard login on Vercel uses the seeded User in Supabase
-- [ ] `JWT_SECRET` rotated if previously exposed (owner decision)
+- [ ] `JWT_SECRET` rotated if previously exposed (optional; owner decision — not a Phase 4 blocker)
 - [x] No debug/admin endpoints outside `/dashboard` + `/api/auth/*` + `/api/contact`
 
-## Remaining to close Phase 4
+## Phase 4 closed
 
-1. Manual: confirm one Projects/Journey edit appears on the public site.
-2. Optional: rotate `JWT_SECRET` if it was ever shared.
-3. Optional later: improve Lighthouse Performance above 76.
+Completed 2026-07-21. Release tag: `v1.4-production-ready`.
+
+Optional follow-ups (non-blocking):
+
+- Rotate `JWT_SECRET` if it was ever shared
+- Improve Lighthouse Performance above 76
 
 ## Deferred (documented, not Phase 4 blockers)
 

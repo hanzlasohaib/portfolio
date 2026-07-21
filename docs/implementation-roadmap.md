@@ -67,11 +67,11 @@ Phase 3 verification (manual):
 
 ## Phase 4 – Quality
 
-Status: In Progress (Lighthouse recorded 2026-07-21)
+Status: Completed (2026-07-21)
 
 Lighthouse (production): Performance 76 · Accessibility 100 · Best Practices 100 · SEO 100.
 
-Remaining before Phase 4 close: one manual CRUD→public confirm (optional JWT rotate).
+Git tag: `v1.4-production-ready`
 
 ```text
 Phase 4 – Production readiness
@@ -91,9 +91,9 @@ Deferred to later ADRs / not blocking Phase 4 close unless required:
 
 ## Phase 5 – Release
 
-Status: Deferred until Phase 4 is completed.
+Status: Completed (2026-07-21)
 
-Target tag: `v1.4-production-ready`
+Annotated tag `v1.4-production-ready` marks V1 production readiness after Phase 4 quality close.
 
 ---
 
@@ -341,7 +341,7 @@ Only after all verification commands succeed may the implementation proceed to R
 
 ### Verification Checklist
 
-- [ ] All manual tests passed (`docs/testing/quality-checklist.md`) — one CRUD→public confirm left
+- [x] All manual tests passed (`docs/testing/quality-checklist.md`)
 - [x] Performance reviewed (Lighthouse Performance 76 — accepted for V1)
 - [x] Accessibility reviewed (Lighthouse Accessibility 100)
 - [x] SEO configured (Lighthouse SEO 100)
