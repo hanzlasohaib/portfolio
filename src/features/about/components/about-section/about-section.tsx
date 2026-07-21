@@ -4,6 +4,7 @@ import {
   buttonSizeClassName,
   buttonVariantClassName,
 } from "@/components/button/button-variants";
+import { Card } from "@/components/card";
 import { Container } from "@/components/container";
 import { Heading } from "@/components/heading";
 import { Link } from "@/components/link";
@@ -38,8 +39,8 @@ export function AboutSection() {
           {biography}
         </Text>
 
-        <div className="grid gap-8 sm:grid-cols-2">
-          <div className="flex flex-col gap-4">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <Card className="h-full">
             <Heading level="h3">Core Strengths</Heading>
             <ul className="flex flex-wrap gap-2">
               {strengths.map((strength) => (
@@ -48,22 +49,20 @@ export function AboutSection() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Card>
 
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
-              <Heading level="h3">Current Focus</Heading>
-              <Text variant="body">{currentFocus}</Text>
-            </div>
+          <Card className="h-full">
+            <Heading level="h3">Current Focus</Heading>
+            <Text variant="body">{currentFocus}</Text>
+          </Card>
 
-            <div className="flex flex-col gap-2">
-              <Heading level="h3">Education</Heading>
-              <Text variant="body">
-                {education.degree} — {education.institution} (
-                {education.period})
-              </Text>
-            </div>
-          </div>
+          <Card className="h-full">
+            <Heading level="h3">Education</Heading>
+            <Text variant="body">
+              {education.degree} — {education.institution} (
+              {education.period})
+            </Text>
+          </Card>
         </div>
 
         <Link

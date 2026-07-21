@@ -4,6 +4,7 @@ import {
   buttonSizeClassName,
   buttonVariantClassName,
 } from "@/components/button/button-variants";
+import { Card } from "@/components/card";
 import { Container } from "@/components/container";
 import { Heading } from "@/components/heading";
 import { Link } from "@/components/link";
@@ -41,15 +42,17 @@ export function SkillsSection() {
 
         <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {SKILLS_DATA.map(({ category, technologies }) => (
-            <li key={category} className="flex flex-col gap-4">
-              <Heading level="h3">{category}</Heading>
-              <ul className="flex flex-wrap gap-2">
-                {technologies.map((technology) => (
-                  <li key={technology}>
-                    <Badge variant="secondary">{technology}</Badge>
-                  </li>
-                ))}
-              </ul>
+            <li key={category} className="h-full">
+              <Card className="h-full">
+                <Heading level="h3">{category}</Heading>
+                <ul className="flex flex-wrap gap-2">
+                  {technologies.map((technology) => (
+                    <li key={technology}>
+                      <Badge variant="secondary">{technology}</Badge>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
             </li>
           ))}
         </ul>
