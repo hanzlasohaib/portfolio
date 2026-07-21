@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 /**
  * Scroll-spy for Home section nav highlighting.
  *
- * Uses document order + a top offset (sticky navbar) so the active section
- * is the last one whose top has crossed the marker line — more reliable than
- * IntersectionObserver ratios on tall sections.
+ * Uses document order + a top offset (fixed navbar height) so the active
+ * section is the last one whose top has crossed the marker line — more
+ * reliable than IntersectionObserver ratios on tall sections.
  */
 export function useActiveSection(sectionIds: readonly string[]): string | null {
   const [activeId, setActiveId] = useState<string | null>(
@@ -36,7 +36,7 @@ export function useActiveSection(sectionIds: readonly string[]): string | null {
             "--nav-height",
           ),
         ) || 72;
-      // Marker just below the sticky navbar.
+      // Marker just below the fixed navbar.
       const marker = navOffset + 8;
 
       let currentId = elements[0].id;

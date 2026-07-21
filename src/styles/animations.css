@@ -162,18 +162,16 @@
 @keyframes page-enter {
   from {
     opacity: 0;
-    transform: translateY(6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
 .animate-page-enter {
+  /* Opacity only — transforms create containing blocks that break
+     sticky/fixed descendants and can glitch the nav while scrolling up. */
   animation: page-enter 280ms var(--easing-entrance) both;
-  /* Avoid leaving a persistent transform (breaks `position: fixed` descendants). */
-  animation-fill-mode: backwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
