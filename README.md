@@ -32,9 +32,9 @@ Required Vercel env vars (names must match — `POSTGRES_*` / `SUPABASE_*` alone
 - `JWT_SECRET`
 - `NEXT_PUBLIC_SITE_URL` (production site URL)
 
-Do **not** set `SEED_ADMIN_*` or `NODE_ENV` on Vercel. Seed is local/dev only.
+Do **not** set `NODE_ENV` on Vercel (Vercel sets `production` automatically).
 
-**Replace the demo admin before treating production as locked down:** create a real admin (or update the seeded user’s email/password hash in Supabase), rotate `JWT_SECRET` if it was ever shared, and stop using `admin@example.com` / seed passwords.
+**Test Admin on Vercel (intentional for V1):** Login uses the `User` row in Supabase, not `SEED_ADMIN_*` env vars. Point Vercel `DATABASE_URL` / `DIRECT_URL` at the same database you seeded locally, then sign in at `/login` with the same email/password you used for seed (`SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`). You do **not** need to add `SEED_ADMIN_*` on Vercel for dashboard login to work — those vars are only for running `npx prisma db seed` (locally, against that DB). Seed still refuses to run when `NODE_ENV=production`.
 
 ---
 

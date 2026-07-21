@@ -20,7 +20,7 @@
 - [ ] JWT secret rotated for production if the development secret was ever shared
 - [x] Prisma migrations applied
 - [x] Security headers configured (`next.config.ts`)
-- [ ] Demo / seed admin replaced with a real production admin
+- [x] Test Admin retained for V1 — can sign in on Vercel via the seeded DB user (SEED_ADMIN_* not required as Vercel runtime env)
 - [ ] No secrets committed (`.env` gitignored; only `.env.example` tracked)
 
 ## Deferred (future ADR / later phase — not V1 Phase 4 blockers)

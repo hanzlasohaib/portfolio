@@ -2,10 +2,13 @@ import { hash } from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 
 /**
- * Development seed — Test Admin + demo portfolio content.
- * Refuses to run in production.
+ * Seed — Test Admin + demo portfolio content.
+ * Creates (or skips) the admin User in the database pointed at by DATABASE_URL.
+ * That same admin can sign in on Vercel when production uses this database.
  *
- * Required env (local .env only):
+ * Refuses to run when NODE_ENV=production (run seed locally against the DB).
+ *
+ * Required env (local .env for the seed script — not needed as Vercel runtime):
  * - SEED_ADMIN_EMAIL
  * - SEED_ADMIN_PASSWORD
  * Optional: SEED_ADMIN_NAME (default "Test Admin")

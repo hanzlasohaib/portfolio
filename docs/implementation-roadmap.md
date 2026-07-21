@@ -75,7 +75,7 @@ Phase 4 – Production readiness
        ├── Manual / production smoke checklist
        ├── Accessibility & SEO review
        ├── Security checklist (V1-applicable items)
-       ├── Production admin (replace demo seed credentials)
+       ├── Keep Test Admin for V1 (sign in on Vercel via seeded DB user)
        └── Performance / Lighthouse pass
 ```
 
@@ -343,7 +343,7 @@ Only after all verification commands succeed may the implementation proceed to R
 - [ ] SEO configured
 - [x] Baseline security headers (`next.config.ts`)
 - [ ] Security checklist V1 items completed (`docs/security/security-checklist.md`)
-- [ ] Development seed / demo admin removed or replaced for production
+- [x] Test Admin retained for V1 (no requirement to remove/replace)
 
   Commands:
    - npm run lint

@@ -58,7 +58,7 @@ See also `docs/security/security-checklist.md`.
 - [x] Secure HTTP-only auth cookies
 - [x] Prisma migrations applied
 - [x] Baseline security headers (`next.config.ts`)
-- [ ] Production admin is not the demo seed account
+- [x] Test Admin retained for V1 — dashboard login on Vercel uses the seeded User in Supabase
 - [ ] `JWT_SECRET` rotated if previously exposed
 - [ ] No debug/admin endpoints outside `/dashboard` + auth APIs
 
