@@ -2,14 +2,15 @@ import { Badge } from "@/components/badge";
 import { Container } from "@/components/container";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
-import { TECHNOLOGIES_DATA } from "@/features/skills";
+
+type AboutTechnologiesProps = {
+  technologies: string[];
+};
 
 /**
- * About page Technologies section — flat badge cloud (different job from
- * the categorized Skills cards above). Data is derived from `SKILLS_DATA`
- * so both sections stay in sync.
+ * About page Technologies section — flat badge cloud.
  */
-export function AboutTechnologies() {
+export function AboutTechnologies({ technologies }: AboutTechnologiesProps) {
   return (
     <Section alt aria-label="Technologies">
       <Container className="flex flex-col gap-10">
@@ -19,7 +20,7 @@ export function AboutTechnologies() {
         />
 
         <ul className="flex flex-wrap gap-2">
-          {TECHNOLOGIES_DATA.map((technology) => (
+          {technologies.map((technology) => (
             <li key={technology}>
               <Badge variant="primary">{technology}</Badge>
             </li>

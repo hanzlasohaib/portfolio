@@ -3,19 +3,17 @@ import { Container } from "@/components/container";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 
-import { JOURNEY_DATA } from "../../constants/journey-data";
+import type { JourneyEntry } from "../../constants/journey-data";
 import { JourneyTimeline } from "../journey-timeline";
+
+type JourneyPageProps = {
+  entries: JourneyEntry[];
+};
 
 /**
  * Full `/journey` page composition (docs/project-design/pages.md § Journey).
- *
- * Presentation-only — reuses `JourneyTimeline` + `JOURNEY_DATA`. The App
- * Router page stays thin and imports this from the journey feature public API.
- *
- * No per-entry detail view in V1; Education stays on `/about` (not duplicated
- * here — see `constants/journey-data.ts`).
  */
-export function JourneyPage() {
+export function JourneyPage({ entries }: JourneyPageProps) {
   return (
     <PageWrapper>
       <Section aria-label="Journey">
@@ -26,7 +24,7 @@ export function JourneyPage() {
             level="h1"
           />
 
-          <JourneyTimeline entries={JOURNEY_DATA} />
+          <JourneyTimeline entries={entries} />
         </Container>
       </Section>
     </PageWrapper>

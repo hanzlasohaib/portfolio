@@ -2,13 +2,17 @@ import { Container } from "@/components/container";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { SkillsCategories } from "@/features/skills";
+import type { SkillCategory } from "@/features/skills";
+
+type AboutSkillsProps = {
+  categories: SkillCategory[];
+};
 
 /**
  * About page Skills section — categorized cards via the shared
- * `SkillsCategories` component. No CTA (this page is the destination the
- * Home Skills preview already links to).
+ * `SkillsCategories` component.
  */
-export function AboutSkills() {
+export function AboutSkills({ categories }: AboutSkillsProps) {
   return (
     <Section aria-label="Skills">
       <Container className="flex flex-col gap-10">
@@ -17,7 +21,7 @@ export function AboutSkills() {
           description="Technologies and tools grouped by the areas I work in most."
         />
 
-        <SkillsCategories />
+        <SkillsCategories categories={categories} />
       </Container>
     </Section>
   );

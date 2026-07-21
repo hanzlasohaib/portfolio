@@ -11,10 +11,7 @@ import { Input } from "@/components/input";
 import { Text } from "@/components/text";
 import { cn } from "@/lib/utils";
 
-import {
-  PROJECTS_DATA,
-  type FeaturedProject,
-} from "../../constants/projects-data";
+import type { FeaturedProject } from "../../constants/projects-data";
 import {
   filterProjects,
   getProjectTechnologyTags,
@@ -22,9 +19,8 @@ import {
 import { ProjectCard } from "../project-card";
 import { ProjectPreviewModal } from "../project-preview-modal";
 
-const TECHNOLOGY_TAGS = getProjectTechnologyTags(PROJECTS_DATA);
-
 export type ProjectsExplorerProps = {
+  projects: FeaturedProject[];
   /**
    * When true, ProjectCards may show a GitHub action (dedicated `/projects`
    * page). Home Featured Projects leave this false.
@@ -45,6 +41,7 @@ export type ProjectsExplorerProps = {
  * specified in `pages.md` § Projects — not a categories taxonomy system.
  */
 export function ProjectsExplorer({
+  projects,
   showRepository = false,
 }: ProjectsExplorerProps) {
   const searchId = useId();
@@ -57,7 +54,8 @@ export function ProjectsExplorer({
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const previewTriggerRef = useRef<HTMLButtonElement | null>(null);
 
-  const filteredProjects = filterProjects(PROJECTS_DATA, {
+  const technologyTags = getProjectTechnologyTags(projects);
+  const filteredProjects = filterProjects(projects, {
     query,
     technology: selectedTechnology,
   });
@@ -115,7 +113,7 @@ export function ProjectsExplorer({
                 All
               </button>
             </li>
-            {TECHNOLOGY_TAGS.map((technology) => {
+            {technologyTags.map((technology) => {
               const isActive = selectedTechnology === technology;
 
               return (

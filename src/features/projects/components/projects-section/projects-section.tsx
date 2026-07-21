@@ -13,27 +13,19 @@ import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { cn } from "@/lib/utils";
 
-import {
-  PROJECTS_DATA,
-  type FeaturedProject,
-} from "../../constants/projects-data";
+import type { FeaturedProject } from "../../constants/projects-data";
 import { ProjectCard } from "../project-card";
 import { ProjectPreviewModal } from "../project-preview-modal";
 
+type ProjectsSectionProps = {
+  projects: FeaturedProject[];
+};
+
 /**
  * Home page "Featured Projects Preview" (docs/project-design/pages.md §
- * Home). Naming per docs/database/naming-conventions.md § Component Names
- * (`ProjectsSection`).
- *
- * Presentation-only — reads static content from
- * `constants/projects-data.ts`. Search/filter live on the dedicated
- * `/projects` page (`ProjectsPage` / `ProjectsExplorer`); this is only the
- * curated Home preview.
- *
- * `id="projects"` anchors this section for the one-page Navbar
- * navigation (see `constants/navigation.ts`).
+ * Home). Data is loaded by the page via the projects service (Phase 3).
  */
-export function ProjectsSection() {
+export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const [selectedProject, setSelectedProject] = useState<FeaturedProject | null>(
     null,
   );
@@ -61,7 +53,7 @@ export function ProjectsSection() {
         />
 
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {PROJECTS_DATA.map((project) => (
+          {projects.map((project) => (
             <li key={project.slug}>
               <ProjectCard project={project} onPreview={handlePreview} />
             </li>

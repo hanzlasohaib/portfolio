@@ -7,14 +7,16 @@ import { AboutSection } from "@/features/about";
 import { ContactSection } from "@/features/contact";
 import { HeroSection } from "@/features/home";
 import { JourneySection } from "@/features/journey";
+import { getJourneyEntriesForUi } from "@/features/journey/service";
 import { ProjectsSection } from "@/features/projects";
+import { getFeaturedProjectsForUi } from "@/features/projects/service";
 import { SkillsSection } from "@/features/skills";
+import { getSkillCategoriesForUi } from "@/features/skills/service";
 
 /**
  * Home (`/`) — docs/project-design/pages.md § Home.
  *
- * Page composes feature components only; no business logic here
- * (docs/architecture/frontend-architecture.md § 6 Page Composition).
+ * Page composes feature components only; data loads via feature services.
  */
 export const metadata: Metadata = buildPageMetadata({
   path: "/",
@@ -24,14 +26,20 @@ export const metadata: Metadata = buildPageMetadata({
   description: SEO_DEFAULTS.description,
 });
 
-export default function Home() {
+export default async function Home() {
+  const [projects, skillCategories, journeyEntries] = await Promise.all([
+    getFeaturedProjectsForUi(),
+    getSkillCategoriesForUi(),
+    getJourneyEntriesForUi(),
+  ]);
+
   return (
     <PageWrapper>
       <HeroSection />
       <AboutSection />
-      <ProjectsSection />
-      <SkillsSection />
-      <JourneySection />
+      <ProjectsSection projects={projects} />
+      <SkillsSection categories={skillCategories} />
+      <JourneySection entries={journeyEntries} />
       <ContactSection />
     </PageWrapper>
   );

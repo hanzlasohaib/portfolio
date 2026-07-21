@@ -106,6 +106,7 @@
   --z-dropdown: 2;
   /* Above sticky nav/progress overlays; consumed by shared Modal. */
   --z-modal: 70;
+  --z-toast: 80;
   --z-nav: 10;
 
   /* -------------------------------------------------------------------------- */

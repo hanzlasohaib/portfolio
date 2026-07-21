@@ -1,5 +1,7 @@
 import { PageWrapper } from "@/components";
 
+import type { SkillCategory } from "@/features/skills";
+
 import { AboutAtAGlance } from "../about-at-a-glance";
 import { AboutCta } from "../about-cta";
 import { AboutCurrentlyLearning } from "../about-currently-learning";
@@ -12,16 +14,18 @@ import { AboutSkills } from "../about-skills";
 import { AboutTechnologies } from "../about-technologies";
 import { AboutWhatIDo } from "../about-what-i-do";
 
+type AboutPageProps = {
+  skillCategories: SkillCategory[];
+  technologies: string[];
+};
+
 /**
- * Full `/about` page composition (docs/project-design/pages.md § About,
- * intentionally extended — see `constants/about-content.ts`).
- *
- * Presentation-only feature root. The App Router page stays thin and
- * imports this component from the about feature public API.
- *
- * Interests are omitted until real content exists.
+ * Full `/about` page composition (docs/project-design/pages.md § About).
  */
-export function AboutPage() {
+export function AboutPage({
+  skillCategories,
+  technologies,
+}: AboutPageProps) {
   return (
     <PageWrapper>
       <AboutIntroduction />
@@ -30,8 +34,8 @@ export function AboutPage() {
       <AboutWhatIDo />
       <AboutEducation />
       <AboutJourneySummary />
-      <AboutSkills />
-      <AboutTechnologies />
+      <AboutSkills categories={skillCategories} />
+      <AboutTechnologies technologies={technologies} />
       <AboutCurrentlyWorkingWith />
       <AboutCurrentlyLearning />
       <AboutCta />

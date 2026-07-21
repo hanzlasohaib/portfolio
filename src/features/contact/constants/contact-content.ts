@@ -29,8 +29,8 @@ export const CONTACT_CONTENT = {
   availability: AVAILABILITY,
 
   formNotice:
-    "Message sending is coming soon. You can still reach me by email or social links in the meantime.",
-  submitLabel: "Coming Soon",
+    "I typically reply within a few days.",
+  submitLabel: "Send Message",
 
   homeCtaLabel: "View Contact Page",
   homeCtaHref: "/contact",

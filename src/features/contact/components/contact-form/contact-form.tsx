@@ -1,29 +1,99 @@
 "use client";
 
+import { FormEvent, useState, useTransition } from "react";
+
+import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { Text } from "@/components/text";
 import { Textarea } from "@/components/textarea";
 
-import { CONTACT_CONTENT } from "../../constants/contact-content";
+import { contactFormSchema } from "../../schemas/contact-form-schema";
+
+type FieldErrors = Record<string, string>;
 
 /**
- * Frontend-only contact form (docs/project-design/pages.md § Contact fields;
- * docs/architecture/validation-strategy.md § Contact field names).
- *
- * No API / Zod / email sending yet (Phase 3 backend). Submit is disabled and
- * labeled "Coming Soon" so the UI is present without pretending to work.
- * Field `name` attributes match the future Contact model for an easy swap.
+ * Contact form with Zod validation + POST /api/contact
+ * (docs/architecture/validation-strategy.md § Contact).
  */
 export function ContactForm() {
+  const [isPending, startTransition] = useTransition();
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setFormError(null);
+    setSuccessMessage(null);
+    setFieldErrors({});
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const raw = {
+      fullName: String(formData.get("fullName") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      subject: String(formData.get("subject") ?? ""),
+      message: String(formData.get("message") ?? ""),
+    };
+
+    const parsed = contactFormSchema.safeParse(raw);
+    if (!parsed.success) {
+      const errors: FieldErrors = {};
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0] ?? "_form");
+        if (!errors[key]) {
+          errors[key] = issue.message;
+        }
+      }
+      setFieldErrors(errors);
+      setFormError("Please fix the highlighted fields and try again.");
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(parsed.data),
+        });
+        const payload = (await response.json()) as {
+          success: boolean;
+          message: string;
+          errors?: FieldErrors;
+        };
+
+        if (!response.ok || !payload.success) {
+          if (payload.errors) {
+            setFieldErrors(payload.errors);
+          }
+          setFormError(
+            payload.message ||
+              "Unable to send your message. Please try again in a moment.",
+          );
+          return;
+        }
+
+        setSuccessMessage(
+          payload.message ||
+            "Message sent successfully. Thank you — I’ll get back to you soon.",
+        );
+        form.reset();
+      } catch {
+        setFormError(
+          "Network error. Check your connection and try sending again.",
+        );
+      }
+    });
+  }
+
   return (
     <form
       className="flex flex-col gap-5"
-      onSubmit={(event) => {
-        event.preventDefault();
-      }}
+      onSubmit={handleSubmit}
       noValidate
-      aria-describedby="contact-form-notice"
+      aria-describedby="contact-form-feedback"
     >
       <Input
         name="fullName"
@@ -33,6 +103,7 @@ export function ContactForm() {
         autoComplete="name"
         fullWidth
         required
+        error={fieldErrors.fullName}
       />
 
       <Input
@@ -43,6 +114,7 @@ export function ContactForm() {
         autoComplete="email"
         fullWidth
         required
+        error={fieldErrors.email}
       />
 
       <Input
@@ -53,6 +125,7 @@ export function ContactForm() {
         autoComplete="off"
         fullWidth
         required
+        error={fieldErrors.subject}
       />
 
       <Textarea
@@ -62,14 +135,29 @@ export function ContactForm() {
         rows={5}
         fullWidth
         required
+        error={fieldErrors.message}
       />
 
-      <Text id="contact-form-notice" variant="small">
-        {CONTACT_CONTENT.formNotice}
-      </Text>
+      {formError ? (
+        <Alert id="contact-form-feedback" variant="error" title="Message not sent">
+          {formError}
+        </Alert>
+      ) : successMessage ? (
+        <Alert
+          id="contact-form-feedback"
+          variant="success"
+          title="Message sent"
+        >
+          {successMessage}
+        </Alert>
+      ) : (
+        <Text id="contact-form-feedback" variant="small">
+          I typically reply within a few days.
+        </Text>
+      )}
 
-      <Button type="submit" size="lg" disabled fullWidth>
-        {CONTACT_CONTENT.submitLabel}
+      <Button type="submit" size="lg" fullWidth disabled={isPending}>
+        {isPending ? "Sending…" : "Send Message"}
       </Button>
     </form>
   );

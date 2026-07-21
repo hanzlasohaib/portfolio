@@ -4,7 +4,7 @@ import Script from "next/script";
 
 import { JsonLd } from "@/components/json-ld";
 import { defaultMetadata } from "@/config/metadata";
-import { ThemeProvider } from "@/providers";
+import { ThemeProvider, ToastProvider } from "@/providers";
 
 import "./globals.css";
 
@@ -40,6 +40,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-theme="dark"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`${orbitron.variable} ${inter.variable} ${firaCode.variable} h-full antialiased`}
     >
@@ -59,7 +60,9 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         <JsonLd />
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

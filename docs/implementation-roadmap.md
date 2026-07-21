@@ -27,43 +27,44 @@ Implementation Roadmap
 
 ## Phase 3 – Backend Foundation
 
-Status:
-Deferred until Phase 2 is completed.
+Status: In Progress
 
-This phase will be planned after the UI Foundation and Public Pages
-have been implemented and verified.
+Auth and dashboard shell land inside Phase 3 (former Phase 4
+dashboard foundation). Quality and Release follow Phase 3.
 
-The implementation order and tasks will be defined before Phase 3 begins.
+```text
+Phase 3.1 – Foundation + Auth + Seed
+       ├── Prisma schema + migrate
+       ├── Supabase PostgreSQL connection
+       ├── Typed environment (`config/env.ts`, `.env.example`)
+       ├── Authentication (login / logout Route Handlers + JWT cookie)
+       ├── Idempotent seed (Test Admin)
+       └── Verify login API + cookie
 
-## Phase 4 – Dashboard
+Phase 3.2 – Dashboard shell + protection
+       ├── Middleware (session validation)
+       ├── Dashboard route shell + placeholders
+       ├── Role protection (ADMIN)
+       ├── Login UI wired to API
+       └── Verify: sign-in, refresh session, protect routes, sign-out
+
+Phase 3.3+ – Feature data + CRUD
+       ├── Contact (POST /api/contact + messages)
+       ├── Projects (+ Technology M2M)
+       ├── Journey
+       ├── Skills (content; no /skills route)
+       └── About (static constants unless DB fields are required)
+```
+
+## Phase 4 – Quality
 
 Status:
 Deferred until Phase 3 is completed.
 
-This phase will be planned after the UI Foundation and Public Pages
-have been implemented and verified.
-
-The implementation order and tasks will be defined before Phase 4 begins.
-
-## Phase 5 – Quality
+## Phase 5 – Release
 
 Status:
 Deferred until Phase 4 is completed.
-
-This phase will be planned after the UI Foundation and Public Pages
-have been implemented and verified.
-
-The implementation order and tasks will be defined before Phase 5 begins.
-
-## Phase 6 – Release
-
-Status:
-Deferred until Phase 5 is completed.
-
-This phase will be planned after the UI Foundation and Public Pages
-have been implemented and verified.
-
-The implementation order and tasks will be defined before Phase 6 begins.
 
 ---
 
@@ -138,8 +139,7 @@ Examples:
 v1.1-ui-foundation
 v1.2-public-pages
 v1.3-backend-foundation
-v1.4-dashboard
-v1.5-production-ready
+v1.4-production-ready
 ```
 
 ---
@@ -207,15 +207,16 @@ Only after all verification commands succeed may the implementation proceed to R
 
 ---
 
-## Phase 3 – Backend Foundation
+## Phase 3.1 – Foundation + Auth + Seed
 
 ### Verification Checklist
 
-- [ ] Environment variables loaded.
+- [ ] Environment variables loaded via `config/env.ts`.
 - [ ] Prisma client generated.
 - [ ] Database connection verified.
 - [ ] Migration completed successfully.
-- [ ] CRUD operations tested.
+- [ ] Seed creates Test Admin idempotently (`npx prisma db seed`).
+- [ ] Login sets HTTP-only JWT cookie; logout clears it.
 
   Commands:
    - npm run lint
@@ -224,6 +225,7 @@ Only after all verification commands succeed may the implementation proceed to R
    - npx prisma validate
    - npx prisma generate
    - npx prisma migrate dev
+   - npx prisma db seed
 
 ### Verification Workflow
 
@@ -239,18 +241,21 @@ If any command fails, fix the issue and re-run the complete pipeline. Do not com
 
 Only after all verification commands succeed may the implementation proceed to Review and Commit.
 
-Phase 3 also requires the Prisma commands listed above before proceeding.
+Phase 3.1 also requires the Prisma commands listed above before proceeding.
 
 ---
 
-## Phase 4 – Dashboard
+## Phase 3.2 – Dashboard shell + protection
 
 ### Verification Checklist
 
-- [ ] Authentication works.
-- [ ] Protected routes secured.
-- [ ] CRUD operations functional.
-- [ ] Forms validated.
+- [ ] Authentication works in the browser (login UI).
+- [ ] Session remains valid after refresh.
+- [ ] Protected `/dashboard/*` routes redirect guests to `/login`.
+- [ ] Authenticated users are redirected away from `/login`.
+- [ ] Sign-out clears the session.
+- [ ] ADMIN role is applied for dashboard access.
+- [ ] Thin authenticated mutation / session ping succeeds.
 
   Commands:
    - npm run lint
@@ -273,7 +278,37 @@ Only after all verification commands succeed may the implementation proceed to R
 
 ---
 
-## Phase 5 – Production Readiness
+## Phase 3.3+ – Feature data + CRUD
+
+### Verification Checklist
+
+- [ ] Contact form persists via `POST /api/contact`.
+- [ ] Projects / Journey / Skills read from the database on public pages.
+- [ ] Dashboard Server Actions support admin CRUD for managed entities.
+- [ ] Forms validated with Zod (client + server).
+
+  Commands:
+   - npm run lint
+   - npm run typecheck
+   - npm run build
+
+### Verification Workflow
+
+Every milestone must pass the full verification pipeline:
+
+```text
+npm run lint
+npm run typecheck
+npm run build
+```
+
+If any command fails, fix the issue and re-run the complete pipeline. Do not commit failing code.
+
+Only after all verification commands succeed may the implementation proceed to Review and Commit.
+
+---
+
+## Phase 4 – Production Readiness (Quality)
 
 ### Verification Checklist
 
@@ -282,6 +317,7 @@ Only after all verification commands succeed may the implementation proceed to R
 - [ ] Accessibility reviewed.
 - [ ] SEO configured.
 - [ ] Security checklist completed.
+- [ ] Development seed / demo admin removed or replaced for production.
 
   Commands:
    - npm run lint

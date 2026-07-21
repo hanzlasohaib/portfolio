@@ -53,7 +53,7 @@ portfolio/
 ├── prisma/               # Prisma schema and migrations (Phase 3+)
 ├── public/               # Static assets
 ├── src/                  # Application source code
-├── middleware.ts         # Global Next.js middleware (Phase 4+)
+├── middleware.ts         # Global Next.js middleware (Phase 3.2+)
 ├── next.config.ts
 ├── package.json
 ├── tsconfig.json
@@ -155,13 +155,14 @@ src/app/
 │   ├── layout.tsx
 │   └── login/page.tsx         # /login
 │
-├── (dashboard)/               # Protected admin
+├── (dashboard)/               # Protected admin layout group
 │   ├── layout.tsx
-│   ├── page.tsx               # /dashboard
-│   ├── projects/page.tsx
-│   ├── journey/page.tsx
-│   ├── messages/page.tsx
-│   └── settings/page.tsx
+│   └── dashboard/
+│       ├── page.tsx           # /dashboard
+│       ├── projects/page.tsx  # /dashboard/projects
+│       ├── journey/page.tsx   # /dashboard/journey
+│       ├── messages/page.tsx  # /dashboard/messages
+│       └── settings/page.tsx  # /dashboard/settings
 │
 └── api/                       # Route Handlers (Phase 3+)
     ├── contact/route.ts

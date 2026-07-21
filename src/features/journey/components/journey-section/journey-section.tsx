@@ -9,22 +9,17 @@ import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { cn } from "@/lib/utils";
 
-import { JOURNEY_DATA } from "../../constants/journey-data";
+import type { JourneyEntry } from "../../constants/journey-data";
 import { JourneyTimeline } from "../journey-timeline";
 
+type JourneySectionProps = {
+  entries: JourneyEntry[];
+};
+
 /**
- * Home page "Journey Timeline Preview" (docs/project-design/pages.md §
- * Home). Naming per docs/database/naming-conventions.md § Component Names
- * (`JourneySection`).
- *
- * Presentation-only — reads static content from
- * `constants/journey-data.ts`. The full `/journey` page is composed by
- * `JourneyPage`; this is only the Home preview.
- *
- * `id="journey"` anchors this section for the one-page Navbar navigation
- * (see `constants/navigation.ts`, which already links to `/#journey`).
+ * Home page "Journey Timeline Preview" (docs/project-design/pages.md § Home).
  */
-export function JourneySection() {
+export function JourneySection({ entries }: JourneySectionProps) {
   return (
     <Section id="journey" aria-label="Journey">
       <Container className="flex flex-col gap-10">
@@ -33,7 +28,7 @@ export function JourneySection() {
           description="A quick look at my professional experience — from internships to hands-on full-stack development."
         />
 
-        <JourneyTimeline entries={JOURNEY_DATA} />
+        <JourneyTimeline entries={entries} />
 
         <Link
           href="/journey"

@@ -3,18 +3,17 @@ import { Container } from "@/components/container";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 
+import type { FeaturedProject } from "../../constants/projects-data";
 import { ProjectsExplorer } from "../projects-explorer";
+
+type ProjectsPageProps = {
+  projects: FeaturedProject[];
+};
 
 /**
  * Full `/projects` page composition (docs/project-design/pages.md § Projects).
- *
- * Thin feature root: intro + interactive explorer (grid, search, technology
- * filter tags, preview modal). App Router page stays thin and imports this
- * from the projects feature public API.
- *
- * `/projects/[slug]` detail view is out of scope for this pass.
  */
-export function ProjectsPage() {
+export function ProjectsPage({ projects }: ProjectsPageProps) {
   return (
     <PageWrapper>
       <Section aria-label="Projects">
@@ -25,7 +24,7 @@ export function ProjectsPage() {
             level="h1"
           />
 
-          <ProjectsExplorer showRepository />
+          <ProjectsExplorer projects={projects} showRepository />
         </Container>
       </Section>
     </PageWrapper>
