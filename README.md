@@ -19,7 +19,7 @@ Built with a feature-based Next.js App Router architecture. Documentation in `do
 | `/contact` | Live — form posts to `POST /api/contact` |
 | `/login` | Live — JWT cookie auth |
 | `/dashboard/**` | Live — protected admin shell + CRUD panels |
-| `/projects/[slug]` | Planned (V1 scope; not implemented yet) |
+| `/projects/[slug]` | Live — project detail (DB-backed with static fallback) |
 
 There is **no** dedicated `/skills` route in V1 — skills appear on Home and `/about`.
 

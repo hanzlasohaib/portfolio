@@ -156,7 +156,11 @@ Refresh Token support if needed.
 
 # Future
 
-- MFA
+- MFA / 2FA (TOTP or email OTP via Resend)
+  - Keep Test Admin login identity as-is for V1 continuity.
+  - Deliver MFA codes to an owner-controlled mailbox (real email), not
+    `admin@example.com` — prefer a dedicated notify address / settings field
+    (e.g. `MFA_NOTIFY_EMAIL`) so the login email need not be a real inbox.
 - OAuth
 - Password Reset
 - Email Verification

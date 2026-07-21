@@ -27,6 +27,8 @@ export type FeaturedProject = {
   slug: string;
   title: string;
   shortDescription: string;
+  /** Full description for `/projects/[slug]` detail pages. */
+  description?: string;
   technologies: string[];
   preview?: ProjectPreview;
   thumbnail?: string;
@@ -40,6 +42,8 @@ export const PROJECTS_DATA: FeaturedProject[] = [
     title: "Travel Booking System",
     shortDescription:
       "A full-stack travel booking platform for browsing and booking trips.",
+    description:
+      "A full-stack travel booking platform for browsing and booking trips. Built to practice end-to-end booking flows, API integration, and responsive UI.",
     technologies: ["React", "Node.js", "MongoDB"],
     preview: {
       type: "video",
@@ -52,6 +56,8 @@ export const PROJECTS_DATA: FeaturedProject[] = [
     slug: "coride-finder",
     title: "CoRide Finder",
     shortDescription: "A full-stack ride-sharing platform.",
+    description:
+      "A full-stack ride-sharing platform connecting riders and drivers. Focused on search, matching, and a clean React + FastAPI architecture with PostgreSQL.",
     technologies: ["React", "FastAPI", "PostgreSQL"],
     preview: {
       type: "video",
@@ -65,6 +71,8 @@ export const PROJECTS_DATA: FeaturedProject[] = [
     title: "NUML LMS (Final Year Project)",
     shortDescription:
       "A responsive, backend-heavy Learning Management System with a local database for user data and course materials.",
+    description:
+      "A responsive, backend-heavy Learning Management System with a local database for user data and course materials. Emphasizes authentication, course content delivery, and maintainable FastAPI services.",
     technologies: ["React", "FastAPI", "Python"],
     preview: {
       type: "video",

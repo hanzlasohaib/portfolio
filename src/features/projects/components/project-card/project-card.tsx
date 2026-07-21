@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/card";
+import { Link } from "@/components/link";
 import { cn } from "@/lib/utils";
 
 import type { FeaturedProject } from "../../constants/projects-data";
@@ -34,7 +35,7 @@ export type ProjectCardProps = {
  * Feature-local card for a single project (docs/database/naming-conventions.md
  * § Component Names — `ProjectCard`, never `PortfolioCard`).
  *
- * Home preview actions: Preview + Live Demo.
+ * Home preview actions: Preview + Live Demo + Details.
  * Full `/projects` page may also show GitHub via `showRepository`.
  */
 export function ProjectCard({
@@ -42,13 +43,27 @@ export function ProjectCard({
   onPreview,
   showRepository = false,
 }: ProjectCardProps) {
-  const { title, shortDescription, technologies, liveUrl, repositoryUrl } =
-    project;
+  const {
+    slug,
+    title,
+    shortDescription,
+    technologies,
+    liveUrl,
+    repositoryUrl,
+  } = project;
 
   return (
     <Card hover className="h-full">
       <CardHeader>
-        <CardTitle level="h3">{title}</CardTitle>
+        <CardTitle level="h3">
+          <Link
+            href={`/projects/${slug}`}
+            underline={false}
+            className="text-inherit hover:text-primary"
+          >
+            {title}
+          </Link>
+        </CardTitle>
         <CardDescription>{shortDescription}</CardDescription>
       </CardHeader>
 
@@ -63,6 +78,17 @@ export function ProjectCard({
       </CardContent>
 
       <CardFooter className="mt-auto flex-wrap justify-center gap-3 pt-2">
+        <Link
+          href={`/projects/${slug}`}
+          underline={false}
+          className={cn(
+            buttonBaseClassName,
+            buttonVariantClassName.secondary,
+            buttonSizeClassName.sm,
+          )}
+        >
+          Details
+        </Link>
         <button
           type="button"
           className={cn(

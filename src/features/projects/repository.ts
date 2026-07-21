@@ -42,6 +42,24 @@ export async function findProjectBySlug(
   });
 }
 
+export async function findPublishedProjectBySlug(
+  slug: string,
+): Promise<ProjectWithTechnologies | null> {
+  return prisma.project.findFirst({
+    where: { slug, published: true },
+    include: { technologies: { include: { technology: true } } },
+  });
+}
+
+export async function listPublishedProjectSlugs(): Promise<string[]> {
+  const projects = await prisma.project.findMany({
+    where: { published: true },
+    select: { slug: true },
+    orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
+  });
+  return projects.map((project) => project.slug);
+}
+
 export async function findProjectById(
   id: string,
 ): Promise<ProjectWithTechnologies | null> {

@@ -2,6 +2,7 @@
  * Public API of the `projects` feature (docs/architecture/feature-template.md).
  */
 export { ProjectCard } from "./components/project-card";
+export { ProjectDetailPage } from "./components/project-detail-page";
 export { ProjectPreviewModal } from "./components/project-preview-modal";
 export { ProjectsExplorer } from "./components/projects-explorer";
 export { ProjectsPage } from "./components/projects-page";
@@ -11,5 +12,7 @@ export { PROJECTS_DATA } from "./constants/projects-data";
 export type { FeaturedProject } from "./constants/projects-data";
 export {
   getFeaturedProjectsForUi,
+  getPublishedProjectBySlugForUi,
+  getPublishedProjectSlugs,
   getPublishedProjectsForUi,
 } from "./service";

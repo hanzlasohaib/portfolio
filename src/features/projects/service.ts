@@ -6,8 +6,10 @@ import { PROJECTS_DATA, type FeaturedProject } from "./constants/projects-data";
 import {
   createProject,
   deleteProject,
+  findPublishedProjectBySlug,
   listAllProjects,
   listFeaturedProjects,
+  listPublishedProjectSlugs,
   listPublishedProjects,
   listTechnologies,
   type ProjectWithTechnologies,
@@ -21,6 +23,7 @@ function toFeaturedProject(project: ProjectWithTechnologies): FeaturedProject {
     slug: project.slug,
     title: project.title,
     shortDescription: project.shortDescription,
+    description: project.description,
     technologies: project.technologies.map((row) => row.technology.name),
     thumbnail: project.thumbnail ?? undefined,
     repositoryUrl: project.repositoryUrl ?? undefined,
@@ -55,6 +58,38 @@ export async function getPublishedProjectsForUi(): Promise<FeaturedProject[]> {
 
 export async function getFeaturedProjectsForUi(): Promise<FeaturedProject[]> {
   return withProjectFallback(listFeaturedProjects);
+}
+
+/**
+ * Published project detail for `/projects/[slug]`.
+ * Falls back to static `PROJECTS_DATA` when the DB is empty/unreachable.
+ */
+export async function getPublishedProjectBySlugForUi(
+  slug: string,
+): Promise<FeaturedProject | null> {
+  try {
+    const project = await findPublishedProjectBySlug(slug);
+    if (project) {
+      return toFeaturedProject(project);
+    }
+  } catch {
+    // fall through to static data
+  }
+
+  const fallback = PROJECTS_DATA.find((project) => project.slug === slug);
+  return fallback ?? null;
+}
+
+export async function getPublishedProjectSlugs(): Promise<string[]> {
+  try {
+    const slugs = await listPublishedProjectSlugs();
+    if (slugs.length > 0) {
+      return slugs;
+    }
+  } catch {
+    // fall through to static data
+  }
+  return PROJECTS_DATA.map((project) => project.slug);
 }
 
 export async function getAdminProjects(): Promise<ProjectWithTechnologies[]> {
