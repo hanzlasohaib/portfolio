@@ -14,7 +14,7 @@
  * updated later to match.
  *
  * Preview fields (`biography`, `strengths`, `currentFocus`, `education`)
- * are sourced from `public/resume/Hanzla-Sohaib-Resume.pdf`. Page-only
+ * are sourced from `public/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf`. Page-only
  * fields (`whatIDo`, `currentlyWorkingWith`, `currentlyLearning`,
  * `atAGlance`, `cta`, `professionalSummary`) are owner-supplied copy —
  * not inferred filler (AGENTS.md).

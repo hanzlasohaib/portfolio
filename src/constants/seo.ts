@@ -11,11 +11,18 @@ export const SEO_DEFAULTS = {
   defaultTitle: SITE.name,
   titleTemplate: `%s · ${SITE.shortName}`,
   description:
-    "Personal portfolio of Hanzla Sohaib, a Full Stack Developer specializing in React, Next.js, FastAPI, Python, and AI-powered web applications.",
+    "Personal portfolio of Hanzla Sohaib, a Full Stack Software Engineer and AI Engineer specializing in React, Next.js, FastAPI, Python, and AI-powered web applications.",
   keywords: [
+    "Hanzla Sohaib Portfolio",
+    "hanzla sohaib portfolio",
+    "Hanzla Sohaib Maan",
+    "Hanzla Sohaib maan",
     "Hanzla Sohaib",
+    "hanzla sohaib",
+    "Full Stack Software Engineer",
     "Full Stack Developer",
     "Software Engineer",
+    "AI Engineer",
     "React Developer",
     "Next.js",
     "FastAPI",
@@ -24,7 +31,7 @@ export const SEO_DEFAULTS = {
     "MERN",
     "Portfolio",
     "Pakistan",
-    "Lahore"
+    "Lahore",
   ] as string[],
   twitterCard: "summary_large_image" as const,
 } as const;
