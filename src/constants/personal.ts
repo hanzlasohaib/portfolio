@@ -17,7 +17,7 @@ export const PERSONAL = {
 
   location: "Lahore, Pakistan",
 
-  resumeUrl: "/resume/Hanzla-Sohaib-Resume.pdf",
+  resumeUrl: "/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf",
 } as const;
 
 export type Personal = typeof PERSONAL;

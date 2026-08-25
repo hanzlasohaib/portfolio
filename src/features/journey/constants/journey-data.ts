@@ -12,7 +12,7 @@
  * only documents month/year precision — storing a fabricated exact day
  * would invent a date that isn't documented.
  *
- * Sourced from `public/resume/Hanzla-Sohaib-Resume.pdf` § Experience —
+ * Sourced from `public/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf` § Experience —
  * existing project information, not invented. Education is intentionally
  * excluded here: docs/project-design/pages.md § About lists "Education"
  * and "Journey Summary" as separate sections, and Education is already

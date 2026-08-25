@@ -16,7 +16,7 @@
  * included — none are documented and none are invented here
  * (AGENTS.md Configuration/Code Quality Rules).
  *
- * Sourced from `public/resume/Hanzla-Sohaib-Resume.pdf` § Skills /
+ * Sourced from `public/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf` § Skills /
  * § Competitions — existing project information, not invented.
  */
 
