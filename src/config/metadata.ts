@@ -46,7 +46,7 @@ export const defaultMetadata: Metadata = {
     title: SEO_DEFAULTS.defaultTitle,
     description: SEO_DEFAULTS.description,
     url: siteConfig.url,
-    locale: "en_US",
+    locale: siteConfig.locale,
   },
   twitter: {
     card: SEO_DEFAULTS.twitterCard,

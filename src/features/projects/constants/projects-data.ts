@@ -7,7 +7,7 @@
  * docs/architecture/validation-strategy.md § Projects) so this shape can be
  * swapped for real repository data in Phase 3 without a rework.
  *
- * Sourced from `public/resume/Hanzla-Sohaib-Resume.pdf` § Projects —
+ * Sourced from `public/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf` § Projects —
  * existing project information, not invented.
  *
  * `repositoryUrl` / `liveUrl` / `thumbnail` / `preview` remain optional.
