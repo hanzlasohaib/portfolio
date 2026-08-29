@@ -11,32 +11,35 @@ import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { Text } from "@/components/text";
-import { PERSONAL } from "@/constants/personal";
+import type { SiteProfileForUi } from "@/features/site-profile";
 import { cn } from "@/lib/utils";
 
 import { ABOUT_CONTENT } from "../../constants/about-content";
 
+type AboutSectionProps = {
+  profile: SiteProfileForUi;
+};
+
 /**
  * Home page "About Preview" (docs/project-design/pages.md § Home).
  *
- * Presentation-only — reads static content from `constants/personal.ts`
- * (shared identity) and the feature-local `about-content.ts` (biography,
- * strengths, current focus, education). No business logic, no data
- * fetching. The full `/about` page is composed by `AboutPage`.
+ * Presentation-only — identity and career narrative from SiteProfile;
+ * strengths and current-focus copy stay static. The full `/about` page
+ * is composed by `AboutPage`.
  *
  * `id="about"` anchors this section for the one-page Navbar navigation
  * (see `constants/navigation.ts`).
  */
-export function AboutSection() {
-  const { biography, strengths, currentFocus, education } = ABOUT_CONTENT;
+export function AboutSection({ profile }: AboutSectionProps) {
+  const { strengths, currentFocus } = ABOUT_CONTENT;
 
   return (
     <Section id="about" alt aria-label="About">
       <Container className="flex flex-col gap-10">
-        <SectionHeading title="About Me" description={PERSONAL.tagline} />
+        <SectionHeading title="About Me" description={profile.tagline} />
 
         <Text variant="body-lg" className="max-w-3xl">
-          {biography}
+          {profile.biography}
         </Text>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -59,8 +62,8 @@ export function AboutSection() {
           <Card className="h-full">
             <Heading level="h3">Education</Heading>
             <Text variant="body">
-              {education.degree} — {education.institution} (
-              {education.period})
+              {profile.education.degree} — {profile.education.institution} (
+              {profile.education.period})
             </Text>
           </Card>
         </div>

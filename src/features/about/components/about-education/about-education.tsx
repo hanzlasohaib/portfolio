@@ -4,11 +4,14 @@ import { Heading } from "@/components/heading";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { Text } from "@/components/text";
+import type { AboutEducation } from "@/features/site-profile";
 
-import { ABOUT_CONTENT } from "../../constants/about-content";
+type AboutEducationProps = {
+  education: AboutEducation;
+};
 
-export function AboutEducation() {
-  const { degree, institution, period } = ABOUT_CONTENT.education;
+export function AboutEducation({ education }: AboutEducationProps) {
+  const { degree, institution, period } = education;
 
   return (
     <Section aria-label="Education">

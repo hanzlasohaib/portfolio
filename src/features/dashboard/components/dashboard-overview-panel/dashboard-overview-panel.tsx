@@ -43,7 +43,7 @@ const QUICK_LINKS = [
   {
     href: "/dashboard/settings",
     label: "Settings",
-    description: "Account details for the signed-in admin.",
+    description: "Public identity, About narrative, and admin account.",
   },
 ] as const;
 

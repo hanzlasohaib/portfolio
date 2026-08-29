@@ -1,9 +1,10 @@
 /**
- * Canonical personal information for the portfolio owner.
+ * Static fallback for portfolio identity.
  *
- * Single source of truth (docs/architecture/folder-structure.md: "Personal
- * information ... must exist only once"). Import from this module instead of
- * duplicating any of these values inside features or components.
+ * Runtime source of truth is the `SiteProfile` singleton via
+ * `getSiteProfileForUi()` (docs/architecture/dynamic-content-architecture.md).
+ * Keep these values in sync with seed data. Public consumers must not import
+ * this module directly except through that service (or SITE/SEO defaults).
  */
 export const PERSONAL = {
   name: "Hanzla Sohaib",

@@ -1,23 +1,14 @@
 /**
- * Static About content (Phase 2 — Home "About Preview" + dedicated `/about`
- * page; docs/project-design/pages.md § Home / § About).
+ * About copy. Career narrative (`biography`, `professionalSummary`,
+ * `education`, `whatIDo`, `currentlyLearning`) is fallback-only — runtime
+ * reads `SiteProfile` via `getSiteProfileForUi()`.
  *
- * Feature-local constants (docs/architecture/feature-template.md) — scoped
- * to the `about` feature. Cross-cutting identity fields (name, role,
- * tagline, email, location, resume) live in `src/constants/personal.ts`
- * and are reused rather than duplicated here.
- *
- * Documentation note: `pages.md` § About lists Interests and does not list
- * What I Do / Currently Working With / Currently Learning / At a Glance /
- * CTA. This module intentionally extends that outline for brand reasons
- * and omits Interests until real content exists. `pages.md` should be
- * updated later to match.
- *
- * Preview fields (`biography`, `strengths`, `currentFocus`, `education`)
- * are sourced from `public/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf`. Page-only
- * fields (`whatIDo`, `currentlyWorkingWith`, `currentlyLearning`,
- * `atAGlance`, `cta`, `professionalSummary`) are owner-supplied copy —
- * not inferred filler (AGENTS.md).
+ * Kept static (marketing / overlaps other dashboard sources):
+ * - `strengths` — Home badges; Skills owns the skill list
+ * - `currentFocus` — restates the current Journey role
+ * - `currentlyWorkingWith` — overlaps Skills / technologies
+ * - `cta` — section marketing copy
+ * - `atAGlance` Experience and Projects — snapshot stats stay in this file
  */
 
 export type AboutWhatIDoItem = {
@@ -67,9 +58,8 @@ export const ABOUT_CONTENT = {
   },
 
   /**
-   * Recruiter-facing snapshot. Location is composed at render time from
-   * `PERSONAL.location` so identity stays single-source
-   * (`src/constants/personal.ts`).
+   * Recruiter-facing snapshot. Education label and location come from
+   * SiteProfile at render time; Experience and Projects stay here.
    */
   atAGlance: [
     {

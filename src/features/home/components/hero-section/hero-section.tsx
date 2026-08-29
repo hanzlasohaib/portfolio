@@ -8,25 +8,26 @@ import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SocialLinks } from "@/components/social-links";
 import { Text } from "@/components/text";
-import { PERSONAL } from "@/constants/personal";
+import type { SiteProfileForUi } from "@/features/site-profile";
 import { cn } from "@/lib/utils";
 
 import { HeroScrollHint } from "./hero-scroll-hint";
+
+type HeroSectionProps = {
+  profile: SiteProfileForUi;
+};
 
 /**
  * Landing page Hero (docs/project-design/pages.md § Home,
  * docs/ui-ux/component-guidelines.md § Hero Section).
  *
- * Presentation-only — reads static content from `constants/personal.ts`.
- * No business logic, no data fetching (Journey/Contact previews belong to
- * later Phase 2 sprints once those features exist).
+ * Presentation-only — identity comes from the SiteProfile service via the page.
  *
  * `id="hero"` anchors this section for the one-page Navbar navigation
  * (see `constants/navigation.ts`). The primary CTA scrolls to the
- * Projects preview section rather than navigating to `/projects` — it
- * nudges visitors further down the same page instead of away from it.
+ * Projects preview section rather than navigating to `/projects`.
  */
-export function HeroSection() {
+export function HeroSection({ profile }: HeroSectionProps) {
   return (
     <Section
       id="hero"
@@ -44,15 +45,15 @@ export function HeroSection() {
 
       <Container className="flex min-h-[70vh] flex-col items-center justify-center gap-6 text-center">
         <p className="hero-entrance-role text-lg font-semibold text-primary-light sm:text-xl">
-          {PERSONAL.role}
+          {profile.role}
         </p>
 
         <h1 className="text-hero hero-entrance-name max-w-3xl">
-          {PERSONAL.name}
+          {profile.name}
         </h1>
 
         <Text variant="body-lg" className="hero-entrance-description max-w-xl">
-          {PERSONAL.tagline}
+          {profile.tagline}
         </Text>
 
         <div className="hero-entrance-cta flex flex-col gap-4 sm:flex-row">
@@ -69,7 +70,7 @@ export function HeroSection() {
             View My Work
           </Link>
           <a
-            href={PERSONAL.resumeUrl}
+            href={profile.resumeUrl}
             download
             className={cn(
               buttonBaseClassName,
@@ -81,7 +82,7 @@ export function HeroSection() {
           </a>
         </div>
 
-        <SocialLinks className="hero-entrance-social" />
+        <SocialLinks className="hero-entrance-social" links={profile.socialLinks} />
       </Container>
 
       <HeroScrollHint />

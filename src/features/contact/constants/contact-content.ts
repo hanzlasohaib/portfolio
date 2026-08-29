@@ -1,7 +1,7 @@
 /**
  * Feature-local Contact copy (Home Contact section + `/contact` page).
- * Identity fields (email, location, social URLs) stay in
- * `constants/personal.ts` / `constants/social-links.ts` — not duplicated here.
+ * Identity fields (email, location, social URLs) stay in `SiteProfile` and
+ * are read through `getSiteProfileForUi()` — not duplicated here.
  *
  * Documentation note: `pages.md` § Home lists "Contact CTA" only; Home was
  * intentionally expanded with a frontend-only form. FAQ belongs on `/contact`
@@ -37,8 +37,8 @@ export const CONTACT_CONTENT = {
 
   /**
    * FAQ for the dedicated `/contact` page only. Answers stay grounded in
-   * known portfolio facts (availability, channels) — location is composed
-   * at render time from `PERSONAL` so identity stays single-source.
+   * known portfolio facts (availability, channels). Location is composed
+   * at render time from SiteProfile so identity stays single-source.
    */
   faqs: [
     {

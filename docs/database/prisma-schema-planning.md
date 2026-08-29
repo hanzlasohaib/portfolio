@@ -24,6 +24,7 @@ Do **not** invent a separate Portfolio or Experience model.
 | Professional timeline | `Journey` |
 | Contact submissions | `Contact` |
 | Admin auth | `User` |
+| Public identity | `SiteProfile` |
 
 Image fields (`thumbnail`, `preview`, `coverImage`, `icon`) store **URL or public-path strings** only. No file upload system in V1.
 
@@ -84,7 +85,7 @@ model User {
 
 `email` uniqueness is case-insensitive in practice: the value is normalized to lowercase before every write and lookup (see `docs/architecture/validation-strategy.md` § Shared Formats), so the `@unique` constraint above is sufficient without a database-level collation change.
 
-`/dashboard/settings` manages the authenticated admin's own `User` record (`fullName`, `email`, password change) using this model directly. No separate `Settings` entity is required for V1.
+`/dashboard/settings` shows the signed-in admin `User` (read-only in this slice) and edits the `SiteProfile` singleton (public name, role, tagline, email, location, social URLs, resume path, About narrative). Admin login email and public contact email are separate fields.
 
 ---
 
@@ -231,6 +232,40 @@ model Skill {
 
 ---
 
+## SiteProfile
+
+Purpose: Singleton public portfolio identity and About career narrative. One row, application-enforced via `findFirst` + upsert. Not the admin `User` record.
+
+```prisma
+model SiteProfile {
+  id                   String   @id @default(uuid())
+  name                 String
+  role                 String
+  tagline              String   @db.Text
+  email                String
+  location             String
+  resumeUrl            String
+  githubUrl            String?
+  linkedinUrl          String?
+  biography            String?  @db.Text
+  professionalSummary  String?  @db.Text
+  educationDegree      String?
+  educationInstitution String?
+  educationPeriod      String?
+  educationLabel       String?
+  whatIDo              Json?
+  currentlyLearning    Json?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("site_profiles")
+}
+```
+
+Edited on `/dashboard/settings`. Public pages read through `getSiteProfileForUi()` with `PERSONAL` / `SOCIAL_LINKS` / `ABOUT_CONTENT` as fallback when the row or narrative columns are missing.
+
+---
+
 ## Blog (Future — not V1 routes)
 
 Kept for schema readiness. Do not expose `/blog` or `/dashboard/blog` in V1.
@@ -272,6 +307,8 @@ Journey       — independent
 
 Skill         — independent
 
+SiteProfile   — independent (singleton)
+
 Blog          — independent (Future UI)
 ```
 
@@ -290,6 +327,7 @@ No Portfolio model. No Experience model.
 | ProjectTechnology | composite PK `(projectId, technologyId)`; `project` cascade delete; `technology` restrict delete |
 | Journey | `title` required; `startDate` required; optional `endDate`, `organization`, `description`, `location` |
 | Skill | optional `category`, `icon` |
+| SiteProfile | singleton; required identity fields; optional githubUrl, linkedinUrl; optional narrative columns until first About save |
 | Blog | `slug` unique; Future UI only |
 
 ---
@@ -320,6 +358,7 @@ Rules (apply in Phase 3):
 - Journey
 - Skill
 - Contact
+- SiteProfile
 
 # Future Extension Models
 

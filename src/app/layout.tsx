@@ -4,6 +4,8 @@ import Script from "next/script";
 
 import { JsonLd } from "@/components/json-ld";
 import { defaultMetadata } from "@/config/metadata";
+import { SEO_DEFAULTS } from "@/constants/seo";
+import { getSiteProfileForUi } from "@/features/site-profile";
 import { ThemeProvider, ToastProvider } from "@/providers";
 
 import "./globals.css";
@@ -29,7 +31,26 @@ const firaCode = Fira_Code({
   display: "swap",
 });
 
-export const metadata: Metadata = defaultMetadata;
+export async function generateMetadata(): Promise<Metadata> {
+  const profile = await getSiteProfileForUi();
+
+  return {
+    ...defaultMetadata,
+    title: {
+      default: profile.name,
+      template: SEO_DEFAULTS.titleTemplate,
+    },
+    openGraph: {
+      ...defaultMetadata.openGraph,
+      siteName: profile.name,
+      title: profile.name,
+    },
+    twitter: {
+      ...defaultMetadata.twitter,
+      title: profile.name,
+    },
+  };
+}
 
 export default function RootLayout({
   children,

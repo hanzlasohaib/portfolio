@@ -4,20 +4,24 @@ import { Heading } from "@/components/heading";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { Text } from "@/components/text";
-import { PERSONAL } from "@/constants/personal";
 
 import { CONTACT_CONTENT } from "../../constants/contact-content";
 
+type ContactFaqProps = {
+  location: string;
+};
+
 /**
  * Contact page FAQ (intentionally omitted from Home so the landing page
- * stays focused). Includes a location Q&A composed from `PERSONAL`.
+ * stays focused). Location comes from SiteProfile; availability stays in
+ * CONTACT_CONTENT.
  */
-export function ContactFaq() {
+export function ContactFaq({ location }: ContactFaqProps) {
   const faqs = [
     ...CONTACT_CONTENT.faqs,
     {
       question: "Where are you based?",
-      answer: PERSONAL.location,
+      answer: location,
     },
   ];
 

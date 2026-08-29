@@ -147,6 +147,30 @@ model Skill {
   @@map("skills")
 }
 
+model SiteProfile {
+  id                     String   @id @default(uuid())
+  name                   String
+  role                   String
+  tagline                String   @db.Text
+  email                  String
+  location               String
+  resumeUrl              String
+  githubUrl              String?
+  linkedinUrl            String?
+  biography              String?  @db.Text
+  professionalSummary    String?  @db.Text
+  educationDegree        String?
+  educationInstitution   String?
+  educationPeriod        String?
+  educationLabel         String?
+  whatIDo                Json?
+  currentlyLearning      Json?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@map("site_profiles")
+}
+
 /// Future UI only — no /blog or /dashboard/blog in V1.
 model Blog {
   id          String    @id @default(uuid())

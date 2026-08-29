@@ -11,7 +11,8 @@ export default function DashboardSettingsPage() {
       <div className="flex flex-col gap-2">
         <Heading level="h1">Settings</Heading>
         <Text variant="small">
-          Account details for the signed-in administrator.
+          Public site identity, About narrative, and signed-in administrator
+          details.
         </Text>
       </div>
       <Suspense fallback={<DashboardSettingsSkeleton />}>

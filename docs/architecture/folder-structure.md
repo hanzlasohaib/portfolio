@@ -189,7 +189,8 @@ features/
 ├── skills/
 ├── contact/
 ├── authentication/
-└── dashboard/
+├── dashboard/
+└── site-profile/
 ```
 
 ## Feature Internal Shape
@@ -287,7 +288,7 @@ routes.ts
 site.ts
 ```
 
-Personal information (name, email, resume, LinkedIn, GitHub, site URL) must exist only once.
+Personal information (name, email, resume, LinkedIn, GitHub) is stored in the `SiteProfile` singleton and read through `getSiteProfileForUi()`. `personal.ts` and `social-links.ts` are static fallbacks only. Canonical site URL stays in `config/site.ts`.
 
 ---
 
