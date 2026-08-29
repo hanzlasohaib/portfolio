@@ -154,9 +154,12 @@ model SiteProfile {
   tagline                String   @db.Text
   email                  String
   location               String
+  availability           String?
   resumeUrl              String
   githubUrl              String?
   linkedinUrl            String?
+  metaDescription        String?  @db.Text
+  metaKeywords           Json?
   biography              String?  @db.Text
   professionalSummary    String?  @db.Text
   educationDegree        String?

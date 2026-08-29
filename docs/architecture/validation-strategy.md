@@ -115,7 +115,7 @@ Cover/thumbnail/preview media are URL or public-path strings only (no file uploa
 
 ## Site Profile
 
-Public identity and About narrative edited on `/dashboard/settings`. Not the admin User record.
+Public identity, search metadata, and About narrative edited on `/dashboard/settings`. Not the admin User record.
 
 | Field | Required | Rules |
 |-------|----------|--------|
@@ -124,9 +124,12 @@ Public identity and About narrative edited on `/dashboard/settings`. Not the adm
 | `tagline` | Yes | Trim; min 10; max 500 characters |
 | `email` | Yes | Shared email format |
 | `location` | Yes | Trim; min 2; max 120 characters |
+| `availability` | Yes (identity save) | Trim; min 10; max 200 characters |
 | `resumeUrl` | Yes | Trim; max 2048; public path (`/...`) or `http`/`https` URL |
 | `githubUrl` | No | Absolute `http`/`https` URL if present; max 2048 characters |
 | `linkedinUrl` | No | Absolute `http`/`https` URL if present; max 2048 characters |
+| `metaDescription` | Yes (identity save) | Trim; min 50; max 320 characters |
+| `metaKeywords` | Yes (identity save) | Array of 1–40 strings; each 2–80 characters |
 | `biography` | Yes (narrative save) | Trim; min 20; max 2000 characters |
 | `professionalSummary` | Yes (narrative save) | Trim; min 40; max 4000 characters |
 | `educationDegree` | Yes (narrative save) | Trim; min 2; max 160 characters |
@@ -136,7 +139,9 @@ Public identity and About narrative edited on `/dashboard/settings`. Not the adm
 | `whatIDo` | Yes (narrative save) | Array of 1–6 `{ title, description }`; title 2–80; description 10–400 |
 | `currentlyLearning` | Yes (narrative save) | Array of 1–20 strings; each 2–80 characters |
 
-Identity and narrative are separate Settings saves. Identity update must not clear narrative columns.
+Identity (including availability and search metadata) and narrative are separate Settings saves. Identity update must not clear narrative columns.
+
+The columns are nullable in the database because they were added to an existing row; the service applies per-field fallbacks (`CONTACT_CONTENT.availability`, `SEO_DEFAULTS.description`, `SEO_DEFAULTS.keywords`) when a column is empty. The rules above apply to dashboard input, which always writes complete values.
 
 ---
 

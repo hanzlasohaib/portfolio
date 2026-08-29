@@ -20,6 +20,8 @@ type AboutPageProps = {
   skillCategories: SkillCategory[];
   technologies: string[];
   journeyEntries: JourneyEntry[];
+  currentJourneyEntry: JourneyEntry | null;
+  publishedProjectCount: number;
   profile: SiteProfileForUi;
 };
 
@@ -30,6 +32,8 @@ export function AboutPage({
   skillCategories,
   technologies,
   journeyEntries,
+  currentJourneyEntry,
+  publishedProjectCount,
   profile,
 }: AboutPageProps) {
   return (
@@ -37,6 +41,8 @@ export function AboutPage({
       <AboutIntroduction profile={profile} />
       <AboutAtAGlance
         educationLabel={profile.education.label}
+        experience={currentJourneyEntry?.title ?? null}
+        projectCount={publishedProjectCount}
         location={profile.location}
       />
       <AboutProfessionalSummary summary={profile.professionalSummary} />

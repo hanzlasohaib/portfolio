@@ -85,7 +85,7 @@ model User {
 
 `email` uniqueness is case-insensitive in practice: the value is normalized to lowercase before every write and lookup (see `docs/architecture/validation-strategy.md` § Shared Formats), so the `@unique` constraint above is sufficient without a database-level collation change.
 
-`/dashboard/settings` shows the signed-in admin `User` (read-only in this slice) and edits the `SiteProfile` singleton (public name, role, tagline, email, location, social URLs, resume path, About narrative). Admin login email and public contact email are separate fields.
+`/dashboard/settings` shows the signed-in admin `User` (read-only in this slice) and edits the `SiteProfile` singleton (public name, role, tagline, email, location, availability, social URLs, resume path, search metadata). Admin login email and public contact email are separate fields.
 
 ---
 
@@ -234,7 +234,7 @@ model Skill {
 
 ## SiteProfile
 
-Purpose: Singleton public portfolio identity and About career narrative. One row, application-enforced via `findFirst` + upsert. Not the admin `User` record.
+Purpose: Singleton public portfolio identity, search metadata, and About career narrative. One row, application-enforced via `findFirst` + upsert. Not the admin `User` record.
 
 ```prisma
 model SiteProfile {
@@ -244,9 +244,12 @@ model SiteProfile {
   tagline              String   @db.Text
   email                String
   location             String
+  availability         String?
   resumeUrl            String
   githubUrl            String?
   linkedinUrl          String?
+  metaDescription      String?  @db.Text
+  metaKeywords         Json?
   biography            String?  @db.Text
   professionalSummary  String?  @db.Text
   educationDegree      String?
@@ -262,7 +265,11 @@ model SiteProfile {
 }
 ```
 
-Edited on `/dashboard/settings`. Public pages read through `getSiteProfileForUi()` with `PERSONAL` / `SOCIAL_LINKS` / `ABOUT_CONTENT` as fallback when the row or narrative columns are missing.
+Edited on `/dashboard/settings`. Public pages read through `getSiteProfileForUi()` with `PERSONAL` / `SOCIAL_LINKS` / `ABOUT_CONTENT` / `SEO_DEFAULTS` / `CONTACT_CONTENT` as fallback when the row or individual optional columns are missing.
+
+`metaDescription` and `metaKeywords` (JSON `string[]`) are the site-wide search metadata; `availability` is the public availability line. All three are nullable so rows created before they existed keep rendering their static fallbacks.
+
+The About snapshot's Experience and Projects values are **not** stored here — they are derived from the current `Journey` entry and the published `Project` count.
 
 ---
 
@@ -327,7 +334,7 @@ No Portfolio model. No Experience model.
 | ProjectTechnology | composite PK `(projectId, technologyId)`; `project` cascade delete; `technology` restrict delete |
 | Journey | `title` required; `startDate` required; optional `endDate`, `organization`, `description`, `location` |
 | Skill | optional `category`, `icon` |
-| SiteProfile | singleton; required identity fields; optional githubUrl, linkedinUrl; optional narrative columns until first About save |
+| SiteProfile | singleton; required identity fields; optional githubUrl, linkedinUrl, availability, metaDescription, metaKeywords; optional narrative columns until first About save |
 | Blog | `slug` unique; Future UI only |
 
 ---

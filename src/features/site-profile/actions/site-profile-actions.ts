@@ -53,9 +53,12 @@ export async function updateSiteProfileAction(
     tagline: parsed.data.tagline,
     email: parsed.data.email,
     location: parsed.data.location,
+    availability: parsed.data.availability,
     resumeUrl: parsed.data.resumeUrl,
     githubUrl: parsed.data.githubUrl ?? null,
     linkedinUrl: parsed.data.linkedinUrl ?? null,
+    metaDescription: parsed.data.metaDescription,
+    metaKeywords: parsed.data.metaKeywords,
   });
 
   if (result.success) {

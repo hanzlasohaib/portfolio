@@ -7,6 +7,9 @@ import { emailSchema, optionalHttpUrlSchema } from "@/lib/validators";
  *
  * resumeUrl is a public path (`/resume/...`) or an absolute http(s) URL.
  * File upload is out of scope — the PDF is dropped into `public/resume/` manually.
+ *
+ * `metaDescription` / `metaKeywords` are the shared search metadata for every
+ * public route; `SEO_DEFAULTS` remains the fallback.
  */
 const resumeUrlSchema = z
   .string()
@@ -43,9 +46,29 @@ export const siteProfileInputSchema = z.object({
     .trim()
     .min(2, "Location must be at least 2 characters.")
     .max(120, "Location must be at most 120 characters."),
+  availability: z
+    .string()
+    .trim()
+    .min(10, "Availability must be at least 10 characters.")
+    .max(200, "Availability must be at most 200 characters."),
   resumeUrl: resumeUrlSchema,
   githubUrl: optionalHttpUrlSchema,
   linkedinUrl: optionalHttpUrlSchema,
+  metaDescription: z
+    .string()
+    .trim()
+    .min(50, "Meta description must be at least 50 characters.")
+    .max(320, "Meta description must be at most 320 characters."),
+  metaKeywords: z
+    .array(
+      z
+        .string()
+        .trim()
+        .min(2, "Keyword must be at least 2 characters.")
+        .max(80, "Keyword must be at most 80 characters."),
+    )
+    .min(1, "Add at least one keyword.")
+    .max(40, "At most 40 keywords."),
 });
 
 export const aboutWhatIDoItemSchema = z.object({

@@ -3,8 +3,6 @@ import { Heading } from "@/components/heading";
 import { Text } from "@/components/text";
 import type { SiteProfileForUi } from "@/features/site-profile";
 
-import { CONTACT_CONTENT } from "../../constants/contact-content";
-
 type ContactInfoItem = {
   label: string;
   value: string;
@@ -54,7 +52,7 @@ function buildContactInfoItems(profile: SiteProfileForUi): ContactInfoItem[] {
     },
     {
       label: "Availability",
-      value: CONTACT_CONTENT.availability,
+      value: profile.availability,
     },
   ];
 }

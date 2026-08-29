@@ -20,20 +20,29 @@ export type AboutNarrative = {
   currentlyLearning: string[];
 };
 
-/**
- * Public identity + About narrative shown on the site.
- */
-export type SiteProfileForUi = {
+export type SiteIdentity = {
   name: string;
   role: string;
   tagline: string;
   email: string;
   location: string;
+  availability: string;
   resumeUrl: string;
   githubUrl: string | null;
   linkedinUrl: string | null;
   socialLinks: SocialLinkItem[];
-} & AboutNarrative;
+};
+
+/** Search metadata shared by every public route. */
+export type SiteSeo = {
+  metaDescription: string;
+  metaKeywords: string[];
+};
+
+/**
+ * Public identity + search metadata + About narrative shown on the site.
+ */
+export type SiteProfileForUi = SiteIdentity & SiteSeo & AboutNarrative;
 
 /**
  * Dashboard view of the singleton. `id` is null while identity still uses

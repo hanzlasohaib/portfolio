@@ -4,6 +4,7 @@ import type { Result } from "@/lib/api/response";
 
 import { PROJECTS_DATA, type FeaturedProject } from "./constants/projects-data";
 import {
+  countPublishedProjects,
   createProject,
   deleteProject,
   findPublishedProjectBySlug,
@@ -121,6 +122,19 @@ export async function getPublishedProjectSlugs(): Promise<string[]> {
     // fall through to static data
   }
   return PROJECTS_DATA.map((project) => project.slug);
+}
+
+/** Published project count for the About snapshot. */
+export async function getPublishedProjectCountForUi(): Promise<number> {
+  try {
+    const count = await countPublishedProjects();
+    if (count > 0) {
+      return count;
+    }
+  } catch {
+    // fall through to static data
+  }
+  return PROJECTS_DATA.length;
 }
 
 export async function getAdminProjects(): Promise<ProjectWithTechnologies[]> {

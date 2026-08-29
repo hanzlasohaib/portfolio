@@ -37,7 +37,10 @@ export function ContactPage({ profile }: ContactPageProps) {
         </Container>
       </Section>
 
-      <ContactFaq location={profile.location} />
+      <ContactFaq
+        location={profile.location}
+        availability={profile.availability}
+      />
     </PageWrapper>
   );
 }

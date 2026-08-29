@@ -12,9 +12,12 @@ export type UpsertSiteProfileData = {
   tagline: string;
   email: string;
   location: string;
+  availability: string;
   resumeUrl: string;
   githubUrl?: string | null;
   linkedinUrl?: string | null;
+  metaDescription: string;
+  metaKeywords: string[];
 };
 
 export type UpsertSiteProfileNarrativeData = {
@@ -41,9 +44,12 @@ export async function upsertSiteProfile(
     tagline: data.tagline,
     email: data.email,
     location: data.location,
+    availability: data.availability,
     resumeUrl: data.resumeUrl,
     githubUrl: data.githubUrl ?? null,
     linkedinUrl: data.linkedinUrl ?? null,
+    metaDescription: data.metaDescription,
+    metaKeywords: data.metaKeywords as Prisma.InputJsonValue,
   };
 
   const existing = await prisma.siteProfile.findFirst();

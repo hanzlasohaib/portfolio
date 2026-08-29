@@ -60,6 +60,10 @@ export async function listPublishedProjectSlugs(): Promise<string[]> {
   return projects.map((project) => project.slug);
 }
 
+export async function countPublishedProjects(): Promise<number> {
+  return prisma.project.count({ where: { published: true } });
+}
+
 export async function findProjectById(
   id: string,
 ): Promise<ProjectWithTechnologies | null> {

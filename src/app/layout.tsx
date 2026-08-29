@@ -40,14 +40,18 @@ export async function generateMetadata(): Promise<Metadata> {
       default: profile.name,
       template: SEO_DEFAULTS.titleTemplate,
     },
+    description: profile.metaDescription,
+    keywords: profile.metaKeywords,
     openGraph: {
       ...defaultMetadata.openGraph,
       siteName: profile.name,
       title: profile.name,
+      description: profile.metaDescription,
     },
     twitter: {
       ...defaultMetadata.twitter,
       title: profile.name,
+      description: profile.metaDescription,
     },
   };
 }

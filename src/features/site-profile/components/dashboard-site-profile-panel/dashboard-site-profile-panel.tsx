@@ -25,9 +25,12 @@ type Draft = {
   tagline: string;
   email: string;
   location: string;
+  availability: string;
   resumeUrl: string;
   githubUrl: string;
   linkedinUrl: string;
+  metaDescription: string;
+  metaKeywords: string;
 };
 
 const emptyDraft = (): Draft => ({
@@ -36,9 +39,12 @@ const emptyDraft = (): Draft => ({
   tagline: "",
   email: "",
   location: "",
+  availability: "",
   resumeUrl: "",
   githubUrl: "",
   linkedinUrl: "",
+  metaDescription: "",
+  metaKeywords: "",
 });
 
 function toDraft(profile: SiteProfileAdminView): Draft {
@@ -48,9 +54,12 @@ function toDraft(profile: SiteProfileAdminView): Draft {
     tagline: profile.tagline,
     email: profile.email,
     location: profile.location,
+    availability: profile.availability,
     resumeUrl: profile.resumeUrl,
     githubUrl: profile.githubUrl ?? "",
     linkedinUrl: profile.linkedinUrl ?? "",
+    metaDescription: profile.metaDescription,
+    metaKeywords: profile.metaKeywords.join("\n"),
   };
 }
 
@@ -87,9 +96,15 @@ export function DashboardSiteProfilePanel() {
       tagline: draft.tagline,
       email: draft.email,
       location: draft.location,
+      availability: draft.availability,
       resumeUrl: draft.resumeUrl,
       githubUrl: draft.githubUrl,
       linkedinUrl: draft.linkedinUrl,
+      metaDescription: draft.metaDescription,
+      metaKeywords: draft.metaKeywords
+        .split("\n")
+        .map((keyword) => keyword.trim())
+        .filter((keyword) => keyword.length > 0),
     };
 
     startTransition(async () => {
@@ -183,6 +198,20 @@ export function DashboardSiteProfilePanel() {
           required
         />
         <Input
+          label="Availability"
+          value={draft.availability}
+          onChange={(event) =>
+            setDraft((current) => ({
+              ...current,
+              availability: event.target.value,
+            }))
+          }
+          error={fieldErrors.availability}
+          helperText="Shown in the Contact details list and answers the availability FAQ."
+          fullWidth
+          required
+        />
+        <Input
           label="Resume URL"
           value={draft.resumeUrl}
           onChange={(event) =>
@@ -219,6 +248,38 @@ export function DashboardSiteProfilePanel() {
           }
           error={fieldErrors.linkedinUrl}
           fullWidth
+        />
+
+        <Text variant="body">Search metadata</Text>
+        <Textarea
+          label="Meta description"
+          value={draft.metaDescription}
+          onChange={(event) =>
+            setDraft((current) => ({
+              ...current,
+              metaDescription: event.target.value,
+            }))
+          }
+          error={fieldErrors.metaDescription}
+          helperText="Default description for search results and link previews. Aim for 150–160 characters."
+          fullWidth
+          required
+          rows={3}
+        />
+        <Textarea
+          label="Meta keywords"
+          value={draft.metaKeywords}
+          onChange={(event) =>
+            setDraft((current) => ({
+              ...current,
+              metaKeywords: event.target.value,
+            }))
+          }
+          error={fieldErrors.metaKeywords}
+          helperText="One keyword per line."
+          fullWidth
+          required
+          rows={6}
         />
 
         <div>

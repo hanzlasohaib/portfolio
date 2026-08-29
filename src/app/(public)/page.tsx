@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { PageWrapper } from "@/components";
 import { buildPageMetadata } from "@/config/metadata";
-import { SEO_DEFAULTS } from "@/constants/seo";
 import { AboutSection } from "@/features/about";
 import { ContactSection } from "@/features/contact";
 import { HeroSection } from "@/features/home";
@@ -27,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: {
       absolute: profile.name,
     },
-    description: SEO_DEFAULTS.description,
+    description: profile.metaDescription,
   });
 }
 

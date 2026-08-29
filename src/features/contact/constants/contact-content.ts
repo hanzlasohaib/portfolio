@@ -1,7 +1,8 @@
 /**
  * Feature-local Contact copy (Home Contact section + `/contact` page).
- * Identity fields (email, location, social URLs) stay in `SiteProfile` and
- * are read through `getSiteProfileForUi()` — not duplicated here.
+ * Identity fields (email, location, availability, social URLs) stay in
+ * `SiteProfile` and are read through `getSiteProfileForUi()` — not duplicated
+ * here. `availability` below is the fallback for that field.
  *
  * Documentation note: `pages.md` § Home lists "Contact CTA" only; Home was
  * intentionally expanded with a frontend-only form. FAQ belongs on `/contact`
@@ -10,6 +11,8 @@
  */
 
 export type ContactFaqItem = {
+  /** Stable key; `availability` is answered from SiteProfile at render. */
+  id: string;
   question: string;
   answer: string;
 };
@@ -26,6 +29,7 @@ export const CONTACT_CONTENT = {
   pageIntroduction:
     "Whether you're hiring, collaborating, or just connecting — I'd love to hear from you. Use the form below or reach me through email and social links.",
 
+  /** Fallback only — runtime reads `SiteProfile.availability`. */
   availability: AVAILABILITY,
 
   formNotice:
@@ -37,20 +41,24 @@ export const CONTACT_CONTENT = {
 
   /**
    * FAQ for the dedicated `/contact` page only. Answers stay grounded in
-   * known portfolio facts (availability, channels). Location is composed
-   * at render time from SiteProfile so identity stays single-source.
+   * known portfolio facts (availability, channels). The `availability` and
+   * `location` answers are composed at render time from SiteProfile so
+   * identity stays single-source; the text below is the fallback.
    */
   faqs: [
     {
+      id: "channels",
       question: "How can I get in touch?",
       answer:
         "Use the contact form on this page, or reach me directly by email, LinkedIn, or GitHub — the channels are listed beside the form.",
     },
     {
+      id: "availability",
       question: "Are you open to new opportunities?",
       answer: AVAILABILITY,
     },
     {
+      id: "focus",
       question: "What kind of work do you focus on?",
       answer:
         "Full-stack web applications and AI-powered solutions — typically with React, Next.js, FastAPI, Python, and related modern tooling.",

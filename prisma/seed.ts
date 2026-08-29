@@ -1,7 +1,9 @@
 import { hash } from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 
+import { SEO_DEFAULTS } from "../src/constants/seo";
 import { ABOUT_CONTENT } from "../src/features/about/constants/about-content";
+import { CONTACT_CONTENT } from "../src/features/contact/constants/contact-content";
 
 /**
  * Seed — Test Admin + demo portfolio content.
@@ -214,9 +216,26 @@ async function seedSiteProfile() {
     currentlyLearning: [...ABOUT_CONTENT.currentlyLearning],
   };
 
+  const seoAndAvailability = {
+    availability: CONTACT_CONTENT.availability,
+    metaDescription: SEO_DEFAULTS.description,
+    metaKeywords: [...SEO_DEFAULTS.keywords],
+  };
+
   const existing = await prisma.siteProfile.findFirst();
   if (existing) {
-    const backfill = existing.biography ? {} : narrative;
+    const backfill = {
+      ...(existing.biography ? {} : narrative),
+      ...(existing.availability
+        ? {}
+        : { availability: seoAndAvailability.availability }),
+      ...(existing.metaDescription
+        ? {}
+        : { metaDescription: seoAndAvailability.metaDescription }),
+      ...(existing.metaKeywords
+        ? {}
+        : { metaKeywords: seoAndAvailability.metaKeywords }),
+    };
 
     if (Object.keys(backfill).length > 0) {
       await prisma.siteProfile.update({
@@ -244,6 +263,7 @@ async function seedSiteProfile() {
       resumeUrl: "/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf",
       githubUrl: "https://github.com/hanzlasohaib",
       linkedinUrl: "https://www.linkedin.com/in/hanzlasohaib",
+      ...seoAndAvailability,
       ...narrative,
     },
   });

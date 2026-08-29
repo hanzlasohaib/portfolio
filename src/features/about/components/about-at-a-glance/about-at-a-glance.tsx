@@ -5,24 +5,31 @@ import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { Text } from "@/components/text";
 
-import { ABOUT_CONTENT } from "../../constants/about-content";
-
 type AboutAtAGlanceProps = {
   educationLabel: string;
+  experience: string | null;
+  projectCount: number;
   location: string;
 };
 
 /**
  * Compact recruiter-facing snapshot. Education and location come from
- * SiteProfile; Experience and Projects stay in ABOUT_CONTENT.
+ * SiteProfile; experience is the current Journey role and the project count
+ * is the published `Project` total — no hardcoded snapshot stats.
  */
 export function AboutAtAGlance({
   educationLabel,
+  experience,
+  projectCount,
   location,
 }: AboutAtAGlanceProps) {
   const items = [
     { label: "Education", value: educationLabel },
-    ...ABOUT_CONTENT.atAGlance.filter((item) => item.label !== "Education"),
+    ...(experience ? [{ label: "Experience", value: experience }] : []),
+    {
+      label: "Projects",
+      value: `${projectCount} ${projectCount === 1 ? "Project" : "Projects"}`,
+    },
     { label: "Location", value: location },
   ];
 

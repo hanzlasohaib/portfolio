@@ -8,7 +8,9 @@
  * - `currentFocus` — restates the current Journey role
  * - `currentlyWorkingWith` — overlaps Skills / technologies
  * - `cta` — section marketing copy
- * - `atAGlance` Experience and Projects — snapshot stats stay in this file
+ *
+ * `atAGlance` is the education-label fallback only: the snapshot's Experience
+ * and Projects values are derived from `Journey` and `Project`.
  */
 
 export type AboutWhatIDoItem = {
@@ -58,21 +60,14 @@ export const ABOUT_CONTENT = {
   },
 
   /**
-   * Recruiter-facing snapshot. Education label and location come from
-   * SiteProfile at render time; Experience and Projects stay here.
+   * Fallback source for the `SiteProfile` education label only. Location comes
+   * from SiteProfile; Experience is the current Journey role and Projects is
+   * the published project count — neither is stored here.
    */
   atAGlance: [
     {
       label: "Education",
       value: "BS Computer Science (NUML)",
-    },
-    {
-      label: "Experience",
-      value: "Software Development Intern",
-    },
-    {
-      label: "Projects",
-      value: "15+ Projects",
     },
   ] satisfies AboutAtAGlanceItem[],
 

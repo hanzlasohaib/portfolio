@@ -50,9 +50,9 @@ export async function DashboardSettingsPanel() {
           Site identity
         </Heading>
         <Text variant="small">
-          Name, role, tagline, contact, social links, and resume path shown on
-          the public site. Drop resume files into public/resume/ and save the
-          path — there is no file upload.
+          Name, role, tagline, contact, availability, social links, resume path,
+          and search metadata shown on the public site. Drop resume files into
+          public/resume/ and save the path — there is no file upload.
         </Text>
         <LazyDashboardSiteProfilePanel />
       </section>
@@ -63,8 +63,8 @@ export async function DashboardSettingsPanel() {
         </Heading>
         <Text variant="small">
           Career prose on Home and About: biography, professional summary,
-          education, what you do, and what you are learning. Skills and
-          journey entries stay in their own dashboard pages.
+          education, what you do, and what you are learning. Skills, journey
+          entries, and snapshot stats stay in their own dashboard pages.
         </Text>
         <LazyDashboardAboutNarrativePanel />
       </section>

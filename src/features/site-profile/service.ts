@@ -2,8 +2,10 @@ import type { SiteProfile } from "@prisma/client";
 import { cache } from "react";
 
 import { PERSONAL } from "@/constants/personal";
+import { SEO_DEFAULTS } from "@/constants/seo";
 import { SOCIAL_LINKS, type SocialLinkItem } from "@/constants/social-links";
 import { ABOUT_CONTENT } from "@/features/about/constants/about-content";
+import { CONTACT_CONTENT } from "@/features/contact/constants/contact-content";
 import type { Result } from "@/lib/api/response";
 
 import {
@@ -17,8 +19,10 @@ import { aboutWhatIDoItemSchema } from "./schemas/site-profile-schema";
 import type {
   AboutNarrative,
   AboutWhatIDoItem,
+  SiteIdentity,
   SiteProfileAdminView,
   SiteProfileForUi,
+  SiteSeo,
 } from "./types";
 
 function socialUrl(
@@ -80,7 +84,7 @@ function fallbackNarrative(): AboutNarrative {
   };
 }
 
-function fallbackIdentity(): Omit<SiteProfileForUi, keyof AboutNarrative> {
+function fallbackIdentity(): SiteIdentity {
   const githubUrl = socialUrl("github");
   const linkedinUrl = socialUrl("linkedin");
 
@@ -90,6 +94,7 @@ function fallbackIdentity(): Omit<SiteProfileForUi, keyof AboutNarrative> {
     tagline: PERSONAL.tagline,
     email: PERSONAL.email,
     location: PERSONAL.location,
+    availability: CONTACT_CONTENT.availability,
     resumeUrl: PERSONAL.resumeUrl,
     githubUrl,
     linkedinUrl,
@@ -97,9 +102,17 @@ function fallbackIdentity(): Omit<SiteProfileForUi, keyof AboutNarrative> {
   };
 }
 
+function fallbackSeo(): SiteSeo {
+  return {
+    metaDescription: SEO_DEFAULTS.description,
+    metaKeywords: [...SEO_DEFAULTS.keywords],
+  };
+}
+
 function fallbackProfile(): SiteProfileForUi {
   return {
     ...fallbackIdentity(),
+    ...fallbackSeo(),
     ...fallbackNarrative(),
   };
 }
@@ -112,20 +125,21 @@ function parseWhatIDo(value: unknown): AboutWhatIDoItem[] | null {
   return parsed.success && parsed.data.length > 0 ? parsed.data : null;
 }
 
-function parseLearning(value: unknown): string[] | null {
+/** Non-empty trimmed string list from a JSON column, or null when unusable. */
+function parseStringList(value: unknown): string[] | null {
   if (!Array.isArray(value)) {
     return null;
   }
-  const topics = value
+  const items = value
     .filter((item): item is string => typeof item === "string")
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
-  return topics.length > 0 ? topics : null;
+  return items.length > 0 ? items : null;
 }
 
 function parseNarrative(row: SiteProfile): AboutNarrative | null {
   const whatIDo = parseWhatIDo(row.whatIDo);
-  const currentlyLearning = parseLearning(row.currentlyLearning);
+  const currentlyLearning = parseStringList(row.currentlyLearning);
   const biography = row.biography?.trim() ?? "";
   const professionalSummary = row.professionalSummary?.trim() ?? "";
   const degree = row.educationDegree?.trim() ?? "";
@@ -155,15 +169,14 @@ function parseNarrative(row: SiteProfile): AboutNarrative | null {
   };
 }
 
-function identityFromRow(
-  row: SiteProfile,
-): Omit<SiteProfileForUi, keyof AboutNarrative> {
+function identityFromRow(row: SiteProfile): SiteIdentity {
   return {
     name: row.name,
     role: row.role,
     tagline: row.tagline,
     email: row.email,
     location: row.location,
+    availability: row.availability?.trim() || CONTACT_CONTENT.availability,
     resumeUrl: row.resumeUrl,
     githubUrl: row.githubUrl,
     linkedinUrl: row.linkedinUrl,
@@ -175,16 +188,28 @@ function identityFromRow(
   };
 }
 
+/** Per-field fallback: these columns are nullable on rows saved before P2 #3. */
+function seoFromRow(row: SiteProfile): SiteSeo {
+  return {
+    metaDescription: row.metaDescription?.trim() || SEO_DEFAULTS.description,
+    metaKeywords: parseStringList(row.metaKeywords) ?? [
+      ...SEO_DEFAULTS.keywords,
+    ],
+  };
+}
+
 export function toSiteProfileForUi(row: SiteProfile): SiteProfileForUi {
   return {
     ...identityFromRow(row),
+    ...seoFromRow(row),
     ...(parseNarrative(row) ?? fallbackNarrative()),
   };
 }
 
 /**
- * Request-scoped DB-first identity and About narrative. Empty table or
- * unreachable DB uses PERSONAL / SOCIAL_LINKS / ABOUT_CONTENT.
+ * Request-scoped DB-first identity, search metadata, and About narrative.
+ * Empty table or unreachable DB uses PERSONAL / SOCIAL_LINKS / SEO_DEFAULTS /
+ * CONTACT_CONTENT / ABOUT_CONTENT.
  */
 export const getSiteProfileForUi = cache(
   async (): Promise<SiteProfileForUi> => {
@@ -214,6 +239,7 @@ export async function getAdminSiteProfile(): Promise<SiteProfileAdminView> {
   const narrative = parseNarrative(row);
   return {
     ...identityFromRow(row),
+    ...seoFromRow(row),
     ...(narrative ?? fallbackNarrative()),
     id: row.id,
     isFallback: false,
