@@ -28,6 +28,12 @@ export const projectInputSchema = z.object({
     .max(2048)
     .optional()
     .transform((value) => (value && value.length > 0 ? value : undefined)),
+  preview: z
+    .string()
+    .trim()
+    .max(2048)
+    .optional()
+    .transform((value) => (value && value.length > 0 ? value : undefined)),
   repositoryUrl: optionalHttpUrlSchema,
   liveUrl: optionalHttpUrlSchema,
   featured: z.boolean().default(false),

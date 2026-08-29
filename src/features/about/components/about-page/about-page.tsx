@@ -1,5 +1,6 @@
 import { PageWrapper } from "@/components";
 
+import type { JourneyEntry } from "@/features/journey";
 import type { SkillCategory } from "@/features/skills";
 
 import { AboutAtAGlance } from "../about-at-a-glance";
@@ -17,6 +18,7 @@ import { AboutWhatIDo } from "../about-what-i-do";
 type AboutPageProps = {
   skillCategories: SkillCategory[];
   technologies: string[];
+  journeyEntries: JourneyEntry[];
 };
 
 /**
@@ -25,6 +27,7 @@ type AboutPageProps = {
 export function AboutPage({
   skillCategories,
   technologies,
+  journeyEntries,
 }: AboutPageProps) {
   return (
     <PageWrapper>
@@ -33,7 +36,7 @@ export function AboutPage({
       <AboutProfessionalSummary />
       <AboutWhatIDo />
       <AboutEducation />
-      <AboutJourneySummary />
+      <AboutJourneySummary entries={journeyEntries} />
       <AboutSkills categories={skillCategories} />
       <AboutTechnologies technologies={technologies} />
       <AboutCurrentlyWorkingWith />

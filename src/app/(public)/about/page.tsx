@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { buildPageMetadata } from "@/config/metadata";
 import { PERSONAL } from "@/constants/personal";
 import { AboutPage } from "@/features/about";
+import { getJourneyEntriesForUi } from "@/features/journey/service";
 import {
   getSkillCategoriesForUi,
   getTechnologiesListForUi,
@@ -18,15 +19,17 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default async function About() {
-  const [skillCategories, technologies] = await Promise.all([
+  const [skillCategories, technologies, journeyEntries] = await Promise.all([
     getSkillCategoriesForUi(),
     getTechnologiesListForUi(),
+    getJourneyEntriesForUi(),
   ]);
 
   return (
     <AboutPage
       skillCategories={skillCategories}
       technologies={technologies}
+      journeyEntries={journeyEntries}
     />
   );
 }

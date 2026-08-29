@@ -109,6 +109,7 @@ Fields
 - title
 - description
 - thumbnail
+- preview
 - repositoryUrl
 - liveUrl
 - featured

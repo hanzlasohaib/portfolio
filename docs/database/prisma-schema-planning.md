@@ -25,7 +25,7 @@ Do **not** invent a separate Portfolio or Experience model.
 | Contact submissions | `Contact` |
 | Admin auth | `User` |
 
-Image fields (`thumbnail`, `coverImage`, `icon`) store **URL strings** only. No file upload system in V1.
+Image fields (`thumbnail`, `preview`, `coverImage`, `icon`) store **URL or public-path strings** only. No file upload system in V1.
 
 This document is documentation only. Do not generate `schema.prisma` or migrations from this task alone — implement schema in Phase 3 per the roadmap.
 
@@ -126,6 +126,7 @@ model Project {
   shortDescription String
   description      String              @db.Text
   thumbnail        String?
+  preview          String?
   repositoryUrl    String?
   liveUrl          String?
   featured         Boolean             @default(false)
@@ -284,7 +285,7 @@ No Portfolio model. No Experience model.
 |-------|-------------|
 | User | `email` unique (case-insensitive via lowercase normalization); `role` default `ADMIN`; `isActive` default `true` |
 | Contact | `status` default `NEW`; `message` Text; optional `ipAddress`, `userAgent` |
-| Project | `slug` unique; `featured`/`published` default `false`; `displayOrder` default `0`; optional URLs/thumbnail |
+| Project | `slug` unique; `featured`/`published` default `false`; `displayOrder` default `0`; optional URLs/thumbnail/preview |
 | Technology | `name` unique |
 | ProjectTechnology | composite PK `(projectId, technologyId)`; `project` cascade delete; `technology` restrict delete |
 | Journey | `title` required; `startDate` required; optional `endDate`, `organization`, `description`, `location` |

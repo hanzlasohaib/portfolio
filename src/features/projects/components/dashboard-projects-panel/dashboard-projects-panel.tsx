@@ -32,6 +32,7 @@ type Draft = {
   shortDescription: string;
   description: string;
   thumbnail: string;
+  preview: string;
   repositoryUrl: string;
   liveUrl: string;
   featured: boolean;
@@ -46,6 +47,7 @@ const emptyDraft = (): Draft => ({
   shortDescription: "",
   description: "",
   thumbnail: "",
+  preview: "",
   repositoryUrl: "",
   liveUrl: "",
   featured: false,
@@ -121,6 +123,7 @@ export function DashboardProjectsPanel() {
       shortDescription: project.shortDescription,
       description: project.description,
       thumbnail: project.thumbnail ?? "",
+      preview: project.preview ?? "",
       repositoryUrl: project.repositoryUrl ?? "",
       liveUrl: project.liveUrl ?? "",
       featured: project.featured,
@@ -139,6 +142,7 @@ export function DashboardProjectsPanel() {
       shortDescription: draft.shortDescription,
       description: draft.description,
       thumbnail: draft.thumbnail || undefined,
+      preview: draft.preview || undefined,
       repositoryUrl: draft.repositoryUrl || undefined,
       liveUrl: draft.liveUrl || undefined,
       featured: draft.featured,
@@ -276,7 +280,7 @@ export function DashboardProjectsPanel() {
           rows={4}
         />
         <Input
-          label="Thumbnail URL / path"
+          label="Thumbnail path"
           value={draft.thumbnail}
           onChange={(event) =>
             setDraft((current) => ({
@@ -284,6 +288,19 @@ export function DashboardProjectsPanel() {
               thumbnail: event.target.value,
             }))
           }
+          helperText="Public path or https URL. Convention: /projects/{slug}/thumbnail.webp"
+          fullWidth
+        />
+        <Input
+          label="Preview path"
+          value={draft.preview}
+          onChange={(event) =>
+            setDraft((current) => ({
+              ...current,
+              preview: event.target.value,
+            }))
+          }
+          helperText="Public path or https URL. Convention: /projects/{slug}/preview.mp4"
           fullWidth
         />
         <Input

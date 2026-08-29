@@ -161,6 +161,7 @@ src/app/
 │       ├── page.tsx           # /dashboard
 │       ├── projects/page.tsx  # /dashboard/projects
 │       ├── journey/page.tsx   # /dashboard/journey
+│       ├── skills/page.tsx    # /dashboard/skills
 │       ├── messages/page.tsx  # /dashboard/messages
 │       └── settings/page.tsx  # /dashboard/settings
 │
@@ -185,6 +186,7 @@ features/
 ├── about/
 ├── projects/
 ├── journey/
+├── skills/
 ├── contact/
 ├── authentication/
 └── dashboard/
@@ -345,6 +347,10 @@ public/
 ├── icons/
 ├── fonts/
 ├── resume/
+├── projects/
+│   └── {slug}/
+│       ├── thumbnail.webp
+│       └── preview.mp4
 └── favicons/
 ```
 

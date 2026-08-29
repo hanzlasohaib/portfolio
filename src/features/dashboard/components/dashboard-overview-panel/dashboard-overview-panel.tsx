@@ -36,6 +36,11 @@ const QUICK_LINKS = [
     description: "Update professional timeline entries.",
   },
   {
+    href: "/dashboard/skills",
+    label: "Skills",
+    description: "Manage skill names, categories, and order.",
+  },
+  {
     href: "/dashboard/settings",
     label: "Settings",
     description: "Account details for the signed-in admin.",
@@ -73,7 +78,7 @@ export function DashboardOverviewPanel({
       label: "Skills",
       value: overview.skillCount,
       detail: "Shown on Home and About",
-      href: null,
+      href: "/dashboard/skills" as string | null,
     },
   ] as const;
 

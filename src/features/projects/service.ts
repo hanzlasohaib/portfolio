@@ -21,9 +21,7 @@ import { resolvePublicAssetUrl } from "./utils/resolve-public-asset";
 
 function toFeaturedProject(project: ProjectWithTechnologies): FeaturedProject {
   const thumbnail = resolvePublicAssetUrl(project.thumbnail);
-  const previewSrc = resolvePublicAssetUrl(
-    `/projects/${project.slug}/preview.mp4`,
-  );
+  const previewSrc = resolvePublicAssetUrl(project.preview);
   const previewPoster = thumbnail;
 
   return {

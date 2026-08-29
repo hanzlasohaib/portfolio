@@ -116,6 +116,7 @@ Redirect Login
 - `/dashboard`
 - `/dashboard/projects`
 - `/dashboard/journey`
+- `/dashboard/skills`
 - `/dashboard/messages`
 - `/dashboard/settings`
 

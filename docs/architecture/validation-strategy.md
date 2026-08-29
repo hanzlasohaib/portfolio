@@ -75,7 +75,8 @@ Optional server-captured (not user form fields):
 | `slug` | Yes | Lowercase kebab-case (`^[a-z0-9]+(?:-[a-z0-9]+)*$`); min 3; max 120; **unique** |
 | `shortDescription` | Yes | Trim; min 10; max 300 characters |
 | `description` | Yes | Trim; min 20; max 10000 characters |
-| `thumbnail` | No | Valid URL string if present; max 2048 characters |
+| `thumbnail` | No | URL or `/public` path string if present; max 2048 characters |
+| `preview` | No | URL or `/public` path string if present; max 2048 characters |
 | `repositoryUrl` | No | Valid URL string if present; max 2048 characters |
 | `liveUrl` | No | Valid URL string if present; max 2048 characters |
 | `featured` | No | Boolean; default `false` |
@@ -83,7 +84,7 @@ Optional server-captured (not user form fields):
 | `displayOrder` | No | Integer ≥ 0; default `0` |
 | `technologyIds` | No | Array of UUID strings |
 
-Cover/thumbnail images are URL strings only (no file upload).
+Cover/thumbnail/preview media are URL or public-path strings only (no file upload).
 
 ---
 

@@ -143,6 +143,7 @@ async function seedTechnologiesAndProjects() {
         description: project.description,
         liveUrl: "liveUrl" in project ? project.liveUrl : null,
         thumbnail: null,
+        preview: null,
         featured: project.featured,
         published: project.published,
         displayOrder: project.displayOrder,
