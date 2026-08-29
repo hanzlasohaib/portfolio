@@ -154,7 +154,7 @@ Dashboard mutations must revalidate affected public routes.
 
 | Dashboard action | Revalidate paths |
 |------------------|------------------|
-| Project CRUD | `/`, `/projects`, `/projects/[slug]`, `/dashboard/projects` |
+| Project CRUD | `/`, `/projects`, `/projects/[slug]`, `/about`, `/dashboard/projects` |
 | Journey CRUD | `/`, `/journey`, `/about`, `/dashboard/journey` |
 | Skill CRUD | `/`, `/about`, `/dashboard/skills` |
 | Contact status/delete | `/dashboard/messages` |
@@ -243,7 +243,7 @@ Do **not** build: file uploads, Blog routes/dashboard, multi-admin, OAuth, profi
 
 ### Metadata composition
 
-`config/metadata.ts` stays pure and deliberately omits `keywords` from `defaultMetadata`. The root layout's `generateMetadata` sets `description` and `keywords` from the profile; routes built with `buildPageMetadata` inherit keywords via Next.js metadata merging and supply their own page-specific `description`. This keeps one dashboard field authoritative without every route re-reading it.
+`config/metadata.ts` stays pure and deliberately omits `keywords` and Open Graph `siteName` from `defaultMetadata`. The root layout's `generateMetadata` sets `description`, `keywords`, and `openGraph.siteName` from the profile; routes built with `buildPageMetadata` inherit those fields via Next.js metadata merging and supply their own page-specific `title` / `description`. This keeps one dashboard field authoritative without every route re-reading it.
 
 ---
 

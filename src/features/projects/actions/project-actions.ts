@@ -54,6 +54,7 @@ export async function createProjectAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/projects");
+    revalidatePath("/about");
     revalidatePath("/dashboard/projects");
   }
   return result;
@@ -87,6 +88,7 @@ export async function updateProjectAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/projects");
+    revalidatePath("/about");
     revalidatePath("/dashboard/projects");
   }
   return result;
@@ -105,6 +107,7 @@ export async function deleteProjectAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/projects");
+    revalidatePath("/about");
     revalidatePath("/dashboard/projects");
   }
   return result;
