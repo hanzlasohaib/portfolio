@@ -72,6 +72,7 @@ Accessible only to authenticated administrators.
 | `/dashboard` | Dashboard Overview |
 | `/dashboard/projects` | Manage Projects |
 | `/dashboard/journey` | Manage Journey |
+| `/dashboard/skills` | Manage Skills |
 | `/dashboard/messages` | Contact Messages |
 | `/dashboard/settings` | Settings |
 

@@ -6,6 +6,7 @@ import { SocialLinks } from "@/components/social-links";
 import { Text } from "@/components/text";
 import { PUBLIC_NAV_LINKS } from "@/constants/navigation";
 import { PERSONAL } from "@/constants/personal";
+import { SOCIAL_LINKS } from "@/constants/social-links";
 import { cn } from "@/lib/utils";
 
 import type { FooterProps } from "./footer.types";
@@ -14,8 +15,18 @@ import type { FooterProps } from "./footer.types";
  * Site footer (docs/project-design/pages.md § Footer): brand, short sentence,
  * quick links, social links (including email via icon), copyright, and Back
  * to Top. Pair with the floating `BackToTopButton` in `PublicLayout`.
+ *
+ * Identity defaults to static constants when props are omitted; PublicLayout
+ * passes the DB-first profile.
  */
-export function Footer({ className, children, ...props }: FooterProps) {
+export function Footer({
+  className,
+  children,
+  name = PERSONAL.name,
+  tagline = PERSONAL.tagline,
+  socialLinks = SOCIAL_LINKS,
+  ...props
+}: FooterProps) {
   const year = new Date().getFullYear();
 
   return (
@@ -32,9 +43,9 @@ export function Footer({ className, children, ...props }: FooterProps) {
           <>
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               <div className="flex flex-col gap-3">
-                <NavbarBrand label={PERSONAL.name} />
+                <NavbarBrand label={name} />
                 <Text variant="small" className="max-w-xs">
-                  {PERSONAL.tagline}
+                  {tagline}
                 </Text>
               </div>
 
@@ -57,14 +68,14 @@ export function Footer({ className, children, ...props }: FooterProps) {
                 <p className="text-small font-medium text-text-primary">
                   Connect
                 </p>
-                <SocialLinks />
+                <SocialLinks links={socialLinks} />
               </div>
             </div>
 
             <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-col gap-1">
                 <p className="m-0 text-caption text-text-disabled">
-                  © {year} {PERSONAL.name}. All rights reserved.
+                  © {year} {name}. All rights reserved.
                 </p>
                 <p className="m-0 text-caption text-text-disabled">
                   Built with Next.js, React, and Tailwind CSS.

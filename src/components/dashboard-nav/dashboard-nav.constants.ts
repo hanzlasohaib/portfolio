@@ -4,6 +4,7 @@ export const DASHBOARD_NAV_LINKS: NavLinksItem[] = [
   { href: "/dashboard", label: "Dashboard", exact: true },
   { href: "/dashboard/projects", label: "Projects" },
   { href: "/dashboard/journey", label: "Journey" },
+  { href: "/dashboard/skills", label: "Skills" },
   { href: "/dashboard/messages", label: "Messages" },
   { href: "/dashboard/settings", label: "Settings" },
 ];

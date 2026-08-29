@@ -1,6 +1,10 @@
 import { hash } from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 
+import { SEO_DEFAULTS } from "../src/constants/seo";
+import { ABOUT_CONTENT } from "../src/features/about/constants/about-content";
+import { CONTACT_CONTENT } from "../src/features/contact/constants/contact-content";
+
 /**
  * Seed — Test Admin + demo portfolio content.
  * Creates (or skips) the admin User in the database pointed at by DATABASE_URL.
@@ -143,6 +147,7 @@ async function seedTechnologiesAndProjects() {
         description: project.description,
         liveUrl: "liveUrl" in project ? project.liveUrl : null,
         thumbnail: null,
+        preview: null,
         featured: project.featured,
         published: project.published,
         displayOrder: project.displayOrder,
@@ -191,6 +196,78 @@ async function seedJourney() {
     await prisma.journey.create({ data: entry });
     console.log(`Created journey: ${entry.title}`);
   }
+}
+
+async function seedSiteProfile() {
+  const educationLabel =
+    ABOUT_CONTENT.atAGlance.find((item) => item.label === "Education")?.value ??
+    ABOUT_CONTENT.education.degree;
+  const narrative = {
+    biography: ABOUT_CONTENT.biography,
+    professionalSummary: ABOUT_CONTENT.professionalSummary,
+    educationDegree: ABOUT_CONTENT.education.degree,
+    educationInstitution: ABOUT_CONTENT.education.institution,
+    educationPeriod: ABOUT_CONTENT.education.period,
+    educationLabel,
+    whatIDo: ABOUT_CONTENT.whatIDo.map((item) => ({
+      title: item.title,
+      description: item.description,
+    })),
+    currentlyLearning: [...ABOUT_CONTENT.currentlyLearning],
+  };
+
+  const seoAndAvailability = {
+    availability: CONTACT_CONTENT.availability,
+    metaDescription: SEO_DEFAULTS.description,
+    metaKeywords: [...SEO_DEFAULTS.keywords],
+  };
+
+  const existing = await prisma.siteProfile.findFirst();
+  if (existing) {
+    const backfill = {
+      ...(existing.biography ? {} : narrative),
+      ...(existing.availability
+        ? {}
+        : { availability: seoAndAvailability.availability }),
+      ...(existing.metaDescription
+        ? {}
+        : { metaDescription: seoAndAvailability.metaDescription }),
+      ...(existing.metaKeywords
+        ? {}
+        : { metaKeywords: seoAndAvailability.metaKeywords }),
+    };
+
+    if (Object.keys(backfill).length > 0) {
+      await prisma.siteProfile.update({
+        where: { id: existing.id },
+        data: backfill,
+      });
+      console.log(
+        `Backfilled site profile columns: ${Object.keys(backfill).join(", ")}.`,
+      );
+      return;
+    }
+
+    console.log("Site profile already exists — skipping.");
+    return;
+  }
+
+  await prisma.siteProfile.create({
+    data: {
+      name: "Hanzla Sohaib",
+      role: "Full Stack Software Engineer • AI Engineer",
+      tagline:
+        "Building scalable full-stack web applications with React, Next.js, FastAPI, Python, and AI-powered solutions.",
+      email: "hanzlamaan125@gmail.com",
+      location: "Lahore, Pakistan",
+      resumeUrl: "/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf",
+      githubUrl: "https://github.com/hanzlasohaib",
+      linkedinUrl: "https://www.linkedin.com/in/hanzlasohaib",
+      ...seoAndAvailability,
+      ...narrative,
+    },
+  });
+  console.log("Seeded site profile.");
 }
 
 async function seedSkills() {
@@ -262,6 +339,7 @@ async function main() {
   await seedTechnologiesAndProjects();
   await seedJourney();
   await seedSkills();
+  await seedSiteProfile();
   console.log("Seed complete.");
 }
 

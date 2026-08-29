@@ -64,6 +64,8 @@ Authorization answers: What are you allowed to do?
 
 ✓ Manage Journey (`/dashboard/journey`)
 
+✓ Manage Skills (`/dashboard/skills`)
+
 ✓ View / manage Contact Messages (`/dashboard/messages`)
 
 ✓ Settings (`/dashboard/settings`)

@@ -41,6 +41,7 @@ export async function createJourneyAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/journey");
+    revalidatePath("/about");
     revalidatePath("/dashboard/journey");
   }
   return result;
@@ -72,6 +73,7 @@ export async function updateJourneyAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/journey");
+    revalidatePath("/about");
     revalidatePath("/dashboard/journey");
   }
   return result;
@@ -90,6 +92,7 @@ export async function deleteJourneyAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/journey");
+    revalidatePath("/about");
     revalidatePath("/dashboard/journey");
   }
   return result;

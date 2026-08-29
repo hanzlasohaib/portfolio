@@ -3,9 +3,11 @@ import { Container } from "@/components/container";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 
-import { ABOUT_CONTENT } from "../../constants/about-content";
+type AboutCurrentlyLearningProps = {
+  topics: string[];
+};
 
-export function AboutCurrentlyLearning() {
+export function AboutCurrentlyLearning({ topics }: AboutCurrentlyLearningProps) {
   return (
     <Section alt aria-label="Currently Learning">
       <Container className="flex flex-col gap-10">
@@ -15,7 +17,7 @@ export function AboutCurrentlyLearning() {
         />
 
         <ul className="flex flex-wrap gap-2">
-          {ABOUT_CONTENT.currentlyLearning.map((topic) => (
+          {topics.map((topic) => (
             <li key={topic}>
               <Badge variant="info">{topic}</Badge>
             </li>

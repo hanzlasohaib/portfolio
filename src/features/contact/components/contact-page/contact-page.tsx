@@ -2,20 +2,24 @@ import { PageWrapper } from "@/components";
 import { Container } from "@/components/container";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
+import type { SiteProfileForUi } from "@/features/site-profile";
 
 import { CONTACT_CONTENT } from "../../constants/contact-content";
 import { ContactFaq } from "../contact-faq";
 import { ContactForm } from "../contact-form";
 import { ContactInfo } from "../contact-info";
 
+type ContactPageProps = {
+  profile: SiteProfileForUi;
+};
+
 /**
  * Full `/contact` page composition (docs/project-design/pages.md § Contact).
  *
  * Reuses `ContactForm` + `ContactInfo` from the Home section. Adds FAQ here
- * (not on Home). Success messaging and live validation/API submission are
- * deferred to Phase 3 — the form remains frontend-only ("Coming Soon").
+ * (not on Home).
  */
-export function ContactPage() {
+export function ContactPage({ profile }: ContactPageProps) {
   return (
     <PageWrapper>
       <Section aria-label="Contact">
@@ -28,12 +32,15 @@ export function ContactPage() {
 
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-start">
             <ContactForm />
-            <ContactInfo />
+            <ContactInfo profile={profile} />
           </div>
         </Container>
       </Section>
 
-      <ContactFaq />
+      <ContactFaq
+        location={profile.location}
+        availability={profile.availability}
+      />
     </PageWrapper>
   );
 }

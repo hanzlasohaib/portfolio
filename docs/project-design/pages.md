@@ -127,6 +127,7 @@ Private routes under `/dashboard/**`.
 | Overview | `/dashboard` |
 | Projects Management | `/dashboard/projects` |
 | Journey Management | `/dashboard/journey` |
+| Skills Management | `/dashboard/skills` |
 | Contact Messages | `/dashboard/messages` |
 | Settings | `/dashboard/settings` |
 

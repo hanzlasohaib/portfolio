@@ -75,7 +75,8 @@ Optional server-captured (not user form fields):
 | `slug` | Yes | Lowercase kebab-case (`^[a-z0-9]+(?:-[a-z0-9]+)*$`); min 3; max 120; **unique** |
 | `shortDescription` | Yes | Trim; min 10; max 300 characters |
 | `description` | Yes | Trim; min 20; max 10000 characters |
-| `thumbnail` | No | Valid URL string if present; max 2048 characters |
+| `thumbnail` | No | URL or `/public` path string if present; max 2048 characters |
+| `preview` | No | URL or `/public` path string if present; max 2048 characters |
 | `repositoryUrl` | No | Valid URL string if present; max 2048 characters |
 | `liveUrl` | No | Valid URL string if present; max 2048 characters |
 | `featured` | No | Boolean; default `false` |
@@ -83,7 +84,7 @@ Optional server-captured (not user form fields):
 | `displayOrder` | No | Integer ≥ 0; default `0` |
 | `technologyIds` | No | Array of UUID strings |
 
-Cover/thumbnail images are URL strings only (no file upload).
+Cover/thumbnail/preview media are URL or public-path strings only (no file upload).
 
 ---
 
@@ -109,6 +110,38 @@ Cover/thumbnail images are URL strings only (no file upload).
 | `category` | No | Trim; max 80 characters |
 | `icon` | No | URL or icon key string; max 2048 characters |
 | `displayOrder` | No | Integer ≥ 0; default `0` |
+
+---
+
+## Site Profile
+
+Public identity, search metadata, and About narrative edited on `/dashboard/settings`. Not the admin User record.
+
+| Field | Required | Rules |
+|-------|----------|--------|
+| `name` | Yes | Trim; min 2; max 120 characters |
+| `role` | Yes | Trim; min 2; max 160 characters |
+| `tagline` | Yes | Trim; min 10; max 500 characters |
+| `email` | Yes | Shared email format |
+| `location` | Yes | Trim; min 2; max 120 characters |
+| `availability` | Yes (identity save) | Trim; min 10; max 200 characters |
+| `resumeUrl` | Yes | Trim; max 2048; public path (`/...`) or `http`/`https` URL |
+| `githubUrl` | No | Absolute `http`/`https` URL if present; max 2048 characters |
+| `linkedinUrl` | No | Absolute `http`/`https` URL if present; max 2048 characters |
+| `metaDescription` | Yes (identity save) | Trim; min 50; max 320 characters |
+| `metaKeywords` | Yes (identity save) | Array of 1–40 strings; each 2–80 characters |
+| `biography` | Yes (narrative save) | Trim; min 20; max 2000 characters |
+| `professionalSummary` | Yes (narrative save) | Trim; min 40; max 4000 characters |
+| `educationDegree` | Yes (narrative save) | Trim; min 2; max 160 characters |
+| `educationInstitution` | Yes (narrative save) | Trim; min 2; max 200 characters |
+| `educationPeriod` | Yes (narrative save) | Trim; min 2; max 40 characters |
+| `educationLabel` | Yes (narrative save) | Trim; min 2; max 120 characters |
+| `whatIDo` | Yes (narrative save) | Array of 1–6 `{ title, description }`; title 2–80; description 10–400 |
+| `currentlyLearning` | Yes (narrative save) | Array of 1–20 strings; each 2–80 characters |
+
+Identity (including availability and search metadata) and narrative are separate Settings saves. Identity update must not clear narrative columns.
+
+The columns are nullable in the database because they were added to an existing row; the service applies per-field fallbacks (`CONTACT_CONTENT.availability`, `SEO_DEFAULTS.description`, `SEO_DEFAULTS.keywords`) when a column is empty. The rules above apply to dashboard input, which always writes complete values.
 
 ---
 

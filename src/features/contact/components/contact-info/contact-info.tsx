@@ -1,10 +1,7 @@
 import { ExternalLink } from "@/components/external-link";
 import { Heading } from "@/components/heading";
 import { Text } from "@/components/text";
-import { PERSONAL } from "@/constants/personal";
-import { SOCIAL_LINKS } from "@/constants/social-links";
-
-import { CONTACT_CONTENT } from "../../constants/contact-content";
+import type { SiteProfileForUi } from "@/features/site-profile";
 
 type ContactInfoItem = {
   label: string;
@@ -13,15 +10,21 @@ type ContactInfoItem = {
   external?: boolean;
 };
 
-function buildContactInfoItems(): ContactInfoItem[] {
-  const github = SOCIAL_LINKS.find((link) => link.platform === "github");
-  const linkedin = SOCIAL_LINKS.find((link) => link.platform === "linkedin");
+type ContactInfoProps = {
+  profile: SiteProfileForUi;
+};
+
+function buildContactInfoItems(profile: SiteProfileForUi): ContactInfoItem[] {
+  const github = profile.socialLinks.find((link) => link.platform === "github");
+  const linkedin = profile.socialLinks.find(
+    (link) => link.platform === "linkedin",
+  );
 
   return [
     {
       label: "Email",
-      value: PERSONAL.email,
-      href: `mailto:${PERSONAL.email}`,
+      value: profile.email,
+      href: `mailto:${profile.email}`,
     },
     ...(linkedin
       ? [
@@ -45,11 +48,11 @@ function buildContactInfoItems(): ContactInfoItem[] {
       : []),
     {
       label: "Location",
-      value: PERSONAL.location,
+      value: profile.location,
     },
     {
       label: "Availability",
-      value: CONTACT_CONTENT.availability,
+      value: profile.availability,
     },
   ];
 }
@@ -60,8 +63,8 @@ function buildContactInfoItems(): ContactInfoItem[] {
  * extras requested for recruiter clarity. FAQ is intentionally omitted
  * here — it lives on `/contact` (`ContactFaq`).
  */
-export function ContactInfo() {
-  const items = buildContactInfoItems();
+export function ContactInfo({ profile }: ContactInfoProps) {
+  const items = buildContactInfoItems(profile);
 
   return (
     <aside className="flex flex-col gap-6" aria-label="Contact details">

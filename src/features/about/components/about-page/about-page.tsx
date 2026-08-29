@@ -1,5 +1,7 @@
 import { PageWrapper } from "@/components";
 
+import type { JourneyEntry } from "@/features/journey";
+import type { SiteProfileForUi } from "@/features/site-profile";
 import type { SkillCategory } from "@/features/skills";
 
 import { AboutAtAGlance } from "../about-at-a-glance";
@@ -17,6 +19,10 @@ import { AboutWhatIDo } from "../about-what-i-do";
 type AboutPageProps = {
   skillCategories: SkillCategory[];
   technologies: string[];
+  journeyEntries: JourneyEntry[];
+  currentJourneyEntry: JourneyEntry | null;
+  publishedProjectCount: number;
+  profile: SiteProfileForUi;
 };
 
 /**
@@ -25,19 +31,28 @@ type AboutPageProps = {
 export function AboutPage({
   skillCategories,
   technologies,
+  journeyEntries,
+  currentJourneyEntry,
+  publishedProjectCount,
+  profile,
 }: AboutPageProps) {
   return (
     <PageWrapper>
-      <AboutIntroduction />
-      <AboutAtAGlance />
-      <AboutProfessionalSummary />
-      <AboutWhatIDo />
-      <AboutEducation />
-      <AboutJourneySummary />
+      <AboutIntroduction profile={profile} />
+      <AboutAtAGlance
+        educationLabel={profile.education.label}
+        experience={currentJourneyEntry?.title ?? null}
+        projectCount={publishedProjectCount}
+        location={profile.location}
+      />
+      <AboutProfessionalSummary summary={profile.professionalSummary} />
+      <AboutWhatIDo items={profile.whatIDo} />
+      <AboutEducation education={profile.education} />
+      <AboutJourneySummary entries={journeyEntries} />
       <AboutSkills categories={skillCategories} />
       <AboutTechnologies technologies={technologies} />
       <AboutCurrentlyWorkingWith />
-      <AboutCurrentlyLearning />
+      <AboutCurrentlyLearning topics={profile.currentlyLearning} />
       <AboutCta />
     </PageWrapper>
   );

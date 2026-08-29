@@ -38,6 +38,7 @@ export async function createSkillAction(raw: unknown): Promise<Result<Skill>> {
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/about");
+    revalidatePath("/dashboard/skills");
   }
   return result;
 }
@@ -67,6 +68,7 @@ export async function updateSkillAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/about");
+    revalidatePath("/dashboard/skills");
   }
   return result;
 }
@@ -84,6 +86,7 @@ export async function deleteSkillAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/about");
+    revalidatePath("/dashboard/skills");
   }
   return result;
 }

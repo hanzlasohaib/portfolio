@@ -6,6 +6,10 @@ import { SITE } from "./site";
  *
  * Page-level metadata should extend these defaults via
  * `config/metadata.ts`, not duplicate them.
+ *
+ * `description` and `keywords` are **fallback-only**: runtime metadata reads
+ * `SiteProfile.metaDescription` / `.metaKeywords` via `getSiteProfileForUi()`.
+ * Titles keep using `defaultTitle` / `titleTemplate` from here.
  */
 export const SEO_DEFAULTS = {
   defaultTitle: SITE.name,

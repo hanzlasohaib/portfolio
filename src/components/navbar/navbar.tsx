@@ -13,7 +13,7 @@ import type { NavbarProps } from "./navbar.types";
  * valid route for the portfolio owner, but visitors must not be shown a
  * public CTA into the admin area.
  */
-export function Navbar({ className, ...props }: NavbarProps) {
+export function Navbar({ className, brandLabel, ...props }: NavbarProps) {
   return (
     <nav
       aria-label="Primary"
@@ -23,7 +23,7 @@ export function Navbar({ className, ...props }: NavbarProps) {
       )}
       {...props}
     >
-      <NavbarBrand />
+      <NavbarBrand label={brandLabel} />
 
       <NavLinks className="hidden md:flex" />
 
