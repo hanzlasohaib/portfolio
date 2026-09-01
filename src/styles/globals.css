@@ -1,5 +1,6 @@
 /*
  * Global Styles
+ * Source of truth: docs/design/design-system.md (v2)
  *
  * Sections:
  * 1. Imports
@@ -35,10 +36,12 @@
   --color-background-secondary: var(--background-secondary);
   --color-surface: var(--surface);
   --color-surface-hover: var(--surface-hover);
+  --color-surface-raised: var(--surface-raised);
 
   --color-foreground: var(--text-primary);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
   --color-text-disabled: var(--text-disabled);
   --color-text-inverse: var(--text-inverse);
   --color-on-primary: var(--on-primary);
@@ -54,11 +57,13 @@
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+  --color-border-neutral: var(--border-neutral);
 
   --color-glow-primary: var(--glow-primary);
   --color-glow-secondary: var(--glow-secondary);
 
   /* Radius */
+  --radius-xs: var(--radius-token-xs);
   --radius-sm: var(--radius-token-sm);
   --radius-md: var(--radius-token-md);
   --radius-lg: var(--radius-token-lg);
@@ -69,6 +74,7 @@
   --shadow-soft: var(--elevation-soft);
   --shadow-medium: var(--elevation-medium);
   --shadow-large: var(--elevation-large);
+  --shadow-focus: var(--elevation-focus);
   --shadow-glow-primary: var(--elevation-glow-primary);
   --shadow-glow-secondary: var(--elevation-glow-secondary);
 
@@ -85,22 +91,38 @@
   --spacing-16: var(--space-16);
   --spacing-20: var(--space-20);
   --spacing-24: var(--space-24);
+  --spacing-32: var(--space-32);
+  --spacing-40: var(--space-40);
 
-  /* Typography sizes */
-  --text-hero: var(--size-hero);
-  --text-hero--line-height: var(--leading-heading);
+  /* Typography sizes — each tier carries its own leading and tracking */
+  --text-display: var(--size-display);
+  --text-display--line-height: var(--leading-display);
+  --text-display--letter-spacing: var(--tracking-display);
+
+  /* `text-hero` is retained as the public class name for the display tier. */
+  --text-hero: var(--size-display);
+  --text-hero--line-height: var(--leading-display);
+  --text-hero--letter-spacing: var(--tracking-display);
+
   --text-h1: var(--size-h1);
-  --text-h1--line-height: var(--leading-heading);
+  --text-h1--line-height: var(--leading-h1);
+  --text-h1--letter-spacing: var(--tracking-h1);
   --text-h2: var(--size-h2);
-  --text-h2--line-height: var(--leading-heading);
+  --text-h2--line-height: var(--leading-h2);
+  --text-h2--letter-spacing: var(--tracking-h2);
   --text-h3: var(--size-h3);
-  --text-h3--line-height: var(--leading-heading);
+  --text-h3--line-height: var(--leading-h3);
+  --text-h3--letter-spacing: var(--tracking-h3);
   --text-h4: var(--size-h4);
-  --text-h4--line-height: var(--leading-heading);
+  --text-h4--line-height: var(--leading-h4);
+  --text-h4--letter-spacing: var(--tracking-h4);
   --text-h5: var(--size-h5);
-  --text-h5--line-height: var(--leading-heading);
+  --text-h5--line-height: var(--leading-h5);
   --text-h6: var(--size-h6);
-  --text-h6--line-height: var(--leading-heading);
+  --text-h6--line-height: var(--leading-h5);
+
+  --text-lead: var(--size-lead);
+  --text-lead--line-height: var(--leading-lead);
   --text-body-lg: var(--size-body-lg);
   --text-body-lg--line-height: var(--leading-body);
   --text-body: var(--size-body);
@@ -109,20 +131,26 @@
   --text-small--line-height: var(--leading-body);
   --text-caption: var(--size-caption);
   --text-caption--line-height: var(--leading-caption);
+  --text-overline: var(--size-overline);
+  --text-overline--line-height: var(--leading-caption);
+  --text-overline--letter-spacing: var(--tracking-overline);
 
   /* Motion */
   --ease-default: var(--easing-default);
   --ease-entrance: var(--easing-entrance);
   --ease-exit: var(--easing-exit);
+  --ease-in-out: var(--easing-in-out);
+  --ease-snap: var(--easing-snap);
   --animate-fade-in: fade-in var(--duration-normal) var(--easing-entrance) both;
   --animate-fade-up: fade-up var(--duration-normal) var(--easing-entrance) both;
   --animate-fade-down: fade-down var(--duration-normal) var(--easing-entrance) both;
   --animate-scale-in: scale-in var(--duration-normal) var(--easing-entrance) both;
-  --animate-blob: blob-float 18s var(--easing-default) infinite;
 
   /* Max widths */
+  --container-wide: var(--wide-width);
   --container-app: var(--max-width);
   --container-content: var(--content-width);
+  --container-prose: var(--prose-width);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -136,6 +164,10 @@
 
 html {
   scroll-behavior: smooth;
+  /* Anchor targets must clear the fixed header. */
+  scroll-padding-top: calc(var(--nav-height) + var(--space-4));
+  /* Reserve scrollbar space so opening the mobile sheet does not shift the bar. */
+  scrollbar-gutter: stable;
 }
 
 [data-theme="dark"] {
@@ -199,6 +231,8 @@ select {
 
 /* -------------------------------------------------------------------------- */
 /* 4. Typography                                                              */
+/* Display family is reserved for h1–h3. h4–h6 use the body family: a display */
+/* face should not set UI labels (ADR-011).                                   */
 /* -------------------------------------------------------------------------- */
 h1,
 h2,
@@ -206,42 +240,60 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-family-display);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--leading-heading);
-  letter-spacing: var(--tracking-heading);
   color: var(--text-primary);
   margin: 0;
 }
 
+h1,
+h2,
+h3 {
+  font-family: var(--font-family-display);
+}
+
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-body);
+}
+
 h1 {
-  font-size: clamp(36px, 5vw, var(--size-h1));
+  font-size: var(--size-h1);
   font-weight: var(--font-weight-bold);
+  line-height: var(--leading-h1);
+  letter-spacing: var(--tracking-h1);
 }
 
 h2 {
-  font-size: clamp(30px, 4vw, var(--size-h2));
+  font-size: var(--size-h2);
   font-weight: var(--font-weight-bold);
+  line-height: var(--leading-h2);
+  letter-spacing: var(--tracking-h2);
 }
 
 h3 {
-  font-size: clamp(24px, 3vw, var(--size-h3));
+  font-size: var(--size-h3);
   font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-h3);
+  letter-spacing: var(--tracking-h3);
 }
 
 h4 {
   font-size: var(--size-h4);
   font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-h4);
+  letter-spacing: var(--tracking-h4);
 }
 
 h5 {
   font-size: var(--size-h5);
   font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-h5);
 }
 
 h6 {
   font-size: var(--size-h6);
   font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-h5);
 }
 
 p {
@@ -262,6 +314,15 @@ pre {
 :focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
+  border-radius: inherit;
+}
+
+/*
+ * Extra halo on `--primary`-tinted surfaces so the ring is not the same
+ * hue as the fill (audit CC-9).
+ */
+.focus-on-primary:focus-visible {
+  box-shadow: var(--elevation-focus);
 }
 
 ::selection {
@@ -281,6 +342,33 @@ pre {
   border-width: 0;
 }
 
+/*
+ * Skip link — visually hidden until focused, then pinned to the top-left.
+ * Must be the first focusable element in the document (WCAG 2.4.1).
+ */
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: var(--z-toast);
+  transform: translateY(-200%);
+  border-radius: var(--radius-token-sm);
+  background: var(--surface-raised);
+  border: var(--border-width) solid var(--border-strong);
+  color: var(--text-primary);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--size-small);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: transform var(--duration-fast) var(--easing-entrance);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+}
+
 .touch-target {
   min-width: var(--touch-target);
   min-height: var(--touch-target);
@@ -290,46 +378,93 @@ pre {
   html {
     scroll-behavior: auto;
   }
+
+  .surface-card-interactive:hover,
+  .surface-card-interactive:active,
+  .hover-lift:hover,
+  .hover-lift:active,
+  .hover-scale:hover,
+  .hover-scale:active {
+    transform: none;
+  }
 }
 
 /* -------------------------------------------------------------------------- */
-/* 6. Layout utilities (design-system.md)                                     */
+/* 6. Layout utilities (design-system.md §4)                                  */
 /* -------------------------------------------------------------------------- */
-.container-app {
+.container-wide,
+.container-app,
+.container-content,
+.container-prose {
   width: 100%;
-  max-width: var(--max-width);
   margin-inline: auto;
   padding-inline: var(--container-padding-mobile);
+}
+
+.container-wide {
+  max-width: var(--wide-width);
+}
+
+.container-app {
+  max-width: var(--max-width);
 }
 
 .container-content {
-  width: 100%;
   max-width: var(--content-width);
-  margin-inline: auto;
-  padding-inline: var(--container-padding-mobile);
+}
+
+.container-prose {
+  max-width: var(--prose-width);
 }
 
 @media (min-width: 768px) {
+  .container-wide,
   .container-app,
-  .container-content {
+  .container-content,
+  .container-prose {
     padding-inline: var(--container-padding-tablet);
   }
 }
 
 @media (min-width: 1024px) {
+  .container-wide,
   .container-app,
-  .container-content {
+  .container-content,
+  .container-prose {
     padding-inline: var(--container-padding-desktop);
   }
 }
 
+@media (min-width: 1440px) {
+  .container-wide {
+    padding-inline: var(--container-padding-wide);
+  }
+}
+
+/* Three-tier section rhythm replaces a single uniform value. */
+.section-tight {
+  padding-block: var(--section-tight-mobile);
+}
+
 .section {
-  padding-block: var(--section-padding-mobile);
+  padding-block: var(--section-base-mobile);
+}
+
+.section-loose {
+  padding-block: var(--section-loose-mobile);
 }
 
 @media (min-width: 768px) {
+  .section-tight {
+    padding-block: var(--section-tight-desktop);
+  }
+
   .section {
-    padding-block: var(--section-padding-desktop);
+    padding-block: var(--section-base-desktop);
+  }
+
+  .section-loose {
+    padding-block: var(--section-loose-desktop);
   }
 }
 
@@ -337,25 +472,57 @@ pre {
   background: var(--background-secondary);
 }
 
+/* Measure utilities — replace ad-hoc max-w-xl / max-w-2xl / max-w-3xl. */
+.measure-prose {
+  max-width: var(--measure-prose);
+}
+
+.measure-lead {
+  max-width: var(--measure-lead);
+}
+
+.measure-narrow {
+  max-width: var(--measure-narrow);
+}
+
 /* -------------------------------------------------------------------------- */
 /* 7. Surface utilities                                                       */
+/* Depth is expressed by background step first, border second, shadow last.   */
+/* A resting card has no shadow — otherwise everything reads as equally       */
+/* raised and hierarchy collapses.                                            */
 /* -------------------------------------------------------------------------- */
 .surface-card {
   background: var(--surface);
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--border-neutral);
   border-radius: var(--radius-token-lg);
   padding: var(--space-6);
-  box-shadow: var(--elevation-soft);
   transition:
     transform var(--duration-normal) var(--easing-default),
+    border-color var(--duration-normal) var(--easing-default),
     background-color var(--duration-normal) var(--easing-default),
     box-shadow var(--duration-normal) var(--easing-default);
 }
 
-.surface-card:hover {
-  background: var(--surface-hover);
-  transform: translateY(-4px);
-  box-shadow: var(--elevation-soft), var(--elevation-glow-primary);
+.surface-card-interactive {
+  border-color: var(--border);
+  box-shadow: var(--elevation-soft);
+}
+
+.surface-card-interactive:active {
+  transform: scale(0.995);
+}
+
+@media (hover: hover) {
+  .surface-card-interactive:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-medium);
+  }
+
+  .surface-card-interactive:hover:active {
+    transform: translateY(-2px) scale(0.995);
+  }
 }
 
 .gradient-primary {
@@ -364,6 +531,18 @@ pre {
 
 .gradient-hero {
   background-image: var(--gradient-hero);
+}
+
+/*
+ * Gradient text — permitted on exactly one element per page (the hero name).
+ * Requires a background-clip fallback colour for browsers that drop the clip.
+ */
+.gradient-text {
+  background-image: var(--gradient-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -376,10 +555,18 @@ pre {
 
 .text-hero {
   font-family: var(--font-family-display);
-  font-size: clamp(36px, 8vw, var(--size-hero));
+  font-size: var(--size-display);
   font-weight: var(--font-weight-bold);
-  line-height: var(--leading-heading);
-  letter-spacing: var(--tracking-hero);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.text-lead {
+  font-family: var(--font-family-body);
+  font-size: var(--size-lead);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-lead);
+  letter-spacing: var(--tracking-body);
 }
 
 .text-body {
@@ -409,9 +596,22 @@ pre {
 .text-caption {
   font-family: var(--font-family-body);
   font-size: var(--size-caption);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-medium);
   line-height: var(--leading-caption);
   letter-spacing: var(--tracking-body);
+}
+
+/*
+ * Overline — small uppercase monospace eyebrow above section headings.
+ * Carries the technical identity at almost no visual weight.
+ */
+.text-overline {
+  font-family: var(--font-family-mono);
+  font-size: var(--size-overline);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-caption);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
 }
 
 .text-mono {
@@ -420,7 +620,30 @@ pre {
 
 /* -------------------------------------------------------------------------- */
 /* 9. Motion utilities                                                        */
+/* Tailwind v4 has no `--duration-*` theme namespace, so `duration-normal`     */
+/* style class names must be defined here to resolve at all.                  */
 /* -------------------------------------------------------------------------- */
+.duration-instant {
+  transition-duration: var(--duration-instant);
+}
+
+.duration-fast {
+  transition-duration: var(--duration-fast);
+}
+
+.duration-normal {
+  transition-duration: var(--duration-normal);
+}
+
+.duration-slow {
+  transition-duration: var(--duration-slow);
+}
+
+.transition-instant {
+  transition-duration: var(--duration-instant);
+  transition-timing-function: var(--easing-default);
+}
+
 .transition-fast {
   transition-duration: var(--duration-fast);
   transition-timing-function: var(--easing-default);
@@ -442,11 +665,27 @@ pre {
     box-shadow var(--duration-normal) var(--easing-default);
 }
 
-.hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--elevation-medium);
+.hover-lift:active {
+  transform: scale(0.995);
 }
 
-.hover-scale:hover {
-  transform: scale(1.02);
+@media (hover: hover) {
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-medium);
+  }
+
+  .hover-lift:hover:active {
+    transform: translateY(-2px) scale(0.995);
+  }
+}
+
+.hover-scale:active {
+  transform: scale(0.99);
+}
+
+@media (hover: hover) {
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
 }

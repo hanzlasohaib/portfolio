@@ -34,6 +34,7 @@ function toFeaturedProject(project: ProjectWithTechnologies): FeaturedProject {
     thumbnail,
     repositoryUrl: project.repositoryUrl ?? undefined,
     liveUrl: project.liveUrl ?? undefined,
+    featured: project.featured,
     preview: previewSrc
       ? {
           type: "video",

@@ -39,7 +39,7 @@ export function ContactSection({ profile }: ContactSectionProps) {
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-start">
           <ContactForm />
-          <ContactInfo profile={profile} />
+            <ContactInfo profile={profile} headingLevel="h3" />
         </div>
 
         <Link

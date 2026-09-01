@@ -23,6 +23,7 @@ export type ToastInput = {
 type ToastItem = ToastInput & {
   id: string;
   variant: ToastVariant;
+  exiting?: boolean;
 };
 
 type ToastContextValue = {
@@ -41,6 +42,8 @@ const variantClassName: Record<ToastVariant, string> = {
 };
 
 const DEFAULT_DURATION_MS = 4200;
+const TOAST_EXIT_MS = 160;
+const MAX_VISIBLE_TOASTS = 3;
 
 export type ToastProviderProps = {
   children: ReactNode;
@@ -54,7 +57,20 @@ export function ToastProvider({ children }: ToastProviderProps) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const dismiss = useCallback((id: string) => {
-    setToasts((current) => current.filter((toast) => toast.id !== id));
+    setToasts((current) => {
+      const target = current.find((item) => item.id === id);
+      if (!target || target.exiting) {
+        return current;
+      }
+
+      return current.map((item) =>
+        item.id === id ? { ...item, exiting: true } : item,
+      );
+    });
+
+    window.setTimeout(() => {
+      setToasts((open) => open.filter((item) => item.id !== id));
+    }, TOAST_EXIT_MS);
   }, []);
 
   const toast = useCallback(
@@ -66,16 +82,39 @@ export function ToastProvider({ children }: ToastProviderProps) {
       const variant = input.variant ?? "info";
       const durationMs = input.durationMs ?? DEFAULT_DURATION_MS;
 
-      setToasts((current) => [
-        ...current,
-        {
-          id,
-          title: input.title,
-          message: input.message,
-          variant,
-          durationMs,
-        },
-      ]);
+      setToasts((current) => {
+        const active = current.filter((item) => !item.exiting);
+        const overflowIds = active
+          .slice(0, Math.max(0, active.length - MAX_VISIBLE_TOASTS + 1))
+          .map((item) => item.id);
+
+        const marked = current.map((item) =>
+          overflowIds.includes(item.id) ? { ...item, exiting: true } : item,
+        );
+
+        if (overflowIds.length > 0) {
+          queueMicrotask(() => {
+            for (const overflowId of overflowIds) {
+              window.setTimeout(() => {
+                setToasts((open) =>
+                  open.filter((item) => item.id !== overflowId),
+                );
+              }, TOAST_EXIT_MS);
+            }
+          });
+        }
+
+        return [
+          ...marked,
+          {
+            id,
+            title: input.title,
+            message: input.message,
+            variant,
+            durationMs,
+          },
+        ];
+      });
 
       window.setTimeout(() => dismiss(id), durationMs);
     },
@@ -110,6 +149,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
             role={item.variant === "error" ? "alert" : "status"}
             className={cn(
               "pointer-events-auto w-full max-w-sm rounded-lg border px-4 py-3 shadow-medium",
+              item.exiting ? "animate-toast-out" : "animate-toast-in",
               variantClassName[item.variant],
             )}
           >

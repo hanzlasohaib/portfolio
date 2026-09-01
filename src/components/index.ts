@@ -38,6 +38,9 @@ export type {
 export { Checkbox } from "./checkbox";
 export type { CheckboxProps } from "./checkbox";
 
+export { Chip } from "./chip";
+export type { ChipProps } from "./chip";
+
 export { Container } from "./container";
 export type { ContainerProps, ContainerSize } from "./container";
 
@@ -49,7 +52,7 @@ export type { DashboardLayoutProps } from "./dashboard-layout";
 
 export { DashboardNav } from "./dashboard-nav";
 export type { DashboardNavProps } from "./dashboard-nav";
-export { DASHBOARD_NAV_LINKS } from "./dashboard-nav";
+export { DASHBOARD_NAV_LINKS, dashboardNavLinkClassName } from "./dashboard-nav";
 
 export { DashboardSidebar } from "./dashboard-sidebar";
 export type { DashboardSidebarProps } from "./dashboard-sidebar";
@@ -128,6 +131,9 @@ export type { PublicLayoutProps } from "./public-layout";
 
 export { Radio } from "./radio";
 export type { RadioProps } from "./radio";
+
+export { Reveal } from "./reveal";
+export type { RevealProps } from "./reveal";
 
 export { ScrollProgressBar } from "./scroll-progress-bar";
 export type { ScrollProgressBarProps } from "./scroll-progress-bar";

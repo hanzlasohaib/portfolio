@@ -31,11 +31,11 @@ export function AboutCta() {
       <Container className="flex flex-col items-start gap-8">
         <SectionHeading title={title} />
 
-        <Text variant="body-lg" className="max-w-3xl">
+        <Text variant="body-lg" className="measure-prose">
           {description}
         </Text>
 
-        <div className="flex flex-col gap-4 sm:flex-row">
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
           <Link
             href={primaryHref}
             underline={false}
@@ -44,6 +44,7 @@ export function AboutCta() {
               buttonBaseClassName,
               buttonVariantClassName.primary,
               buttonSizeClassName.lg,
+              "w-full sm:w-auto",
             )}
           >
             {primaryLabel}
@@ -56,6 +57,7 @@ export function AboutCta() {
               buttonBaseClassName,
               buttonVariantClassName.secondary,
               buttonSizeClassName.lg,
+              "w-full sm:w-auto",
             )}
           >
             {secondaryLabel}

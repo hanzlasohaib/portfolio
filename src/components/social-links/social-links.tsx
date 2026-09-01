@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 import type { SocialLinksProps } from "./social-links.types";
 
-const iconClassName = "size-[18px]";
+const iconClassName = "size-[var(--icon-sm)]";
 
 function GitHubIcon() {
   return (
@@ -73,7 +73,7 @@ export function SocialLinks({
               rel={isExternal ? "noopener noreferrer" : undefined}
               className={cn(
                 iconButtonBaseClassName,
-                "border border-border bg-transparent text-text-secondary hover:border-border-strong hover:bg-surface hover:text-text-primary active:bg-surface-hover",
+                "border border-border bg-transparent text-text-secondary active:bg-surface-hover [@media(hover:hover)]:hover:border-border-strong [@media(hover:hover)]:hover:bg-surface [@media(hover:hover)]:hover:text-text-primary",
                 iconButtonSizeClassName[size],
               )}
             >

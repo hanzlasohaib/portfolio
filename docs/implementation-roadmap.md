@@ -98,6 +98,77 @@ Annotated tag `v1.4-production-ready` marks V1 production readiness after Phase 
 
 ---
 
+## Phase 6 – UI/UX Redesign
+
+Status: Completed (2026-09-01)
+
+Started 2026-08-29. Transforms the working V1 into a polished, high-end
+Software Engineer / AI Engineer portfolio without altering backend architecture,
+data flow, authentication, or route contracts.
+
+Close review: `docs/design/uiux-final-review.md`
+
+Planning documents:
+
+- `docs/design/uiux-audit.md` — page-by-page audit (historical)
+- `docs/design/design-system.md` — visual system v2 (implemented)
+- `docs/design/uiux-redesign-plan.md` — 11-stage plan (complete)
+
+Decisions:
+
+- Colour: **existing blue accent retained.** `docs/ui-ux/color-palette.md` stands;
+  no colour ADR required (audit conflict C-1, resolved 2026-08-29).
+- Typography: **Space Grotesk + JetBrains Mono + Inter**, fluid scale — see ADR-011.
+  `docs/ui-ux/typography.md` is Superseded.
+
+```text
+Phase 6 – UI/UX Redesign
+       ├── Stage 0  Design foundation (complete 2026-08-29)
+       ├── Stage 1  Homepage / hero (complete 2026-08-30)
+       ├── Stage 2  Navigation (complete 2026-08-30)
+       ├── Stage 3  Projects presentation  (complete 2026-09-01)
+       ├── Stage 4  Project detail pages   (complete 2026-09-01)
+       ├── Stage 5  About composition      (complete 2026-09-01)
+       ├── Stage 6  Journey timeline       (complete 2026-09-01)
+       ├── Stage 7  Contact experience     (complete 2026-09-01)
+       ├── Stage 8  Dashboard visual consistency (complete 2026-09-01)
+       ├── Stage 9  Mobile UX sweep (complete 2026-09-01)
+       ├── Stage 10 Accessibility sweep (complete 2026-09-01)
+       └── Stage 11 Motion pass (complete 2026-09-01)
+```
+
+Hard boundaries (must not change): Prisma schema, repositories, services, Server
+Actions, DB-first read paths and static fallbacks, authentication / MFA / RBAC,
+rate limiting / reCAPTCHA / CSP, `src/app/api/**` contracts, SEO and metadata
+output, route paths, dashboard CRUD behaviour. No new runtime dependencies.
+
+### Verification Checklist
+
+Per stage (lint / typecheck / build were run at stage close; device, keyboard,
+reduced-motion, and CRUD passes were not re-run for this documentation close —
+see `docs/design/uiux-final-review.md` §6):
+
+- [x] `npm run lint` passes
+- [x] `npm run typecheck` passes
+- [ ] Manual pass at 320 / 768 / 1280 px
+- [ ] Keyboard traversal verified
+- [ ] `prefers-reduced-motion` verified
+- [ ] No dashboard CRUD regression
+
+Phase close:
+
+- [x] `npm run build` passes
+- [ ] Every public and dashboard route verified
+- [ ] Lighthouse Accessibility holds at 100
+- [ ] Lighthouse Performance at or above the 78 baseline
+- [ ] Dark and light themes both verified
+- [x] `docs/design/uiux-final-review.md` produced
+- [x] `docs/ui-ux/design-system.md`, `docs/ui-ux/typography.md`, and `docs/ui-ux/animations.md` marked Superseded
+
+Git tag on close: `v1.7-uiux-redesign` (not created — no commit/push in this close).
+
+---
+
 # Development Workflow
 
 Every implementation task follows the same development cycle to ensure quality, maintainability, and incremental progress.

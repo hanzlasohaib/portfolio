@@ -138,6 +138,8 @@ export function DashboardSiteProfilePanel() {
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <Text variant="body-lg">Public site identity</Text>
+        <fieldset disabled={isPending} className="flex flex-col gap-4 border-0 p-0">
+          <legend className="sr-only">Site identity fields</legend>
         <Input
           label="Name"
           value={draft.name}
@@ -282,8 +284,10 @@ export function DashboardSiteProfilePanel() {
           rows={6}
         />
 
+        </fieldset>
+
         <div>
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" loading={isPending}>
             Save identity
           </Button>
         </div>

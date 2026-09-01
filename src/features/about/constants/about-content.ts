@@ -6,7 +6,7 @@
  * Kept static (marketing / overlaps other dashboard sources):
  * - `strengths` — Home badges; Skills owns the skill list
  * - `currentFocus` — restates the current Journey role
- * - `currentlyWorkingWith` — overlaps Skills / technologies
+ * - `currentlyWorkingWith` — Stack “currently using” emphasis; overlaps Skills
  * - `cta` — section marketing copy
  *
  * `atAGlance` is the education-label fallback only: the snapshot's Experience

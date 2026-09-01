@@ -43,13 +43,11 @@ Sections:
 
 Sections:
 
-- Introduction
-- Professional Summary
-- Education
-- Journey Summary
-- Skills
-- Technologies
-- Interests
+- Introduction (portrait, narrative, at-a-glance)
+- What I Do
+- Stack
+- Path
+- CTA
 
 ---
 
@@ -80,9 +78,7 @@ Displays a single project by slug.
 
 ## Journey (`/journey`)
 
-Displays the professional Journey timeline.
-
-Component example: `JourneyTimeline`
+Displays the professional Journey timeline (`JourneyTimeline`) and a closing CTA to Projects and Contact.
 
 ---
 
@@ -90,12 +86,11 @@ Component example: `JourneyTimeline`
 
 Contains:
 
-- Contact Form
-- Email
-- LinkedIn
-- GitHub
-- Success Message
-- Validation
+- Contact Form (live submit with `Button loading`)
+- Email, LinkedIn, GitHub (`ExternalLink`)
+- Availability status (SiteProfile)
+- FAQ (`<details>`)
+- Success / validation messaging
 
 ---
 
@@ -121,6 +116,12 @@ Forgot Password is **out of scope** for V1 (see project scope and authentication
 # Dashboard
 
 Private routes under `/dashboard/**`.
+
+Chrome: header with brand (“Dashboard”), current-section breadcrumb, and
+account actions. Below `md`, navigation is an off-canvas drawer and the
+breadcrumb is hidden so the header fits a 320px viewport; from `md` the
+sidebar is pinned. Active sidebar row uses a filled background and left
+accent, not the public navbar underline.
 
 | Module | Route |
 |--------|-------|

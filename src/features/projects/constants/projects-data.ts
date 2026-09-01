@@ -22,6 +22,11 @@ export type ProjectPreview = {
   alt?: string;
 };
 
+export type ProjectMetric = {
+  label: string;
+  value: string;
+};
+
 export type FeaturedProject = {
   slug: string;
   title: string;
@@ -33,6 +38,17 @@ export type FeaturedProject = {
   thumbnail?: string;
   repositoryUrl?: string;
   liveUrl?: string;
+  featured?: boolean;
+  /** Optional outcome line. Omitted when the data source has none. */
+  outcome?: string;
+  /** Optional metric row (max 3 rendered). Omitted when empty. */
+  metrics?: ProjectMetric[];
+  /** Optional role for the case-study rail. Omitted when the data source has none. */
+  role?: string;
+  /** Optional period for the case-study rail. Omitted when the data source has none. */
+  period?: string;
+  /** Optional approach narrative. Omitted when the data source has none. */
+  approach?: string;
 };
 
 export const PROJECTS_DATA: FeaturedProject[] = [

@@ -14,12 +14,13 @@ export function LayoutShell({
   floating,
   children,
   className,
+  mainClassName,
 }: LayoutShellProps) {
   return (
     <>
       <div className={cn("flex min-h-full flex-1 flex-col", className)}>
         {header}
-        <Main>{children}</Main>
+        <Main className={mainClassName}>{children}</Main>
         {footer}
       </div>
       {floating}

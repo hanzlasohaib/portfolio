@@ -3,7 +3,7 @@
 import type { Skill } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-import type { Result } from "@/lib/api/response";
+import { type Result, zodFieldErrors } from "@/lib/api/response";
 import { requireAdminSession } from "@/lib/auth/require-admin";
 import { uuidSchema } from "@/lib/validators";
 
@@ -25,7 +25,11 @@ export async function createSkillAction(raw: unknown): Promise<Result<Skill>> {
   await requireAdminSession();
   const parsed = skillInputSchema.safeParse(raw);
   if (!parsed.success) {
-    return { success: false, error: "Validation failed." };
+    return {
+      success: false,
+      error: "Validation failed.",
+      fieldErrors: zodFieldErrors(parsed.error.issues),
+    };
   }
 
   const result = await createSkillRecord({
@@ -55,7 +59,11 @@ export async function updateSkillAction(
 
   const parsed = skillInputSchema.safeParse(raw);
   if (!parsed.success) {
-    return { success: false, error: "Validation failed." };
+    return {
+      success: false,
+      error: "Validation failed.",
+      fieldErrors: zodFieldErrors(parsed.error.issues),
+    };
   }
 
   const result = await updateSkillRecord(idParsed.data, {

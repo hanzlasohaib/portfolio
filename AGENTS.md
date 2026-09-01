@@ -101,7 +101,7 @@ Prefer consistency with the project's architecture over short-term optimizations
 # Documentation Priority (Priority of Truth)
 
 1. AGENTS.md
-2. Architecture Decision Records (docs/architecture/adr/)
+2. Architecture Decision Records (docs/adr/)
 3. docs/project-design/project-scope.md
 4. Other architecture documentation
 5. docs/implementation-roadmap.md
@@ -302,6 +302,12 @@ Stack: Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS
 
 Commands (from `package.json`): `npm run dev` (dev server on http://localhost:3000), `npm run lint`, `npm run typecheck`, `npm run build`. Note `README.md` says `npm run type-check`, but the real script is `npm run typecheck` (no hyphen).
 
-No database, `.env`, or external services are required to run today. The backend (Prisma/Supabase/JWT/Zod) described in `README.md` and `docs/` is planned for later phases and is NOT yet implemented — there is no `prisma/schema.prisma`, no API route handlers, and no `.env.example`.
+The backend is implemented. `prisma/schema.prisma`, `.env.example`, API route handlers under `src/app/api/**`, and Server Actions under `src/features/*/actions/**` all exist. A PostgreSQL connection is required for database-backed pages; public pages fall back to static constants when the database is unavailable.
 
-Only two pages currently exist (Phase 1/2 per `docs/implementation-roadmap.md`): `/` (home, composed of Hero/About/Projects/Skills feature sections) and `/login`. Other routes (`/about`, `/projects`, `/journey`, `/contact`) return 404 by design, and `/login` renders `null` for now — these are not bugs.
+All routes exist and work:
+
+- Public: `/`, `/about`, `/projects`, `/projects/[slug]`, `/journey`, `/contact`
+- Auth: `/login` (credentials + email OTP MFA, fully implemented)
+- Dashboard: `/dashboard` plus `/dashboard/{projects,journey,skills,messages,settings}`, all with CRUD
+
+Blog and binary upload are intentionally out of scope.

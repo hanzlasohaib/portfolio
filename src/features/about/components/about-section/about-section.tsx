@@ -42,7 +42,7 @@ export function AboutSection({ profile }: AboutSectionProps) {
           {profile.biography}
         </Text>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
           <Card className="h-full">
             <Heading level="h3">Core Strengths</Heading>
             <ul className="flex flex-wrap gap-2">
@@ -76,7 +76,7 @@ export function AboutSection({ profile }: AboutSectionProps) {
             buttonBaseClassName,
             buttonVariantClassName.primary,
             buttonSizeClassName.lg,
-            "self-center",
+            "w-full self-stretch sm:w-auto sm:self-center",
           )}
         >
           More About Me

@@ -134,6 +134,8 @@ export function DashboardAboutNarrativePanel() {
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <Text variant="body-lg">About narrative</Text>
+        <fieldset disabled={isPending} className="flex flex-col gap-4 border-0 p-0">
+          <legend className="sr-only">About narrative fields</legend>
         <Textarea
           label="Biography"
           value={draft.biography}
@@ -314,8 +316,10 @@ export function DashboardAboutNarrativePanel() {
           rows={6}
         />
 
+        </fieldset>
+
         <div>
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" loading={isPending}>
             Save About narrative
           </Button>
         </div>

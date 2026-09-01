@@ -5,8 +5,13 @@ import { useState, useTransition } from "react";
 
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
+import { cn } from "@/lib/utils";
 
-export function LogoutButton() {
+type LogoutButtonProps = {
+  className?: string;
+};
+
+export function LogoutButton({ className }: LogoutButtonProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +37,7 @@ export function LogoutButton() {
   }
 
   return (
-    <div className="flex flex-col items-end gap-2">
+    <div className={cn("flex flex-col items-end gap-2", className)}>
       {error ? (
         <Alert variant="error" title="Sign-out failed">
           {error}
@@ -43,9 +48,9 @@ export function LogoutButton() {
         variant="secondary"
         size="sm"
         onClick={handleLogout}
-        disabled={isPending}
+        loading={isPending}
       >
-        {isPending ? "Signing out…" : "Sign out"}
+        Sign out
       </Button>
     </div>
   );

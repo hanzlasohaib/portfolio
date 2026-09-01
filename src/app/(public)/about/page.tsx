@@ -8,10 +8,7 @@ import {
 } from "@/features/journey/service";
 import { getPublishedProjectCountForUi } from "@/features/projects/service";
 import { getSiteProfileForUi } from "@/features/site-profile";
-import {
-  getSkillCategoriesForUi,
-  getTechnologiesListForUi,
-} from "@/features/skills/service";
+import { getSkillCategoriesForUi } from "@/features/skills/service";
 
 /**
  * About (`/about`) — docs/project-design/pages.md § About.
@@ -29,14 +26,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function About() {
   const [
     skillCategories,
-    technologies,
     journeyEntries,
     currentJourneyEntry,
     publishedProjectCount,
     profile,
   ] = await Promise.all([
     getSkillCategoriesForUi(),
-    getTechnologiesListForUi(),
     getJourneyEntriesForUi(),
     getCurrentJourneyEntryForUi(),
     getPublishedProjectCountForUi(),
@@ -46,7 +41,6 @@ export default async function About() {
   return (
     <AboutPage
       skillCategories={skillCategories}
-      technologies={technologies}
       journeyEntries={journeyEntries}
       currentJourneyEntry={currentJourneyEntry}
       publishedProjectCount={publishedProjectCount}

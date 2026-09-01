@@ -1,3 +1,5 @@
+import { forwardRef } from "react";
+
 import { cn } from "@/lib/utils";
 
 import {
@@ -18,42 +20,48 @@ function IconButtonSpinner() {
   );
 }
 
-export function IconButton({
-  variant = "ghost",
-  size = "md",
-  disabled = false,
-  loading = false,
-  className,
-  children,
-  "aria-label": ariaLabel,
-  type = "button",
-  ...props
-}: IconButtonProps) {
-  const isDisabled = disabled || loading;
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+  function IconButton(
+    {
+      variant = "ghost",
+      size = "md",
+      disabled = false,
+      loading = false,
+      className,
+      children,
+      "aria-label": ariaLabel,
+      type = "button",
+      ...props
+    },
+    ref,
+  ) {
+    const isDisabled = disabled || loading;
 
-  return (
-    <button
-      type={type}
-      disabled={isDisabled}
-      aria-label={ariaLabel}
-      aria-busy={loading || undefined}
-      className={cn(
-        iconButtonBaseClassName,
-        buttonVariantClassName[variant],
-        iconButtonSizeClassName[size],
-        className,
-      )}
-      {...props}
-    >
-      {loading ? <IconButtonSpinner /> : null}
-      <span
+    return (
+      <button
+        ref={ref}
+        type={type}
+        disabled={isDisabled}
+        aria-label={ariaLabel}
+        aria-busy={loading || undefined}
         className={cn(
-          "inline-flex items-center justify-center [&_svg]:size-[18px]",
-          loading && "opacity-0",
+          iconButtonBaseClassName,
+          buttonVariantClassName[variant],
+          iconButtonSizeClassName[size],
+          className,
         )}
+        {...props}
       >
-        {children}
-      </span>
-    </button>
-  );
-}
+        {loading ? <IconButtonSpinner /> : null}
+        <span
+          className={cn(
+            "inline-flex items-center justify-center [&_svg]:size-[18px]",
+            loading && "opacity-0",
+          )}
+        >
+          {children}
+        </span>
+      </button>
+    );
+  },
+);

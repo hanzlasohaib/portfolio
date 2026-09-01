@@ -1,8 +1,12 @@
 /*
  * Animations
- * Source of truth: docs/ui-ux/animations.md, design-system.md
- * Allowed: fade, slide, scale, stagger, background blob
- * Forbidden: bounce, flash, shake
+ * Source of truth: docs/design/design-system.md §7
+ *
+ * Motion is permitted only when it signals entrance, maintains continuity,
+ * communicates state, or acknowledges input. Decoration is not a purpose.
+ *
+ * Forbidden: perpetual ambient loops, parallax, bounce, flash, shake,
+ * overshoot, stagger longer than 300ms total.
  */
 
 @keyframes fade-in {
@@ -11,6 +15,15 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 
@@ -39,24 +52,11 @@
 @keyframes scale-in {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.97);
   }
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes blob-float {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(12px, -16px) scale(1.02);
-  }
-  66% {
-    transform: translate(-10px, 8px) scale(0.98);
   }
 }
 
@@ -67,39 +67,21 @@
 }
 
 .animate-fade-up {
-  animation: fade-up var(--duration-normal) var(--easing-entrance) both;
+  animation: fade-up var(--duration-slow) var(--easing-entrance) both;
 }
 
 .animate-fade-down {
-  animation: fade-down var(--duration-normal) var(--easing-entrance) both;
+  animation: fade-down var(--duration-slow) var(--easing-entrance) both;
 }
 
 .animate-scale-in {
   animation: scale-in var(--duration-normal) var(--easing-entrance) both;
 }
 
-.animate-blob {
-  animation: blob-float 18s var(--easing-default) infinite;
-}
-
-.animate-blob-reverse {
-  animation: blob-float 20s var(--easing-default) infinite reverse;
-}
-
-/* Hero entrance — one-shot on load (animation-iteration-count: 1), ~1.2s total */
-@keyframes hero-blur-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-    filter: blur(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
+/*
+ * Hero entrance — three steps, 520ms total (§7.5).
+ * Transform + opacity only (no blur). Last step starts at 240ms + 280ms.
+ */
 @keyframes hero-fade-up-sm {
   from {
     opacity: 0;
@@ -111,10 +93,22 @@
   }
 }
 
-@keyframes hero-fade-up-light {
+.hero-entrance-primary {
+  animation: hero-fade-up-sm 280ms var(--easing-entrance) 0ms 1 both;
+}
+
+.hero-entrance-copy {
+  animation: hero-fade-up-sm 280ms var(--easing-entrance) 120ms 1 both;
+}
+
+.hero-entrance-actions {
+  animation: hero-fade-up-sm 280ms var(--easing-entrance) 240ms 1 both;
+}
+
+@keyframes toast-in {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -122,41 +116,63 @@
   }
 }
 
-.hero-entrance-name {
-  animation: hero-blur-up 420ms var(--easing-entrance) 0ms 1 both;
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
 }
 
-.hero-entrance-role {
-  animation: hero-fade-up-sm 260ms var(--easing-entrance) 280ms 1 both;
+.animate-toast-in {
+  animation: toast-in var(--duration-normal) var(--easing-entrance) both;
 }
 
-.hero-entrance-description {
-  animation: hero-fade-up-light 240ms var(--easing-entrance) 520ms 1 both;
+.animate-toast-out {
+  animation: toast-out var(--duration-fast) var(--easing-exit) both;
 }
 
-.hero-entrance-cta {
-  animation: fade-up 240ms var(--easing-entrance) 760ms 1 both;
+/*
+ * Scroll reveal — a single reusable pattern, applied by the reveal hook.
+ * Elements occupy their final space before animating, so CLS stays at zero.
+ */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity var(--duration-slow) var(--easing-entrance),
+    transform var(--duration-slow) var(--easing-entrance);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 
-.hero-entrance-social {
-  animation: fade-up 260ms var(--easing-entrance) 960ms 1 both;
+.reveal[data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-/* Stagger children via animation-delay utilities */
+/* Stagger — 60ms steps, capped at 5 children (300ms total). */
 .stagger-1 {
-  animation-delay: 50ms;
+  animation-delay: 60ms;
+  --reveal-delay: 60ms;
 }
 .stagger-2 {
-  animation-delay: 100ms;
+  animation-delay: 120ms;
+  --reveal-delay: 120ms;
 }
 .stagger-3 {
-  animation-delay: 150ms;
+  animation-delay: 180ms;
+  --reveal-delay: 180ms;
 }
 .stagger-4 {
-  animation-delay: 200ms;
+  animation-delay: 240ms;
+  --reveal-delay: 240ms;
 }
 .stagger-5 {
-  animation-delay: 250ms;
+  animation-delay: 300ms;
+  --reveal-delay: 300ms;
 }
 
 @keyframes page-enter {
@@ -171,7 +187,7 @@
 .animate-page-enter {
   /* Opacity only — transforms create containing blocks that break
      sticky/fixed descendants and can glitch the nav while scrolling up. */
-  animation: page-enter 280ms var(--easing-entrance) both;
+  animation: page-enter var(--duration-normal) var(--easing-entrance) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -188,17 +204,40 @@
   .animate-fade-up,
   .animate-fade-down,
   .animate-scale-in,
-  .animate-blob,
-  .animate-blob-reverse,
   .animate-page-enter,
-  .hero-entrance-name,
-  .hero-entrance-role,
-  .hero-entrance-description,
-  .hero-entrance-cta,
-  .hero-entrance-social {
+  .hero-entrance-primary,
+  .hero-entrance-copy,
+  .hero-entrance-actions {
     animation: none !important;
     filter: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .animate-toast-in {
+    animation: fade-in var(--duration-instant) both !important;
+    transform: none !important;
+  }
+
+  .animate-toast-out {
+    animation: fade-out var(--duration-instant) both !important;
+    transform: none !important;
+  }
+
+  /* Reveal targets must land in their final state, never stuck hidden. */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /*
+   * A spinner frozen mid-rotation reads as a broken image. Hold it static
+   * and upright instead of letting the global duration override stall it.
+   */
+  .animate-spin {
+    animation: none !important;
+    border-top-color: currentColor !important;
+    opacity: 0.7;
   }
 }

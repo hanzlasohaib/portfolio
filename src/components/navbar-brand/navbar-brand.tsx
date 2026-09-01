@@ -15,7 +15,9 @@ export function NavbarBrand({
       href={href}
       className={cn(
         "font-display text-h5 font-bold text-text-primary transition-fast",
-        "focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+        "inline-flex min-h-[var(--touch-target)] items-center",
+        "active:opacity-80",
+        "focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[var(--focus-ring-offset)] focus-visible:outline-primary",
         className,
       )}
       {...props}

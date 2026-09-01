@@ -3,4 +3,5 @@ import type { ComponentPropsWithoutRef } from "react";
 export type NavbarProps = ComponentPropsWithoutRef<"nav"> & {
   className?: string;
   brandLabel?: string;
+  resumeUrl: string;
 };

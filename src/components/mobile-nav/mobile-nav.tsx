@@ -23,7 +23,7 @@ export function MobileNav({
   const sectionId = pathname === "/" ? activeSectionId : null;
 
   return (
-    <ul className={cn("flex flex-col gap-2", className)} {...props}>
+    <ul data-mobile-nav className={cn("flex flex-col gap-1", className)} {...props}>
       {items.map((item) => {
         const isActive = resolvePublicNavActive(
           pathname,
@@ -38,7 +38,7 @@ export function MobileNav({
               href={item.href}
               exact={item.exact}
               active={isActive}
-              className="block w-full py-2"
+              className="flex min-h-[var(--touch-target)] w-full items-center"
               onClick={onNavigate}
             >
               {item.label}

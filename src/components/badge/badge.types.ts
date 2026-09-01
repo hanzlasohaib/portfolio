@@ -3,6 +3,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 export type BadgeVariant =
   | "primary"
   | "secondary"
+  | "tech"
   | "success"
   | "warning"
   | "danger"

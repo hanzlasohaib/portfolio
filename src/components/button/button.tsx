@@ -1,3 +1,5 @@
+import { forwardRef } from "react";
+
 import { cn } from "@/lib/utils";
 
 import {
@@ -18,37 +20,51 @@ function ButtonSpinner() {
   );
 }
 
-export function Button({
-  variant = "primary",
-  size = "md",
-  disabled = false,
-  loading = false,
-  type = "button",
-  fullWidth = false,
-  className,
-  children,
-  ...props
-}: ButtonProps) {
-  const isDisabled = disabled || loading;
+/**
+ * Stage 2: Added forwardRef support for accessibility patterns.
+ */
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button(
+    {
+      variant = "primary",
+      size = "md",
+      disabled = false,
+      loading = false,
+      type = "button",
+      fullWidth = false,
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) {
+    const isDisabled = disabled || loading;
 
-  return (
-    <button
-      type={type}
-      disabled={isDisabled}
-      aria-busy={loading || undefined}
-      className={cn(
-        buttonBaseClassName,
-        buttonVariantClassName[variant],
-        buttonSizeClassName[size],
-        fullWidth && "w-full",
-        className,
-      )}
-      {...props}
-    >
-      {loading ? <ButtonSpinner /> : null}
-      <span className={cn("inline-flex items-center gap-2", loading && "opacity-0")}>
-        {children}
-      </span>
-    </button>
-  );
-}
+    return (
+      <button
+        ref={ref}
+        type={type}
+        disabled={isDisabled}
+        aria-busy={loading || undefined}
+        className={cn(
+          buttonBaseClassName,
+          buttonVariantClassName[variant],
+          buttonSizeClassName[size],
+          fullWidth && "w-full",
+          className,
+        )}
+        {...props}
+      >
+        {loading ? <ButtonSpinner /> : null}
+        <span
+          className={cn(
+            "inline-flex items-center gap-2",
+            loading && "opacity-0",
+          )}
+        >
+          {children}
+        </span>
+      </button>
+    );
+  },
+);

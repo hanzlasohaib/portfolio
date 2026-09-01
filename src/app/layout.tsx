@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fira_Code, Inter, Orbitron } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 
 import { JsonLd } from "@/components/json-ld";
@@ -10,8 +10,8 @@ import { ThemeProvider, ToastProvider } from "@/providers";
 
 import "./globals.css";
 
-const orbitron = Orbitron({
-  variable: "--font-orbitron",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
   weight: ["600", "700"],
   display: "swap",
@@ -20,14 +20,14 @@ const orbitron = Orbitron({
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
-const firaCode = Fira_Code({
-  variable: "--font-fira-code",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -67,7 +67,7 @@ export default function RootLayout({
       data-theme="dark"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${orbitron.variable} ${inter.variable} ${firaCode.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <head>
         <Script id="theme-init" strategy="beforeInteractive">

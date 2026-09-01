@@ -3,17 +3,21 @@ import { cn } from "@/lib/utils";
 
 import type { DashboardSidebarProps } from "./dashboard-sidebar.types";
 
-export function DashboardSidebar({ className, ...props }: DashboardSidebarProps) {
+export function DashboardSidebar({
+  className,
+  onNavigate,
+  ...props
+}: DashboardSidebarProps) {
   return (
     <aside
       className={cn(
-        "w-full shrink-0 border-b border-border bg-surface md:w-64 md:border-b-0 md:border-r",
+        "w-full shrink-0 border-border bg-surface md:w-64 md:border-r",
         className,
       )}
       {...props}
     >
       <nav aria-label="Dashboard" className="p-4">
-        <DashboardNav />
+        <DashboardNav onNavigate={onNavigate} />
       </nav>
     </aside>
   );

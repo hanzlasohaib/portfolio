@@ -1,9 +1,4 @@
-import { Card } from "@/components/card";
-import { Container } from "@/components/container";
-import { Heading } from "@/components/heading";
-import { Section } from "@/components/section";
-import { SectionHeading } from "@/components/section-heading";
-import { Text } from "@/components/text";
+import { Reveal } from "@/components/reveal";
 
 type AboutAtAGlanceProps = {
   educationLabel: string;
@@ -13,9 +8,9 @@ type AboutAtAGlanceProps = {
 };
 
 /**
- * Compact recruiter-facing snapshot. Education and location come from
- * SiteProfile; experience is the current Journey role and the project count
- * is the published `Project` total — no hardcoded snapshot stats.
+ * Recruiter snapshot as a description list (audit A-6).
+ * Values stay derived: education/location from SiteProfile, experience
+ * from the current Journey role, project count from published projects.
  */
 export function AboutAtAGlance({
   educationLabel,
@@ -34,24 +29,17 @@ export function AboutAtAGlance({
   ];
 
   return (
-    <Section alt aria-label="At a Glance">
-      <Container className="flex flex-col gap-10">
-        <SectionHeading
-          title="At a Glance"
-          description="A quick snapshot of education, experience, and where I'm based."
-        />
-
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map(({ label, value }) => (
-            <li key={label} className="h-full">
-              <Card className="h-full">
-                <Heading level="h3">{label}</Heading>
-                <Text variant="body">{value}</Text>
-              </Card>
-            </li>
-          ))}
-        </ul>
-      </Container>
-    </Section>
+    <Reveal>
+      <dl className="flex flex-col gap-4">
+        {items.map(({ label, value }) => (
+          <div key={label} className="flex flex-col gap-1">
+            <dt className="font-mono text-caption uppercase tracking-wider text-text-tertiary">
+              {label}
+            </dt>
+            <dd className="text-small font-medium text-text-primary">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </Reveal>
   );
 }

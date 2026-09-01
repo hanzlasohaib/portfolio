@@ -134,17 +134,44 @@ export function DashboardFormPanelSkeleton({ className }: DashboardSkeletonProps
 export function DashboardSettingsSkeleton({ className }: DashboardSkeletonProps) {
   return (
     <div
-      className={cn("flex flex-col gap-4", className)}
+      className={cn("flex flex-col gap-10", className)}
       role="status"
       aria-live="polite"
       aria-busy="true"
     >
       <span className="sr-only">Loading settings…</span>
-      <Skeleton height="4rem" className="w-full" />
-      <Skeleton height="1.25rem" className="w-56" />
-      <Skeleton height="1rem" className="w-48" />
-      <Skeleton height="1rem" className="w-32" />
-      <Skeleton height="2rem" className="w-24" />
+
+      <div className="flex flex-col gap-4">
+        <Skeleton height="1.5rem" className="w-32" />
+        <Skeleton height="4rem" className="w-full" />
+        <Skeleton height="1rem" className="w-56 max-w-full" />
+        <Skeleton height="1rem" className="w-48 max-w-full" />
+        <Skeleton height="1rem" className="w-32" />
+        <Skeleton height="2.25rem" className="w-24" />
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <Skeleton height="1.5rem" className="w-40" />
+        <Skeleton height="1rem" className="w-full max-w-lg" />
+        <div className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-4">
+          <Skeleton height="3rem" className="w-full" />
+          <Skeleton height="3rem" className="w-full" />
+          <Skeleton height="5rem" className="w-full" />
+          <Skeleton height="3rem" className="w-full" />
+          <Skeleton height="2.5rem" className="w-36" />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <Skeleton height="1.5rem" className="w-44" />
+        <Skeleton height="1rem" className="w-full max-w-lg" />
+        <div className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-4">
+          <Skeleton height="5rem" className="w-full" />
+          <Skeleton height="5rem" className="w-full" />
+          <Skeleton height="3rem" className="w-full" />
+          <Skeleton height="2.5rem" className="w-44" />
+        </div>
+      </div>
     </div>
   );
 }

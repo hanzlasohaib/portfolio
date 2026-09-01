@@ -19,7 +19,7 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
               {showSeparator ? (
                 <span
                   aria-hidden="true"
-                  className="text-small text-text-disabled"
+                  className="text-small text-text-tertiary"
                 >
                   /
                 </span>

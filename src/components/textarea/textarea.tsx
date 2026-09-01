@@ -22,6 +22,7 @@ export function Textarea({
   id,
   disabled,
   readOnly,
+  required,
   rows = 4,
   ...props
 }: TextareaProps) {
@@ -34,13 +35,18 @@ export function Textarea({
 
   return (
     <div className={cn(fieldWrapperClassName, fullWidth && "w-full")}>
-      {label ? <Label htmlFor={textareaId}>{label}</Label> : null}
+      {label ? (
+        <Label htmlFor={textareaId} required={required}>
+          {label}
+        </Label>
+      ) : null}
 
       <textarea
         id={textareaId}
         rows={rows}
         disabled={disabled}
         readOnly={readOnly}
+        required={required}
         aria-invalid={hasError || undefined}
         aria-describedby={describedBy}
         className={cn(

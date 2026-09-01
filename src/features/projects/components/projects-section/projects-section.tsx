@@ -9,6 +9,7 @@ import {
 } from "@/components/button/button-variants";
 import { Container } from "@/components/container";
 import { Link } from "@/components/link";
+import { Reveal } from "@/components/reveal";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { cn } from "@/lib/utils";
@@ -53,9 +54,11 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
         />
 
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
+          {projects.map((project, index) => (
             <li key={project.slug}>
-              <ProjectCard project={project} onPreview={handlePreview} />
+              <Reveal index={index}>
+                <ProjectCard project={project} onPreview={handlePreview} />
+              </Reveal>
             </li>
           ))}
         </ul>
@@ -68,7 +71,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
             buttonBaseClassName,
             buttonVariantClassName.primary,
             buttonSizeClassName.lg,
-            "self-center",
+            "w-full self-stretch sm:w-auto sm:self-center",
           )}
         >
           View All Projects

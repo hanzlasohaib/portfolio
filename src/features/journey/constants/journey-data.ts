@@ -14,12 +14,12 @@
  *
  * Sourced from `public/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf` § Experience —
  * existing project information, not invented. Education is intentionally
- * excluded here: docs/project-design/pages.md § About lists "Education"
- * and "Journey Summary" as separate sections, and Education is already
- * covered by `features/about/constants/about-content.ts`.
+ * excluded here: `/about` Path uses SiteProfile education, not Journey rows.
  *
  * Ordered most-recent-first.
  */
+
+export type JourneyEntryKind = "work" | "education" | "milestone";
 
 export type JourneyEntry = {
   title: string;
@@ -27,6 +27,8 @@ export type JourneyEntry = {
   location?: string;
   period: string;
   description: string;
+  /** Optional. When omitted, kind is inferred from title/organization. */
+  kind?: JourneyEntryKind;
 };
 
 export const JOURNEY_DATA: JourneyEntry[] = [

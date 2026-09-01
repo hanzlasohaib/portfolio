@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useState, useTransition } from "react";
+import { FormEvent, useLayoutEffect, useRef, useState, useTransition } from "react";
 
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
@@ -13,6 +13,10 @@ import { loginSchema, mfaCodeSchema } from "@/features/authentication";
 type FieldErrors = Record<string, string>;
 type LoginStep = "credentials" | "mfa";
 
+const CREDENTIALS_EMAIL_ID = "login-email";
+const MFA_CODE_ID = "mfa-code";
+const MFA_HEADING_ID = "mfa-heading";
+
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -22,6 +26,16 @@ export function LoginForm() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [maskedHint, setMaskedHint] = useState<string | null>(null);
+  const previousStepRef = useRef<LoginStep>("credentials");
+
+  useLayoutEffect(() => {
+    if (step === "mfa") {
+      document.getElementById(MFA_CODE_ID)?.focus();
+    } else if (previousStepRef.current === "mfa") {
+      document.getElementById(CREDENTIALS_EMAIL_ID)?.focus();
+    }
+    previousStepRef.current = step;
+  }, [step]);
 
   function redirectToDashboard() {
     const next = searchParams.get("next");
@@ -207,9 +221,12 @@ export function LoginForm() {
         className="flex flex-col gap-5"
         onSubmit={handleMfaSubmit}
         noValidate
+        aria-labelledby={MFA_HEADING_ID}
       >
         <div className="flex flex-col gap-2">
-          <Heading level="h1">Verify sign-in</Heading>
+          <Heading level="h1" id={MFA_HEADING_ID}>
+            Verify sign-in
+          </Heading>
           <Text variant="small">
             Enter the 6-digit code sent to your MFA notify email.
           </Text>
@@ -217,6 +234,7 @@ export function LoginForm() {
         </div>
 
         <Input
+          id={MFA_CODE_ID}
           name="code"
           type="text"
           inputMode="numeric"
@@ -288,6 +306,7 @@ export function LoginForm() {
       </div>
 
       <Input
+        id={CREDENTIALS_EMAIL_ID}
         name="email"
         type="email"
         label="Email"

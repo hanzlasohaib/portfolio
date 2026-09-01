@@ -2,14 +2,11 @@
 
 import { useId, useRef, useState } from "react";
 
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
+import { Chip } from "@/components/chip";
+import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
+import { Reveal } from "@/components/reveal";
 import { Text } from "@/components/text";
-import { cn } from "@/lib/utils";
 
 import type { FeaturedProject } from "../../constants/projects-data";
 import {
@@ -21,29 +18,32 @@ import { ProjectPreviewModal } from "../project-preview-modal";
 
 export type ProjectsExplorerProps = {
   projects: FeaturedProject[];
-  /**
-   * When true, ProjectCards may show a GitHub action (dedicated `/projects`
-   * page). Home Featured Projects leave this false.
-   */
-  showRepository?: boolean;
 };
 
+function splitFeatured(
+  projects: FeaturedProject[],
+  allowFeaturedRow: boolean,
+): { featured: FeaturedProject | null; rest: FeaturedProject[] } {
+  if (!allowFeaturedRow || projects.length === 0) {
+    return { featured: null, rest: projects };
+  }
+
+  const featured = projects.find((project) => project.featured) ?? null;
+  if (!featured) {
+    return { featured: null, rest: projects };
+  }
+
+  return {
+    featured,
+    rest: projects.filter((project) => project.slug !== featured.slug),
+  };
+}
+
 /**
- * Interactive projects gallery: search, technology filter tags, grid, and
- * preview modal (docs/project-design/pages.md § Projects).
- *
- * Client-only because search/filter/modal require local UI state.
- * Filtering is pure (`utils/filter-projects.ts`); this component owns
- * presentation and modal focus restore.
- *
- * Note: `project-scope.md` lists "Portfolio categories / search" under
- * Future (Not V1). This is lightweight page-local search + tech filter as
- * specified in `pages.md` § Projects — not a categories taxonomy system.
+ * Interactive projects gallery: search, technology chips, featured row,
+ * 2-up grid, and preview modal (docs/project-design/pages.md § Projects).
  */
-export function ProjectsExplorer({
-  projects,
-  showRepository = false,
-}: ProjectsExplorerProps) {
+export function ProjectsExplorer({ projects }: ProjectsExplorerProps) {
   const searchId = useId();
   const [query, setQuery] = useState("");
   const [selectedTechnology, setSelectedTechnology] = useState<string | null>(
@@ -59,6 +59,8 @@ export function ProjectsExplorer({
     query,
     technology: selectedTechnology,
   });
+  const allowFeaturedRow = query.trim() === "" && selectedTechnology === null;
+  const { featured, rest } = splitFeatured(filteredProjects, allowFeaturedRow);
 
   function handlePreview(project: FeaturedProject, trigger: HTMLButtonElement) {
     previewTriggerRef.current = trigger;
@@ -77,6 +79,9 @@ export function ProjectsExplorer({
       current === technology ? null : technology,
     );
   }
+
+  const shownCount = filteredProjects.length;
+  const totalCount = projects.length;
 
   return (
     <div className="flex flex-col gap-8">
@@ -98,58 +103,63 @@ export function ProjectsExplorer({
           </p>
           <ul className="flex flex-wrap gap-2" aria-label="Technology filters">
             <li>
-              <button
-                type="button"
-                aria-pressed={selectedTechnology === null}
+              <Chip
+                pressed={selectedTechnology === null}
                 onClick={() => setSelectedTechnology(null)}
-                className={cn(
-                  buttonBaseClassName,
-                  buttonSizeClassName.sm,
-                  selectedTechnology === null
-                    ? buttonVariantClassName.primary
-                    : buttonVariantClassName.outline,
-                )}
               >
                 All
-              </button>
+              </Chip>
             </li>
-            {technologyTags.map((technology) => {
-              const isActive = selectedTechnology === technology;
-
-              return (
-                <li key={technology}>
-                  <button
-                    type="button"
-                    aria-pressed={isActive}
-                    onClick={() => handleTechnologyToggle(technology)}
-                    className={cn(
-                      "inline-flex items-center rounded-pill px-2.5 py-1 text-caption font-medium transition-normal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
-                      isActive
-                        ? "border border-primary/30 bg-primary/15 text-primary-light"
-                        : "border border-border bg-surface text-text-secondary hover:bg-surface-hover",
-                    )}
-                  >
-                    {technology}
-                  </button>
-                </li>
-              );
-            })}
+            {technologyTags.map((technology) => (
+              <li key={technology}>
+                <Chip
+                  pressed={selectedTechnology === technology}
+                  onClick={() => handleTechnologyToggle(technology)}
+                >
+                  {technology}
+                </Chip>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
 
+      <p className="text-caption text-text-tertiary" aria-live="polite">
+        Showing {shownCount} of {totalCount}{" "}
+        {totalCount === 1 ? "project" : "projects"}
+      </p>
+
       {filteredProjects.length > 0 ? (
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project) => (
-            <li key={project.slug}>
+        <div className="flex flex-col gap-8">
+          <Reveal>
+            <Heading level="h2">Selected work</Heading>
+          </Reveal>
+
+          {featured ? (
+            <Reveal>
               <ProjectCard
-                project={project}
+                project={featured}
                 onPreview={handlePreview}
-                showRepository={showRepository}
+                layout="feature"
               />
-            </li>
-          ))}
-        </ul>
+            </Reveal>
+          ) : null}
+
+          {rest.length > 0 ? (
+            <ul className="grid gap-6 sm:grid-cols-2">
+              {rest.map((project, index) => (
+                <li key={project.slug}>
+                  <Reveal index={index}>
+                    <ProjectCard
+                      project={project}
+                      onPreview={handlePreview}
+                    />
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
       ) : (
         <Text variant="body" role="status">
           No projects match your search or filter. Try a different query or

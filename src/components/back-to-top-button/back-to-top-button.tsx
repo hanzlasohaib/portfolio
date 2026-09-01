@@ -55,9 +55,10 @@ export function BackToTopButton({
       size="lg"
       aria-label="Back to top"
       onClick={scrollToTop}
+      style={{ zIndex: "var(--z-floating)" }}
       className={cn(
-        "fixed right-5 bottom-5 z-[55] rounded-full shadow-medium sm:right-8 sm:bottom-8",
-        "transition-[opacity,transform] duration-300 ease-[var(--easing-entrance)]",
+        "fixed right-5 bottom-5 rounded-full shadow-medium sm:right-8 sm:bottom-8",
+        "transition-[opacity,transform] duration-normal ease-[var(--easing-entrance)]",
         "motion-reduce:transition-none",
         visible
           ? "pointer-events-auto translate-y-0 opacity-100"

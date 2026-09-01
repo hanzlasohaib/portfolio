@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState, useTransition } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState, useTransition } from "react";
 
 import type { Skill } from "@prisma/client";
 
@@ -13,6 +13,7 @@ import {
   DashboardBusyHint,
   DashboardFormPanelSkeleton,
 } from "@/features/dashboard/components/dashboard-skeletons";
+import { useDashboardFormFocus } from "@/features/dashboard/utils/focus-dashboard-form";
 import { useToast } from "@/providers";
 
 import {
@@ -43,11 +44,14 @@ export function DashboardSkillsPanel() {
   const { success, error: toastError } = useToast();
   const [skills, setSkills] = useState<Skill[]>([]);
   const [draft, setDraft] = useState<Draft>(emptyDraft());
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [query, setQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
+  const formRef = useRef<HTMLFormElement>(null);
+  const requestFormFocus = useDashboardFormFocus(formRef);
 
   function refresh() {
     startTransition(async () => {
@@ -83,6 +87,7 @@ export function DashboardSkillsPanel() {
   const visibleSkills = filteredSkills.slice(0, visibleCount);
 
   function startEdit(skill: Skill) {
+    setFieldErrors({});
     setDraft({
       id: skill.id,
       name: skill.name,
@@ -90,10 +95,12 @@ export function DashboardSkillsPanel() {
       displayOrder: skill.displayOrder,
       icon: skill.icon ?? "",
     });
+    requestFormFocus();
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setFieldErrors({});
 
     const payload = {
       name: draft.name,
@@ -110,6 +117,7 @@ export function DashboardSkillsPanel() {
         : await createSkillAction(payload);
 
       if (!result.success) {
+        setFieldErrors(result.fieldErrors ?? {});
         toastError(result.error || "Unable to save skill.");
         return;
       }
@@ -162,46 +170,67 @@ export function DashboardSkillsPanel() {
     <div className="flex flex-col gap-8">
       {isPending ? <DashboardBusyHint label="Saving changes…" /> : null}
 
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <Text variant="body-lg">
+      <form
+        ref={formRef}
+        className="flex flex-col gap-4"
+        onSubmit={handleSubmit}
+        aria-labelledby="skill-form-heading"
+      >
+        <Text variant="body-lg" id="skill-form-heading">
           {draft.id ? "Edit skill" : "Create skill"}
         </Text>
-        <Input
-          label="Name"
-          value={draft.name}
-          onChange={(event) =>
-            setDraft((current) => ({ ...current, name: event.target.value }))
-          }
-          fullWidth
-          required
-        />
-        <Input
-          label="Category"
-          value={draft.category}
-          onChange={(event) =>
-            setDraft((current) => ({
-              ...current,
-              category: event.target.value,
-            }))
-          }
-          placeholder="e.g. Frontend, Backend, Tools"
-          fullWidth
-        />
-        <Input
-          label="Display order"
-          type="number"
-          min={0}
-          value={draft.displayOrder}
-          onChange={(event) =>
-            setDraft((current) => ({
-              ...current,
-              displayOrder: Number(event.target.value) || 0,
-            }))
-          }
-          fullWidth
-        />
+        <fieldset disabled={isPending} className="flex flex-col gap-4 border-0 p-0">
+          <legend className="sr-only">Skill fields</legend>
+          <Input
+            label="Name"
+            value={draft.name}
+            onChange={(event) =>
+              setDraft((current) => ({ ...current, name: event.target.value }))
+            }
+            error={fieldErrors.name}
+            fullWidth
+            required
+          />
+          <Input
+            label="Category"
+            value={draft.category}
+            onChange={(event) =>
+              setDraft((current) => ({
+                ...current,
+                category: event.target.value,
+              }))
+            }
+            error={fieldErrors.category}
+            placeholder="e.g. Frontend, Backend, Tools"
+            fullWidth
+          />
+          <Input
+            label="Icon"
+            value={draft.icon}
+            onChange={(event) =>
+              setDraft((current) => ({ ...current, icon: event.target.value }))
+            }
+            error={fieldErrors.icon}
+            helperText="Optional icon name or class. Leave blank if unused."
+            fullWidth
+          />
+          <Input
+            label="Display order"
+            type="number"
+            min={0}
+            value={draft.displayOrder}
+            onChange={(event) =>
+              setDraft((current) => ({
+                ...current,
+                displayOrder: Number(event.target.value) || 0,
+              }))
+            }
+            error={fieldErrors.displayOrder}
+            fullWidth
+          />
+        </fieldset>
         <div className="flex flex-wrap gap-3">
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" loading={isPending}>
             {draft.id ? "Update skill" : "Create skill"}
           </Button>
           {draft.id ? (
@@ -209,7 +238,10 @@ export function DashboardSkillsPanel() {
               type="button"
               variant="secondary"
               disabled={isPending}
-              onClick={() => setDraft(emptyDraft())}
+              onClick={() => {
+                setFieldErrors({});
+                setDraft(emptyDraft());
+              }}
             >
               Cancel edit
             </Button>
@@ -239,6 +271,7 @@ export function DashboardSkillsPanel() {
                 ? "Create your first skill with the form above. Until then, public pages may show static examples."
                 : "Try a different search term to find a skill."
             }
+            titleLevel="h2"
           />
         ) : (
           <ul className="flex flex-col gap-3">
@@ -254,7 +287,7 @@ export function DashboardSkillsPanel() {
                     {` · order ${skill.displayOrder}`}
                   </Text>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex shrink-0 gap-2">
                   <Button
                     type="button"
                     size="sm"

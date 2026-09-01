@@ -13,10 +13,15 @@ import type {
   CardVariant,
 } from "./card.types";
 
+/**
+ * Surface hierarchy (docs/design/design-system.md §5.2): depth is expressed by
+ * background step first, border second, shadow last. A resting card carries no
+ * shadow — when every card is raised, nothing is.
+ */
 const variantClassName: Record<CardVariant, string> = {
-  default: "border border-border bg-surface shadow-soft",
+  default: "border border-border-neutral bg-surface",
   elevated: "border border-border bg-surface shadow-medium",
-  outlined: "border border-border bg-surface",
+  outlined: "border border-border bg-transparent",
 };
 
 const paddingClassName: Record<CardPadding, string> = {
@@ -40,7 +45,11 @@ export function Card({
         "flex flex-col gap-4 rounded-lg",
         variantClassName[variant],
         paddingClassName[padding],
-        hover && "hover-lift hover:bg-surface-hover",
+        // `hover` promotes a card to the interactive tier: it gains the accent
+        // border and resting shadow that static cards deliberately lack, plus
+        // an :active press so touch devices get feedback too.
+        hover &&
+          "border-border shadow-soft transition-[transform,box-shadow,background-color,border-color] duration-normal ease-[var(--easing-entrance)] active:scale-[0.995] [@media(hover:hover)]:hover:-translate-y-0.5 [@media(hover:hover)]:hover:border-border-strong [@media(hover:hover)]:hover:bg-surface-hover [@media(hover:hover)]:hover:shadow-medium motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100",
         className,
       )}
       {...props}
@@ -98,7 +107,7 @@ export function CardContent({ className, children, ...props }: CardContentProps)
 
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
   return (
-    <footer className={cn("flex items-center gap-4", className)} {...props}>
+    <footer className={cn("flex flex-wrap items-center gap-2", className)} {...props}>
       {children}
     </footer>
   );

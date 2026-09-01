@@ -56,7 +56,7 @@ export function Footer({
                 <ul className="flex flex-col gap-2">
                   {PUBLIC_NAV_LINKS.map(({ href, label }) => (
                     <li key={href}>
-                      <Link href={href} variant="muted" underline={false}>
+                      <Link href={href} variant="muted" underline={false} className="inline-flex min-h-[var(--touch-target)] items-center">
                         {label}
                       </Link>
                     </li>

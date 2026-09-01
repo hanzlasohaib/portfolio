@@ -5,9 +5,10 @@
  * here. `availability` below is the fallback for that field.
  *
  * Documentation note: `pages.md` § Home lists "Contact CTA" only; Home was
- * intentionally expanded with a frontend-only form. FAQ belongs on `/contact`
- * (not Home). Success messaging + Zod/API submission ship with Phase 3 backend;
- * the form submit control remains "Coming Soon" until then.
+ * intentionally expanded with a form. FAQ belongs on `/contact` (not Home).
+ * The form submits to `POST /api/contact` with Zod validation and success /
+ * error messaging (shipped in Phase 3). The submit control is live — not
+ * “Coming Soon”.
  */
 
 export type ContactFaqItem = {

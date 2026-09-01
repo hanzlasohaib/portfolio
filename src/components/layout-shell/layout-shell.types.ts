@@ -7,4 +7,5 @@ export type LayoutShellProps = {
   /** Viewport-level floating UI (e.g. Back to Top) outside the main column. */
   floating?: ReactNode;
   className?: string;
+  mainClassName?: string;
 };
