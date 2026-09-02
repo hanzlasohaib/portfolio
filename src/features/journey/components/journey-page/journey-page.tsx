@@ -1,4 +1,5 @@
 import { PageWrapper } from "@/components";
+import { CtaLink } from "@/components/button";
 import {
   buttonBaseClassName,
   buttonSizeClassName,
@@ -47,19 +48,9 @@ export function JourneyPage({ entries }: JourneyPageProps) {
               aria-label="Next steps"
               className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
             >
-              <Link
-                href="/projects"
-                underline={false}
-                variant="inherit"
-                className={cn(
-                  buttonBaseClassName,
-                  buttonVariantClassName.primary,
-                  buttonSizeClassName.lg,
-                  "w-full sm:w-auto",
-                )}
-              >
+              <CtaLink href="/projects" size="lg" className="w-full sm:w-auto">
                 View Projects
-              </Link>
+              </CtaLink>
               <Link
                 href="/contact"
                 underline={false}

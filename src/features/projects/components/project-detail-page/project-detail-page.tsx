@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { Badge } from "@/components/badge";
 import { Breadcrumb } from "@/components/breadcrumb";
+import { CtaAnchor } from "@/components/button";
 import {
   buttonBaseClassName,
   buttonSizeClassName,
@@ -176,19 +177,15 @@ export function ProjectDetailPage({
                       </dt>
                       <dd className="flex flex-col gap-2">
                         {project.liveUrl ? (
-                          <ExternalLink
+                          <CtaAnchor
                             href={project.liveUrl}
-                            variant="inherit"
-                            underline={false}
-                            className={cn(
-                              buttonBaseClassName,
-                              buttonVariantClassName.primary,
-                              buttonSizeClassName.md,
-                              "w-full",
-                            )}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            size="md"
+                            className="w-full"
                           >
                             Live Demo
-                          </ExternalLink>
+                          </CtaAnchor>
                         ) : null}
                         {project.repositoryUrl ? (
                           <ExternalLink

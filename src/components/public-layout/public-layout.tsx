@@ -1,5 +1,7 @@
 import { BackToTopButton } from "@/components/back-to-top-button";
+import { CustomCursor } from "@/components/custom-cursor";
 import { Footer } from "@/components/footer";
+import { HashScroll } from "@/components/hash-scroll";
 import { LayoutShell } from "@/components/layout-shell";
 import { ScrollAwareHeader } from "@/components/scroll-aware-header";
 import { ScrollProgressBar } from "@/components/scroll-progress-bar";
@@ -41,6 +43,8 @@ export async function PublicLayout({ children }: PublicLayoutProps) {
       floating={<BackToTopButton />}
     >
       <ScrollProgressBar />
+      <HashScroll />
+      <CustomCursor />
       {children}
     </LayoutShell>
   );

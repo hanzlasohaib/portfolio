@@ -10,7 +10,7 @@ export type { BackToTopButtonProps } from "./back-to-top-button";
 export { Badge } from "./badge";
 export type { BadgeProps, BadgeVariant } from "./badge";
 
-export { Button } from "./button";
+export { Button, CtaAnchor, CtaLink } from "./button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./button";
 
 export { Breadcrumb } from "./breadcrumb";
@@ -44,6 +44,8 @@ export type { ChipProps } from "./chip";
 export { Container } from "./container";
 export type { ContainerProps, ContainerSize } from "./container";
 
+export { CustomCursor } from "./custom-cursor";
+
 export { ContentWrapper } from "./content-wrapper";
 export type { ContentWrapperProps } from "./content-wrapper";
 
@@ -68,6 +70,8 @@ export type { FooterProps } from "./footer";
 
 export { Header } from "./header";
 export type { HeaderProps } from "./header";
+
+export { HashScroll } from "./hash-scroll";
 
 export { Heading } from "./heading";
 export type { HeadingLevel, HeadingProps } from "./heading";

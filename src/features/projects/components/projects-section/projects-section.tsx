@@ -2,17 +2,11 @@
 
 import { useRef, useState } from "react";
 
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import { Container } from "@/components/container";
-import { Link } from "@/components/link";
 import { Reveal } from "@/components/reveal";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
-import { cn } from "@/lib/utils";
 
 import type { FeaturedProject } from "../../constants/projects-data";
 import { ProjectCard } from "../project-card";
@@ -63,19 +57,9 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
           ))}
         </ul>
 
-        <Link
-          href="/projects"
-          underline={false}
-          variant="inherit"
-          className={cn(
-            buttonBaseClassName,
-            buttonVariantClassName.primary,
-            buttonSizeClassName.lg,
-            "w-full self-stretch sm:w-auto sm:self-center",
-          )}
-        >
+        <CtaLink href="/projects" size="lg" className="w-full self-stretch sm:w-auto sm:self-center">
           View All Projects
-        </Link>
+        </CtaLink>
 
         <ProjectPreviewModal
           open={isPreviewOpen}

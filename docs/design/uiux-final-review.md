@@ -4,7 +4,7 @@
 >
 > Status: Complete
 >
-> Last Updated: 2026-09-01
+> Last Updated: 2026-09-02
 >
 > Category: Design
 >
@@ -70,7 +70,6 @@ These were never in a stage’s proposed solution, or were explicitly deferred.
 | ID | Sev | Why it remains |
 |---|---|---|
 | Outcome / Role / Period / Approach / metric *values* | — | Structure shipped; fields are unused until they exist in data. Schema change is a hard boundary. |
-| Hero right-column visual | P3-ish | Intentional placeholder (Stage 1). |
 | D-12 | P3 | Triple skeleton flash on dashboard lists. |
 | AU-2 | P2 | MFA resend has no cooldown. |
 | AU-3 | P2 | Login remains a centred form without brand chrome. |
@@ -98,6 +97,7 @@ Recorded in the plan; not re-litigated here.
 - Home About / Skills 3-up waits until `xl`; project cards 3-up from `lg`.
 - Toast enter uses `--duration-normal` (240ms), not the 220ms draft copy.
 - Scroll reveal is limited to the Stage 11 list (headings, project cards, timeline, About stats). Not skill cards, forms, nav, footer, dashboard, or page `h1`s.
+- Hero right column is social links plus unused grid space. No illustration and no placeholder panel.
 
 **Documentation conflict (DoD vs colour decision):** the plan’s overall DoD says to mark `docs/ui-ux/color-palette.md` Superseded. The owner decision, ADR-011, design-system v2 §2.3, and the roadmap close list do **not**. Palette stays **Approved**. v1 `design-system.md` and `typography.md` are the documents marked Superseded.
 

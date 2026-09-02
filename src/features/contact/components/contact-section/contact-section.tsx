@@ -1,14 +1,8 @@
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import { Container } from "@/components/container";
-import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import type { SiteProfileForUi } from "@/features/site-profile";
-import { cn } from "@/lib/utils";
 
 import { CONTACT_CONTENT } from "../../constants/contact-content";
 import { ContactForm } from "../contact-form";
@@ -42,19 +36,9 @@ export function ContactSection({ profile }: ContactSectionProps) {
             <ContactInfo profile={profile} headingLevel="h3" />
         </div>
 
-        <Link
-          href={CONTACT_CONTENT.homeCtaHref}
-          underline={false}
-          variant="inherit"
-          className={cn(
-            buttonBaseClassName,
-            buttonVariantClassName.primary,
-            buttonSizeClassName.lg,
-            "self-center",
-          )}
-        >
+        <CtaLink href={CONTACT_CONTENT.homeCtaHref} size="lg" className="self-center">
           {CONTACT_CONTENT.homeCtaLabel}
-        </Link>
+        </CtaLink>
       </Container>
     </Section>
   );

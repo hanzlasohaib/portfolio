@@ -689,3 +689,69 @@ pre {
     transform: scale(1.02);
   }
 }
+
+/*
+ * Public custom cursor (dot + lagging ring). Mounted only when
+ * (hover: hover) and (pointer: fine) and motion is allowed.
+ * Colors follow `--primary`. Scale, not width/height, grows the ring.
+ */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none;
+}
+
+.has-custom-cursor :is(
+  input:not([type="button"]):not([type="submit"]):not([type="reset"]):not(
+      [type="checkbox"]
+    ):not([type="radio"]):not([type="file"]),
+  textarea,
+  [contenteditable="true"]
+) {
+  cursor: text;
+}
+
+.has-custom-cursor select {
+  cursor: default;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-cursor);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.cursor-dot.is-visible,
+.cursor-ring.is-visible {
+  opacity: 1;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+}
+
+.cursor-ring-shape {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  border: var(--border-width-strong) solid
+    color-mix(in srgb, var(--primary) 60%, transparent);
+  transform: scale(1);
+  transition: transform var(--duration-fast) var(--easing-snap);
+}
+
+.cursor-ring-shape.is-active {
+  transform: scale(1.53);
+}

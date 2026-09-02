@@ -48,13 +48,36 @@ export const iconButtonSizeClassName: Record<ButtonSize, string> = {
 };
 
 /**
- * Transition is scoped to specific properties rather than `all`: transitioning
- * `all` re-animates layout properties on unrelated state changes and is a
- * common source of jank.
+ * Press, focus, and disabled. Motion properties live beside each surface so
+ * duration/easing utilities do not collide (cn does not merge Tailwind).
  */
-const interactiveBaseClassName =
-  "touch-manipulation transition-[color,background-color,border-color,box-shadow,opacity,filter,transform] duration-fast ease-[var(--easing-snap)] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[var(--focus-ring-offset)] focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none motion-reduce:active:scale-100";
+const interactiveStateClassName =
+  "touch-manipulation active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[var(--focus-ring-offset)] focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none motion-reduce:active:scale-100";
 
-export const buttonBaseClassName = `relative inline-flex items-center justify-center gap-2 rounded-md font-medium ${interactiveBaseClassName}`;
+const interactiveMotionClassName =
+  "transition-[color,background-color,border-color,box-shadow,opacity,filter,transform] duration-fast ease-[var(--easing-snap)]";
 
-export const iconButtonBaseClassName = `relative inline-flex shrink-0 items-center justify-center rounded-md ${interactiveBaseClassName}`;
+export const buttonBaseClassName = `relative inline-flex items-center justify-center gap-2 rounded-md font-medium ${interactiveStateClassName} ${interactiveMotionClassName}`;
+
+export const iconButtonBaseClassName = `relative inline-flex shrink-0 items-center justify-center rounded-md ${interactiveStateClassName} ${interactiveMotionClassName}`;
+
+/**
+ * Public primary CTA chrome (arrow swap + expanding fill).
+ * Colors stay on `--gradient-primary` / `--on-primary`. Hover motion is
+ * transform and opacity only; gated to hover-capable pointers and reduced-motion.
+ */
+export const ctaButtonClassName = [
+  "relative inline-flex items-center justify-center gap-2 font-semibold",
+  interactiveStateClassName,
+  "group/cta isolate overflow-hidden rounded-pill",
+  "gradient-primary text-on-primary hover:text-on-primary visited:text-on-primary",
+  "ring-2 ring-primary focus-on-primary focus-visible:shadow-focus",
+  "transition-[color,box-shadow,border-radius,transform,filter] duration-slow ease-[var(--easing-entrance)]",
+  "[@media(hover:hover)]:hover:rounded-md [@media(hover:hover)]:hover:ring-8 [@media(hover:hover)]:hover:ring-transparent",
+].join(" ");
+
+export const ctaButtonSizeClassName: Record<ButtonSize, string> = {
+  sm: "h-9 min-h-[var(--touch-target)] px-5 text-small",
+  md: "h-11 min-h-[var(--touch-target)] px-7 text-body",
+  lg: "h-13 min-h-[var(--touch-target)] px-8 text-body",
+};

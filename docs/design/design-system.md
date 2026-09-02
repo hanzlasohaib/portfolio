@@ -278,7 +278,7 @@ Two-layer shadows (contact + ambient) instead of the current single blur. `--ele
 
 All arbitrary values (`z-[55]`, `z-[60]` — audit `CC-5`) are replaced by tokens:
 
-`--z-base 0` · `--z-card 1` · `--z-dropdown 20` · `--z-nav 40` · `--z-progress 45` · `--z-floating 50` · `--z-modal 70` · `--z-toast 80`
+`--z-base 0` · `--z-card 1` · `--z-dropdown 20` · `--z-nav 40` · `--z-progress 45` · `--z-floating 50` · `--z-modal 70` · `--z-toast 80` · `--z-cursor 90`
 
 ---
 
@@ -288,7 +288,7 @@ All arbitrary values (`z-[55]`, `z-[60]` — audit `CC-5`) are replaced by token
 
 | Variant | Resting | Hover | Active | Use |
 |---|---|---|---|---|
-| `primary` | `--gradient-primary`, `--on-primary`, weight 600 | brightness 1.08, `--elevation-soft` | `scale(.98)`, brightness .96 | One per viewport |
+| `primary` | `--gradient-primary`, `--on-primary`, weight 600 | Public CTAs (`CtaLink` / `CtaAnchor`): expanding `--primary-light` fill, arrow swap, ring eases out. Dashboard / form `Button` primary: brightness 1.08, `--elevation-soft` | `scale(.98)`, brightness .96 | One per viewport |
 | `secondary` | `--surface`, 1px `--border`, `--text-primary` | `--surface-hover`, `--border-strong` | `scale(.98)` | Paired with primary |
 | `ghost` | transparent, `--text-secondary` | `--surface`, `--text-primary` | `scale(.98)` | Tertiary, toolbars |
 | `accent` | **New.** transparent, 1px `--secondary`/30, `--secondary` | `--secondary`/10 bg | `scale(.98)` | Technical actions (repo, docs) |
@@ -481,6 +481,12 @@ Compressed to **three steps over 520ms total**: name + role (0ms), tagline + met
 ### 7.6 Reduced motion
 
 `prefers-reduced-motion: reduce` disables all transform and scroll-reveal animation, retains opacity fades at ≤100ms, and preserves the *end state* of every animation. The global override in `animations.css` is kept. `Spinner` / `animate-spin` uses a static complete ring rather than freezing mid-rotation (audit `S-8`).
+
+### 7.7 Public custom cursor
+
+Owner-requested. Public routes only (`PublicLayout`). A `--primary` 6px dot tracks the pointer; a 34px ring lags behind (lerp, `transform` only). Over links and buttons the ring scales to ~52px (`scale(1.53)`), not width/height.
+
+Gates: `(hover: hover) and (pointer: fine)`; `prefers-reduced-motion: reduce` restores the native cursor. Text fields keep `cursor: text` and hide the custom layers. The animation frame loop stops when the ring has caught up. Dashboard and auth layouts are unchanged.
 
 ---
 

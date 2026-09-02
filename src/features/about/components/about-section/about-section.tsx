@@ -1,18 +1,12 @@
 import { Badge } from "@/components/badge";
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import { Card } from "@/components/card";
 import { Container } from "@/components/container";
 import { Heading } from "@/components/heading";
-import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { Text } from "@/components/text";
 import type { SiteProfileForUi } from "@/features/site-profile";
-import { cn } from "@/lib/utils";
 
 import { ABOUT_CONTENT } from "../../constants/about-content";
 
@@ -68,19 +62,9 @@ export function AboutSection({ profile }: AboutSectionProps) {
           </Card>
         </div>
 
-        <Link
-          href="/about"
-          underline={false}
-          variant="inherit"
-          className={cn(
-            buttonBaseClassName,
-            buttonVariantClassName.primary,
-            buttonSizeClassName.lg,
-            "w-full self-stretch sm:w-auto sm:self-center",
-          )}
-        >
-          More About Me
-        </Link>
+          <CtaLink href="/about" size="lg" className="w-full self-stretch sm:w-auto sm:self-center">
+            More About Me
+          </CtaLink>
       </Container>
     </Section>
   );

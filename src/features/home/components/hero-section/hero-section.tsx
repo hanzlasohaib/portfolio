@@ -3,8 +3,8 @@ import {
   buttonSizeClassName,
   buttonVariantClassName,
 } from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import { Container } from "@/components/container";
-import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SocialLinks } from "@/components/social-links";
 import { Text } from "@/components/text";
@@ -97,19 +97,9 @@ export function HeroSection({
 
           {/* CTAs with clear hierarchy */}
           <div className="hero-entrance-actions flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-            <Link
-              href="/#projects"
-              underline={false}
-              variant="inherit"
-              className={cn(
-                buttonBaseClassName,
-                buttonVariantClassName.primary,
-                buttonSizeClassName.lg,
-                "w-full sm:w-auto",
-              )}
-            >
+            <CtaLink href="/#projects" size="lg" className="w-full sm:w-auto">
               View My Work
-            </Link>
+            </CtaLink>
             <a
               href={profile.resumeUrl}
               download
@@ -125,21 +115,12 @@ export function HeroSection({
           </div>
         </div>
 
-        {/* Right column - Social + Visual Interest */}
+        {/* Right column - social links; remaining cells are negative space */}
         <div className="hero-entrance-actions flex flex-col items-start gap-8 md:col-span-5 md:items-end lg:col-span-4">
           <SocialLinks
             links={profile.socialLinks}
             className="flex-row md:flex-col"
           />
-          
-          {/* Decorative element - could be replaced with an actual image/graphic in future */}
-          <div className="relative hidden h-64 w-full rounded-lg border border-border-neutral bg-surface/30 backdrop-blur-sm md:block lg:h-80">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Text variant="caption" className="text-text-tertiary">
-                {/* Placeholder for future visual element */}
-              </Text>
-            </div>
-          </div>
         </div>
       </Container>
 

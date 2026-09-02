@@ -3,11 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
+import { CtaAnchor } from "@/components/button";
 import { IconButton } from "@/components/icon-button";
 import { MobileNav } from "@/components/mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -228,19 +224,15 @@ export function MobileMenu({
           </div>
 
           <div className="border-t border-border-neutral p-4">
-            <a
+            <CtaAnchor
               href={resumeUrl}
               download
-              className={cn(
-                "w-full",
-                buttonBaseClassName,
-                buttonVariantClassName.primary,
-                buttonSizeClassName.md,
-              )}
+              size="md"
+              className="w-full"
               onClick={() => closeMenu({ restoreFocus: true })}
             >
               Download Resume
-            </a>
+            </CtaAnchor>
           </div>
         </div>
       </div>,

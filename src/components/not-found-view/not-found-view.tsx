@@ -3,6 +3,7 @@ import {
   buttonSizeClassName,
   buttonVariantClassName,
 } from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import { Container } from "@/components/container";
 import { Heading } from "@/components/heading";
 import { Link } from "@/components/link";
@@ -23,18 +24,9 @@ export function NotFoundView() {
         the link may be out of date.
       </Text>
       <div className="flex flex-wrap gap-3">
-        <Link
-          href="/"
-          variant="inherit"
-          underline={false}
-          className={cn(
-            buttonBaseClassName,
-            buttonVariantClassName.primary,
-            buttonSizeClassName.md,
-          )}
-        >
+        <CtaLink href="/" size="md">
           Home
-        </Link>
+        </CtaLink>
         <Link
           href="/projects"
           variant="inherit"

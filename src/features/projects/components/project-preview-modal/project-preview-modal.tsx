@@ -4,6 +4,12 @@ import { useId, useState } from "react";
 
 import { Badge } from "@/components/badge";
 import {
+  CtaAnchor,
+  CtaButtonContent,
+  ctaButtonClassName,
+  ctaButtonSizeClassName,
+} from "@/components/button";
+import {
   buttonBaseClassName,
   buttonSizeClassName,
   buttonVariantClassName,
@@ -94,29 +100,24 @@ export function ProjectPreviewModal({
 
         <div className="mt-6 flex justify-end">
           {liveUrl ? (
-            <a
+            <CtaAnchor
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(
-                buttonBaseClassName,
-                buttonVariantClassName.primary,
-                buttonSizeClassName.md,
-              )}
+              size="md"
             >
               Live Demo
-            </a>
+            </CtaAnchor>
           ) : (
             <span
               className={cn(
-                buttonBaseClassName,
-                buttonVariantClassName.primary,
-                buttonSizeClassName.md,
-                "cursor-not-allowed opacity-50",
+                ctaButtonClassName,
+                ctaButtonSizeClassName.md,
+                "cursor-not-allowed pointer-events-none opacity-50",
               )}
               aria-disabled="true"
             >
-              Live Demo
+              <CtaButtonContent size="md">Live Demo</CtaButtonContent>
             </span>
           )}
         </div>

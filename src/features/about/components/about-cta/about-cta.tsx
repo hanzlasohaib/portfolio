@@ -1,3 +1,4 @@
+import { CtaLink } from "@/components/button";
 import {
   buttonBaseClassName,
   buttonSizeClassName,
@@ -36,19 +37,9 @@ export function AboutCta() {
         </Text>
 
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-          <Link
-            href={primaryHref}
-            underline={false}
-            variant="inherit"
-            className={cn(
-              buttonBaseClassName,
-              buttonVariantClassName.primary,
-              buttonSizeClassName.lg,
-              "w-full sm:w-auto",
-            )}
-          >
+          <CtaLink href={primaryHref} size="lg" className="w-full sm:w-auto">
             {primaryLabel}
-          </Link>
+          </CtaLink>
           <Link
             href={secondaryHref}
             underline={false}

@@ -4,6 +4,7 @@ import {
   buttonSizeClassName,
   buttonVariantClassName,
 } from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import {
   Card,
   CardContent,
@@ -150,18 +151,13 @@ export function ProjectCard({
         ) : null}
 
         <CardFooter className="mt-auto w-full gap-2 pt-2">
-          <Link
+          <CtaLink
             href={`/projects/${slug}`}
-            underline={false}
-            className={cn(
-              buttonBaseClassName,
-              buttonVariantClassName.primary,
-              buttonSizeClassName.sm,
-              "min-w-0 flex-1 sm:flex-none",
-            )}
+            size="sm"
+            className="min-w-0 flex-1 sm:flex-none"
           >
             Details
-          </Link>
+          </CtaLink>
           {showPreview ? (
             <button
               type="button"

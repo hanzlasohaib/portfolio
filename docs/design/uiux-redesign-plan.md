@@ -4,7 +4,7 @@
 >
 > Status: **Complete — Phase 6 closed 2026-09-01**
 >
-> Last Updated: 2026-09-01
+> Last Updated: 2026-09-02
 >
 > Category: Design
 >
@@ -97,7 +97,7 @@ Files changed: `src/features/home/components/hero-section/hero-section.tsx`, `sr
 
 1. **Layout transformation**: Centered stack → asymmetric 12-column grid
    - Left column (7/12 on md, 8/12 on lg): Content with role eyebrow, display-scale name with gradient-text, lead tagline, credibility strip, CTAs
-   - Right column (5/12 on md, 4/12 on lg): Social links + decorative placeholder space for future visual element
+   - Right column (5/12 on md, 4/12 on lg): Social links. The unused grid cells are intentional negative space (no illustration, no placeholder panel).
    - Mobile: Single column stack with optimal spacing
 
 2. **Credibility strip**: New data-driven component showing:
@@ -141,7 +141,7 @@ Files changed: `src/features/home/components/hero-section/hero-section.tsx`, `sr
 
 **Mitigation applied.** Every metric renders conditionally and the strip collapses cleanly to zero items. Replaced `min-h-[70vh]` with viewport-height calculation using `svh` units and nav-height token.
 
-**Deviations from plan:** None. All planned features implemented as specified. The decorative right-column element is intentionally minimal (placeholder for future visual content) to avoid adding unnecessary complexity in this stage.
+**Deviations from plan:** The right column is social links plus unused grid space. A bordered decorative panel was rejected: empty space is the composition, not a stand-in for a later graphic.
 
 ---
 

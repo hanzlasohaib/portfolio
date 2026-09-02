@@ -1,13 +1,7 @@
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import { Container } from "@/components/container";
-import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
-import { cn } from "@/lib/utils";
 
 import type { JourneyEntry } from "../../constants/journey-data";
 import { JourneyTimeline } from "../journey-timeline";
@@ -30,19 +24,9 @@ export function JourneySection({ entries }: JourneySectionProps) {
 
         <JourneyTimeline entries={entries} />
 
-        <Link
-          href="/journey"
-          underline={false}
-          variant="inherit"
-          className={cn(
-            buttonBaseClassName,
-            buttonVariantClassName.primary,
-            buttonSizeClassName.lg,
-            "self-center",
-          )}
-        >
+        <CtaLink href="/journey" size="lg" className="self-center">
           View Full Journey
-        </Link>
+        </CtaLink>
       </Container>
     </Section>
   );
