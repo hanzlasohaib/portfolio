@@ -4,7 +4,7 @@
 >
 > Status: Approved
 >
-> Last Updated: 2026-08-29
+> Last Updated: 2026-09-03
 >
 > Owner: Project Team
 >
@@ -182,7 +182,7 @@ Identity save uses `revalidatePath("/", "layout")` so Navbar, Footer, JSON-LD, a
 - File upload for project thumbnails/previews and resume
 - `/dashboard/profile` (distinct from Settings)
 - Blog activation (routes, dashboard, seed)
-- Favicon/app-icon management
+- Favicon/app-icon **dashboard** management (static HS favicon shipped 2026-09-03; still no upload UI)
 - Admin User profile/password editing on Settings
 
 ---

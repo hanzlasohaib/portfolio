@@ -618,6 +618,30 @@ pre {
   font-family: var(--font-family-mono);
 }
 
+/*
+ * Hero code card syntax tokens. Tailwind cannot generate these from the
+ * theme bridge because they are not part of the semantic colour set.
+ */
+.code-keyword {
+  color: var(--code-keyword);
+}
+
+.code-class {
+  color: var(--code-class);
+}
+
+.code-attr {
+  color: var(--code-attr);
+}
+
+.code-string {
+  color: var(--code-string);
+}
+
+.code-punct {
+  color: var(--code-punct);
+}
+
 /* -------------------------------------------------------------------------- */
 /* 9. Motion utilities                                                        */
 /* Tailwind v4 has no `--duration-*` theme namespace, so `duration-normal`     */

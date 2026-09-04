@@ -36,7 +36,7 @@ export function Navbar({
       )}
       {...props}
     >
-      <NavbarBrand label={brandLabel} />
+      <NavbarBrand variant="monogram" label={brandLabel} />
 
       <NavLinks className="hidden lg:flex" />
 

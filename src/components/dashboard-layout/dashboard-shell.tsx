@@ -13,7 +13,8 @@ import { DashboardNavDrawer } from "./dashboard-nav-drawer";
 import type { DashboardLayoutProps } from "./dashboard-layout.types";
 
 /**
- * Dashboard chrome: real header + off-canvas nav below `md` (audit D-1 / D-2).
+ * Dashboard chrome: viewport-fixed header + off-canvas nav below `md`
+ * (audit D-1 / D-2). Content is padded by `--nav-height` so it clears the bar.
  */
 export function DashboardShell({ children }: DashboardLayoutProps) {
   const [navOpen, setNavOpen] = useState(false);
@@ -45,7 +46,7 @@ export function DashboardShell({ children }: DashboardLayoutProps) {
   }, []);
 
   return (
-    <div className="flex min-h-full flex-1 flex-col">
+    <div className="flex min-h-full flex-1 flex-col pt-[var(--nav-height)]">
       <SkipToContent />
       <DashboardHeader
         navOpen={navOpen}

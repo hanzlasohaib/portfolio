@@ -64,6 +64,10 @@ export default async function Home() {
             ? `${currentJourneyEntry.title} at ${currentJourneyEntry.organization}`
             : null
         }
+        techGroups={skillCategories.map(({ category, technologies }) => ({
+          label: category,
+          items: technologies,
+        }))}
       />
       <AboutSection profile={profile} />
       <ProjectsSection projects={projects} />

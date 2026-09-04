@@ -115,7 +115,7 @@ export { Navbar } from "./navbar";
 export type { NavbarProps } from "./navbar";
 
 export { NavbarBrand } from "./navbar-brand";
-export type { NavbarBrandProps } from "./navbar-brand";
+export type { NavbarBrandProps, NavbarBrandVariant } from "./navbar-brand";
 
 export { NavItem } from "./nav-item";
 export type { NavItemProps } from "./nav-item";

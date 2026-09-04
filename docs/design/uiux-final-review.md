@@ -4,7 +4,7 @@
 >
 > Status: Complete
 >
-> Last Updated: 2026-09-02
+> Last Updated: 2026-09-03
 >
 > Category: Design
 >
@@ -97,7 +97,7 @@ Recorded in the plan; not re-litigated here.
 - Home About / Skills 3-up waits until `xl`; project cards 3-up from `lg`.
 - Toast enter uses `--duration-normal` (240ms), not the 220ms draft copy.
 - Scroll reveal is limited to the Stage 11 list (headings, project cards, timeline, About stats). Not skill cards, forms, nav, footer, dashboard, or page `h1`s.
-- Hero right column is social links plus unused grid space. No illustration and no placeholder panel.
+- Hero right column was social links plus unused grid space at Phase 6 close. Superseded 2026-09-03 by the owner-requested `about-me.py` card, icon-led credibility strip, technology rail, and nav monogram (design-system §6.6, §6.9).
 
 **Documentation conflict (DoD vs colour decision):** the plan’s overall DoD says to mark `docs/ui-ux/color-palette.md` Superseded. The owner decision, ADR-011, design-system v2 §2.3, and the roadmap close list do **not**. Palette stays **Approved**. v1 `design-system.md` and `typography.md` are the documents marked Superseded.
 

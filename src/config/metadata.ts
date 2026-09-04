@@ -56,6 +56,9 @@ export const defaultMetadata: Metadata = {
     title: SEO_DEFAULTS.defaultTitle,
     description: SEO_DEFAULTS.description,
   },
+  icons: {
+    icon: [{ url: "/favicons/icon.svg", type: "image/svg+xml" }],
+  },
 };
 
 /**

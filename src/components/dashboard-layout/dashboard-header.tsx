@@ -48,18 +48,16 @@ function dashboardBreadcrumbItems(pathname: string) {
   );
 
   if (!current || current.href === "/dashboard") {
-    return [{ label: "Dashboard" }];
+    return [];
   }
 
-  return [
-    { label: "Dashboard", href: "/dashboard" },
-    { label: current.label },
-  ];
+  return [{ label: current.label }];
 }
 
 /**
  * Dashboard chrome header: hamburger (below md), brand, section breadcrumb,
- * and account actions (audit D-1 / D-2).
+ * and account actions (audit D-1 / D-2). Fixed to the viewport like the
+ * public nav so it stays visible while the page scrolls.
  */
 export function DashboardHeader({
   navOpen,
@@ -68,9 +66,13 @@ export function DashboardHeader({
   menuButtonRef,
 }: DashboardHeaderProps) {
   const pathname = usePathname();
+  const breadcrumbItems = dashboardBreadcrumbItems(pathname);
 
   return (
-    <Header className="border-b border-border-neutral bg-surface">
+    <Header
+      className="fixed inset-x-0 top-0 border-b border-border-neutral bg-surface/95 backdrop-blur-[12px] supports-[backdrop-filter]:bg-surface/95"
+      style={{ zIndex: "var(--z-nav)" }}
+    >
       <div className="flex w-full min-h-[var(--nav-height)] items-center gap-3">
         <IconButton
           ref={menuButtonRef}
@@ -89,10 +91,11 @@ export function DashboardHeader({
 
         <NavbarBrand href="/dashboard" label="Dashboard" className="shrink-0" />
 
-        <Breadcrumb
-          items={dashboardBreadcrumbItems(pathname)}
-          className="hidden min-w-0 flex-1 overflow-hidden md:block"
-        />
+        <div className="hidden min-w-0 flex-1 overflow-hidden md:block">
+          {breadcrumbItems.length > 0 ? (
+            <Breadcrumb items={breadcrumbItems} leadingSeparator />
+          ) : null}
+        </div>
 
         <div
           className="ml-auto flex shrink-0 items-center gap-2"

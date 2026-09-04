@@ -117,11 +117,14 @@ Forgot Password is **out of scope** for V1 (see project scope and authentication
 
 Private routes under `/dashboard/**`.
 
-Chrome: header with brand (“Dashboard”), current-section breadcrumb, and
-account actions. Below `md`, navigation is an off-canvas drawer and the
-breadcrumb is hidden so the header fits a 320px viewport; from `md` the
-sidebar is pinned. Active sidebar row uses a filled background and left
-accent, not the public navbar underline.
+Chrome: a viewport-fixed header (same sticky behaviour as the public nav)
+with brand (“Dashboard” → `/dashboard`), a current-section breadcrumb, and
+account actions. The breadcrumb omits a second “Dashboard” label: it is
+hidden on `/dashboard`, and nested routes render only `/ Section` after the
+brand. Below `md`, navigation is an off-canvas drawer and the breadcrumb is
+hidden so the header fits a 320px viewport; from `md` the sidebar is pinned.
+Active sidebar row uses a filled background and left accent, not the public
+navbar underline.
 
 | Module | Route |
 |--------|-------|

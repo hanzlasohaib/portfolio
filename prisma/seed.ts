@@ -35,31 +35,69 @@ async function seedAdmin() {
     throw new Error("SEED_ADMIN_PASSWORD must be at least 8 characters.");
   }
 
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    console.log(`Admin already exists: ${email} — skipping create.`);
-    return existing;
-  }
-
   const passwordHash = await hash(password, 12);
-  const user = await prisma.user.create({
-    data: {
-      fullName,
-      email,
-      passwordHash,
-      role: "ADMIN",
-      isActive: true,
-    },
+
+  // Projects, journey, skills, site profile, and messages are not owned by
+  // User — they stay in place. Only MFA codes cascade off the old User row.
+
+  const user = await prisma.$transaction(async (tx) => {
+    const existingWithEmail = await tx.user.findUnique({ where: { email } });
+    const previousAdmins = await tx.user.findMany({
+      where: existingWithEmail
+        ? { role: "ADMIN", id: { not: existingWithEmail.id } }
+        : { role: "ADMIN" },
+      select: { id: true, email: true },
+    });
+
+    const nextUser = existingWithEmail
+      ? await tx.user.update({
+          where: { id: existingWithEmail.id },
+          data: {
+            fullName,
+            passwordHash,
+            role: "ADMIN",
+            isActive: true,
+          },
+        })
+      : await tx.user.create({
+          data: {
+            fullName,
+            email,
+            passwordHash,
+            role: "ADMIN",
+            isActive: true,
+          },
+        });
+
+    if (previousAdmins.length > 0) {
+      await tx.user.deleteMany({
+        where: { id: { in: previousAdmins.map((admin) => admin.id) } },
+      });
+    }
+
+    return { nextUser, created: !existingWithEmail, previousAdmins };
   });
 
-  console.log(`Created Test Admin: ${email}`);
-  return user;
+  if (user.created) {
+    console.log(`Created admin: ${email}`);
+  } else {
+    console.log(`Updated admin credentials for: ${email}`);
+  }
+
+  if (user.previousAdmins.length > 0) {
+    console.log(
+      `Removed previous admin(s): ${user.previousAdmins.map((admin) => admin.email).join(", ")}`,
+    );
+  }
+
+  return user.nextUser;
 }
 
 async function seedTechnologiesAndProjects() {
   const techNames = [
     "React",
     "Node.js",
+    "Next.js",
     "MongoDB",
     "FastAPI",
     "PostgreSQL",
@@ -87,6 +125,7 @@ async function seedTechnologiesAndProjects() {
       description:
         "A full-stack travel booking platform for browsing and booking trips.",
       liveUrl: "https://rhombix-technologies-task-3.vercel.app/",
+      thumbnail: "/projects/travel-booking-system/thumbnail.webp",
       featured: true,
       published: true,
       displayOrder: 0,
@@ -98,22 +137,24 @@ async function seedTechnologiesAndProjects() {
       shortDescription: "A full-stack ride-sharing platform.",
       description: "A full-stack ride-sharing platform.",
       liveUrl: "https://corider-finder.vercel.app/",
+      thumbnail: "/projects/coride-finder/thumbnail.webp",
       featured: true,
       published: true,
       displayOrder: 1,
       tech: ["React", "FastAPI", "PostgreSQL"],
     },
     {
-      slug: "numl-lms",
-      title: "NUML LMS (Final Year Project)",
+      slug: "numl-ms",
+      title: "NUML Management System (FYP)",
       shortDescription:
         "A responsive, backend-heavy Learning Management System with a local database for user data and course materials.",
       description:
         "A responsive, backend-heavy Learning Management System with a local database for user data and course materials.",
+      thumbnail: "/projects/numl-ms/thumbnail.webp",
       featured: true,
       published: true,
       displayOrder: 2,
-      tech: ["React", "FastAPI", "Python"],
+      tech: ["FastAPI", "Python", "Next.js", "PostgreSQL"],
     },
   ] as const;
 
@@ -122,17 +163,16 @@ async function seedTechnologiesAndProjects() {
       where: { slug: project.slug },
     });
     if (existing) {
-      // Clear broken local thumbnail paths that were seeded before assets existed.
-      if (
-        existing.thumbnail &&
-        existing.thumbnail.startsWith("/projects/") &&
-        existing.thumbnail.endsWith(".webp")
-      ) {
+      // Backfill when unset. Do not overwrite a dashboard-managed https URL.
+      const canReplaceThumbnail =
+        !existing.thumbnail || existing.thumbnail.startsWith("/projects/");
+
+      if (canReplaceThumbnail && existing.thumbnail !== project.thumbnail) {
         await prisma.project.update({
           where: { id: existing.id },
-          data: { thumbnail: null },
+          data: { thumbnail: project.thumbnail },
         });
-        console.log(`Cleared missing thumbnail for: ${project.slug}`);
+        console.log(`Updated thumbnail for: ${project.slug}`);
       } else {
         console.log(`Project exists: ${project.slug} — skipping.`);
       }
@@ -146,7 +186,7 @@ async function seedTechnologiesAndProjects() {
         shortDescription: project.shortDescription,
         description: project.description,
         liveUrl: "liveUrl" in project ? project.liveUrl : null,
-        thumbnail: null,
+        thumbnail: project.thumbnail,
         preview: null,
         featured: project.featured,
         published: project.published,

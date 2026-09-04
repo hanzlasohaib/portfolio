@@ -3,6 +3,7 @@ import { Heading } from "@/components/heading";
 import { Section } from "@/components/section";
 import { Text } from "@/components/text";
 import type { SiteProfileForUi } from "@/features/site-profile";
+import { initialsFromName } from "@/lib/utils";
 
 import { AboutAtAGlance } from "../about-at-a-glance";
 
@@ -12,18 +13,6 @@ type AboutIntroductionProps = {
   experience: string | null;
   projectCount: number;
 };
-
-function initialsFromName(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-
-  if (parts.length >= 2) {
-    const first = parts[0]?.[0] ?? "";
-    const last = parts[parts.length - 1]?.[0] ?? "";
-    return `${first}${last}`.toUpperCase();
-  }
-
-  return name.trim().slice(0, 2).toUpperCase() || "?";
-}
 
 function distinctSummary(biography: string, summary: string): string | undefined {
   const trimmed = summary.trim();

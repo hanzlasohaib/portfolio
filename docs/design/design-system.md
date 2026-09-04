@@ -4,7 +4,7 @@
 >
 > Status: **Implemented — Phase 6 complete (2026-09-01)**
 >
-> Last Updated: 2026-09-01
+> Last Updated: 2026-09-03
 >
 > Category: Design
 >
@@ -407,7 +407,9 @@ Interactive chips (filters, toggles) are a **separate `Chip` component**, not a 
 
 **Public navbar** — 64px (down from 72px). Transparent over the hero, transitioning to `--background`/85 with `backdrop-blur(12px)` and a `--border-neutral` bottom edge after 24px of scroll. Active link marked by a 2px `--primary` underline that animates width from the centre. Mobile menu becomes a **full-height sheet with a backdrop and scroll lock** (audit `S-6`).
 
-**Dashboard navigation** — implemented in Stage 8. Real header: brand (“Dashboard” → `/dashboard`), current-section breadcrumb, and account actions (Settings + Sign out) (audit `D-2`). The sidebar collapses to an off-canvas drawer below `md`, triggered by a hamburger in that header (audit `D-1`, the only P0). Active row is a filled `--primary`/10 background with a 2px left border — **not** the horizontal navbar's bottom underline (audit `D-3`).
+The brand is a **monogram** (`NavbarBrand variant="monogram"`): the profile name's initials in `--font-family-mono`, `--primary`, tracked `0.14em`, with the full name kept as the link's accessible name. Footer and dashboard keep `variant="name"` and print the label in full. The same HS mark is the tab favicon (`app/icon.svg`).
+
+**Dashboard navigation** — implemented in Stage 8. Real header: brand (“Dashboard” → `/dashboard`), current-section breadcrumb, and account actions (Settings + Sign out) (audit `D-2`). The header is `position: fixed` with a solid `--surface`/95 + blur (no transparent-over-hero treatment); page content is padded by `--nav-height`. The breadcrumb does not repeat the brand: overview shows brand only; nested routes show `/ Section`. The sidebar collapses to an off-canvas drawer below `md`, triggered by a hamburger in that header (audit `D-1`, the only P0). Active row is a filled `--primary`/10 background with a 2px left border — **not** the horizontal navbar's bottom underline (audit `D-3`).
 
 ### 6.7 Focus
 
@@ -428,6 +430,16 @@ Stage 10 (2026-09-01): heading outlines no longer skip on `/projects` (Stage 3),
 ### 6.8 Toasts
 
 Entrance and exit (audit `S-4`, Stage 11): slide up 8px + fade over `--duration-normal` (240ms) in, fade + `scale(.97)` over `--duration-fast` (160ms) out. Maximum 3 visible; older toasts collapse. Positioning, `aria-live`, and `role` handling are unchanged.
+
+### 6.9 Hero composition
+
+Owner-requested. Asymmetric 12-column grid: identity on the left (7/12), an `about-me.py` window on the right (5/12), and a technology rail across the foot.
+
+1. **Credibility strip** — icon-led. Each entry is a 36px `--surface` tile with a 1px `--border` and a `--primary` glyph, then an overline term and a semibold detail, separated by a `--border-neutral` rule from `sm` up. Still a real `<dl>`.
+2. **Code card** — window chrome (three dots + `~/about-me.py`) over a line-numbered `<pre>`. Content is generated from `SiteProfile` (name → Python class name, role → `roles`, location → `based_in`) and owner-ordered skills (→ `stack`); nothing is authored in the component. Exposed as `role="img"` with a summarising `aria-label`, because reciting Python punctuation serves no one and the same facts appear as text in About and Skills.
+3. **Technology rail** — the first 10 skills in dashboard `displayOrder`, as monospace labels. Text, not vendor logos: no brand marks exist under `public/` and V1 has no upload path.
+
+Syntax colour uses a dedicated token set (`--code-keyword`, `--code-class`, `--code-attr`, `--code-string`, `--code-punct`) rather than the semantic palette. Strings need their own token because `--success` at `--size-caption` misses AA on light-theme `--surface`.
 
 ---
 
