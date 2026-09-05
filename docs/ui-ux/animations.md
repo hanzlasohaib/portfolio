@@ -2,13 +2,19 @@
 
 > Version: 1.0.0
 >
-> Status: Approved
+> Status: **Superseded**
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-09-01
 >
 > Owner: Project Team
 >
 > Category: UI-UX
+>
+> Superseded by: `docs/design/design-system.md` §7 and `src/styles/animations.css`.
+
+---
+
+**This document is historical.** Do not implement from it.
 
 ---
 

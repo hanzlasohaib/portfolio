@@ -1,42 +1,45 @@
-import { Card } from "@/components/card";
-import { Container } from "@/components/container";
-import { Heading } from "@/components/heading";
-import { Section } from "@/components/section";
-import { SectionHeading } from "@/components/section-heading";
-import { Text } from "@/components/text";
-import { PERSONAL } from "@/constants/personal";
+import { Reveal } from "@/components/reveal";
 
-import { ABOUT_CONTENT } from "../../constants/about-content";
+type AboutAtAGlanceProps = {
+  educationLabel: string;
+  experience: string | null;
+  projectCount: number;
+  location: string;
+};
 
 /**
- * Compact recruiter-facing snapshot. Location comes from `PERSONAL` so
- * identity is not duplicated in about constants.
+ * Recruiter snapshot as a description list (audit A-6).
+ * Values stay derived: education/location from SiteProfile, experience
+ * from the current Journey role, project count from published projects.
  */
-export function AboutAtAGlance() {
+export function AboutAtAGlance({
+  educationLabel,
+  experience,
+  projectCount,
+  location,
+}: AboutAtAGlanceProps) {
   const items = [
-    ...ABOUT_CONTENT.atAGlance,
-    { label: "Location", value: PERSONAL.location },
+    { label: "Education", value: educationLabel },
+    ...(experience ? [{ label: "Experience", value: experience }] : []),
+    {
+      label: "Projects",
+      value: `${projectCount} ${projectCount === 1 ? "Project" : "Projects"}`,
+    },
+    { label: "Location", value: location },
   ];
 
   return (
-    <Section alt aria-label="At a Glance">
-      <Container className="flex flex-col gap-10">
-        <SectionHeading
-          title="At a Glance"
-          description="A quick snapshot of education, experience, and where I'm based."
-        />
-
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map(({ label, value }) => (
-            <li key={label} className="h-full">
-              <Card className="h-full">
-                <Heading level="h3">{label}</Heading>
-                <Text variant="body">{value}</Text>
-              </Card>
-            </li>
-          ))}
-        </ul>
-      </Container>
-    </Section>
+    <Reveal>
+      <dl className="flex flex-col gap-4">
+        {items.map(({ label, value }) => (
+          <div key={label} className="flex flex-col gap-1">
+            <dt className="font-mono text-caption uppercase tracking-wider text-text-tertiary">
+              {label}
+            </dt>
+            <dd className="text-small font-medium text-text-primary">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </Reveal>
   );
 }

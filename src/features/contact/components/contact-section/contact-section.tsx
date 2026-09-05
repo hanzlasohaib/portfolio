@@ -1,17 +1,16 @@
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import { Container } from "@/components/container";
-import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
-import { cn } from "@/lib/utils";
+import type { SiteProfileForUi } from "@/features/site-profile";
 
 import { CONTACT_CONTENT } from "../../constants/contact-content";
 import { ContactForm } from "../contact-form";
 import { ContactInfo } from "../contact-info";
+
+type ContactSectionProps = {
+  profile: SiteProfileForUi;
+};
 
 /**
  * Home page Contact section (docs/project-design/pages.md § Home).
@@ -23,7 +22,7 @@ import { ContactInfo } from "../contact-info";
  * `id="contact"` anchors Navbar one-page navigation
  * (`constants/navigation.ts`).
  */
-export function ContactSection() {
+export function ContactSection({ profile }: ContactSectionProps) {
   return (
     <Section id="contact" alt aria-label="Contact">
       <Container className="flex flex-col gap-10">
@@ -34,22 +33,12 @@ export function ContactSection() {
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-start">
           <ContactForm />
-          <ContactInfo />
+            <ContactInfo profile={profile} headingLevel="h3" />
         </div>
 
-        <Link
-          href={CONTACT_CONTENT.homeCtaHref}
-          underline={false}
-          variant="inherit"
-          className={cn(
-            buttonBaseClassName,
-            buttonVariantClassName.primary,
-            buttonSizeClassName.lg,
-            "self-center",
-          )}
-        >
+        <CtaLink href={CONTACT_CONTENT.homeCtaHref} size="lg" className="self-center">
           {CONTACT_CONTENT.homeCtaLabel}
-        </Link>
+        </CtaLink>
       </Container>
     </Section>
   );

@@ -1,6 +1,10 @@
 import { hash } from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 
+import { SEO_DEFAULTS } from "../src/constants/seo";
+import { ABOUT_CONTENT } from "../src/features/about/constants/about-content";
+import { CONTACT_CONTENT } from "../src/features/contact/constants/contact-content";
+
 /**
  * Seed — Test Admin + demo portfolio content.
  * Creates (or skips) the admin User in the database pointed at by DATABASE_URL.
@@ -31,31 +35,69 @@ async function seedAdmin() {
     throw new Error("SEED_ADMIN_PASSWORD must be at least 8 characters.");
   }
 
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    console.log(`Admin already exists: ${email} — skipping create.`);
-    return existing;
-  }
-
   const passwordHash = await hash(password, 12);
-  const user = await prisma.user.create({
-    data: {
-      fullName,
-      email,
-      passwordHash,
-      role: "ADMIN",
-      isActive: true,
-    },
+
+  // Projects, journey, skills, site profile, and messages are not owned by
+  // User — they stay in place. Only MFA codes cascade off the old User row.
+
+  const user = await prisma.$transaction(async (tx) => {
+    const existingWithEmail = await tx.user.findUnique({ where: { email } });
+    const previousAdmins = await tx.user.findMany({
+      where: existingWithEmail
+        ? { role: "ADMIN", id: { not: existingWithEmail.id } }
+        : { role: "ADMIN" },
+      select: { id: true, email: true },
+    });
+
+    const nextUser = existingWithEmail
+      ? await tx.user.update({
+          where: { id: existingWithEmail.id },
+          data: {
+            fullName,
+            passwordHash,
+            role: "ADMIN",
+            isActive: true,
+          },
+        })
+      : await tx.user.create({
+          data: {
+            fullName,
+            email,
+            passwordHash,
+            role: "ADMIN",
+            isActive: true,
+          },
+        });
+
+    if (previousAdmins.length > 0) {
+      await tx.user.deleteMany({
+        where: { id: { in: previousAdmins.map((admin) => admin.id) } },
+      });
+    }
+
+    return { nextUser, created: !existingWithEmail, previousAdmins };
   });
 
-  console.log(`Created Test Admin: ${email}`);
-  return user;
+  if (user.created) {
+    console.log(`Created admin: ${email}`);
+  } else {
+    console.log(`Updated admin credentials for: ${email}`);
+  }
+
+  if (user.previousAdmins.length > 0) {
+    console.log(
+      `Removed previous admin(s): ${user.previousAdmins.map((admin) => admin.email).join(", ")}`,
+    );
+  }
+
+  return user.nextUser;
 }
 
 async function seedTechnologiesAndProjects() {
   const techNames = [
     "React",
     "Node.js",
+    "Next.js",
     "MongoDB",
     "FastAPI",
     "PostgreSQL",
@@ -83,6 +125,7 @@ async function seedTechnologiesAndProjects() {
       description:
         "A full-stack travel booking platform for browsing and booking trips.",
       liveUrl: "https://rhombix-technologies-task-3.vercel.app/",
+      thumbnail: "/projects/travel-booking-system/thumbnail.webp",
       featured: true,
       published: true,
       displayOrder: 0,
@@ -94,22 +137,24 @@ async function seedTechnologiesAndProjects() {
       shortDescription: "A full-stack ride-sharing platform.",
       description: "A full-stack ride-sharing platform.",
       liveUrl: "https://corider-finder.vercel.app/",
+      thumbnail: "/projects/coride-finder/thumbnail.webp",
       featured: true,
       published: true,
       displayOrder: 1,
       tech: ["React", "FastAPI", "PostgreSQL"],
     },
     {
-      slug: "numl-lms",
-      title: "NUML LMS (Final Year Project)",
+      slug: "numl-ms",
+      title: "NUML Management System (FYP)",
       shortDescription:
         "A responsive, backend-heavy Learning Management System with a local database for user data and course materials.",
       description:
         "A responsive, backend-heavy Learning Management System with a local database for user data and course materials.",
+      thumbnail: "/projects/numl-ms/thumbnail.webp",
       featured: true,
       published: true,
       displayOrder: 2,
-      tech: ["React", "FastAPI", "Python"],
+      tech: ["FastAPI", "Python", "Next.js", "PostgreSQL"],
     },
   ] as const;
 
@@ -118,17 +163,16 @@ async function seedTechnologiesAndProjects() {
       where: { slug: project.slug },
     });
     if (existing) {
-      // Clear broken local thumbnail paths that were seeded before assets existed.
-      if (
-        existing.thumbnail &&
-        existing.thumbnail.startsWith("/projects/") &&
-        existing.thumbnail.endsWith(".webp")
-      ) {
+      // Backfill when unset. Do not overwrite a dashboard-managed https URL.
+      const canReplaceThumbnail =
+        !existing.thumbnail || existing.thumbnail.startsWith("/projects/");
+
+      if (canReplaceThumbnail && existing.thumbnail !== project.thumbnail) {
         await prisma.project.update({
           where: { id: existing.id },
-          data: { thumbnail: null },
+          data: { thumbnail: project.thumbnail },
         });
-        console.log(`Cleared missing thumbnail for: ${project.slug}`);
+        console.log(`Updated thumbnail for: ${project.slug}`);
       } else {
         console.log(`Project exists: ${project.slug} — skipping.`);
       }
@@ -142,7 +186,8 @@ async function seedTechnologiesAndProjects() {
         shortDescription: project.shortDescription,
         description: project.description,
         liveUrl: "liveUrl" in project ? project.liveUrl : null,
-        thumbnail: null,
+        thumbnail: project.thumbnail,
+        preview: null,
         featured: project.featured,
         published: project.published,
         displayOrder: project.displayOrder,
@@ -191,6 +236,78 @@ async function seedJourney() {
     await prisma.journey.create({ data: entry });
     console.log(`Created journey: ${entry.title}`);
   }
+}
+
+async function seedSiteProfile() {
+  const educationLabel =
+    ABOUT_CONTENT.atAGlance.find((item) => item.label === "Education")?.value ??
+    ABOUT_CONTENT.education.degree;
+  const narrative = {
+    biography: ABOUT_CONTENT.biography,
+    professionalSummary: ABOUT_CONTENT.professionalSummary,
+    educationDegree: ABOUT_CONTENT.education.degree,
+    educationInstitution: ABOUT_CONTENT.education.institution,
+    educationPeriod: ABOUT_CONTENT.education.period,
+    educationLabel,
+    whatIDo: ABOUT_CONTENT.whatIDo.map((item) => ({
+      title: item.title,
+      description: item.description,
+    })),
+    currentlyLearning: [...ABOUT_CONTENT.currentlyLearning],
+  };
+
+  const seoAndAvailability = {
+    availability: CONTACT_CONTENT.availability,
+    metaDescription: SEO_DEFAULTS.description,
+    metaKeywords: [...SEO_DEFAULTS.keywords],
+  };
+
+  const existing = await prisma.siteProfile.findFirst();
+  if (existing) {
+    const backfill = {
+      ...(existing.biography ? {} : narrative),
+      ...(existing.availability
+        ? {}
+        : { availability: seoAndAvailability.availability }),
+      ...(existing.metaDescription
+        ? {}
+        : { metaDescription: seoAndAvailability.metaDescription }),
+      ...(existing.metaKeywords
+        ? {}
+        : { metaKeywords: seoAndAvailability.metaKeywords }),
+    };
+
+    if (Object.keys(backfill).length > 0) {
+      await prisma.siteProfile.update({
+        where: { id: existing.id },
+        data: backfill,
+      });
+      console.log(
+        `Backfilled site profile columns: ${Object.keys(backfill).join(", ")}.`,
+      );
+      return;
+    }
+
+    console.log("Site profile already exists — skipping.");
+    return;
+  }
+
+  await prisma.siteProfile.create({
+    data: {
+      name: "Hanzla Sohaib",
+      role: "Full Stack Software Engineer • AI Engineer",
+      tagline:
+        "Building scalable full-stack web applications with React, Next.js, FastAPI, Python, and AI-powered solutions.",
+      email: "hanzlamaan125@gmail.com",
+      location: "Lahore, Pakistan",
+      resumeUrl: "/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf",
+      githubUrl: "https://github.com/hanzlasohaib",
+      linkedinUrl: "https://www.linkedin.com/in/hanzlasohaib",
+      ...seoAndAvailability,
+      ...narrative,
+    },
+  });
+  console.log("Seeded site profile.");
 }
 
 async function seedSkills() {
@@ -262,6 +379,7 @@ async function main() {
   await seedTechnologiesAndProjects();
   await seedJourney();
   await seedSkills();
+  await seedSiteProfile();
   console.log("Seed complete.");
 }
 

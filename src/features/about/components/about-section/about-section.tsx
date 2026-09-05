@@ -1,45 +1,42 @@
 import { Badge } from "@/components/badge";
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import { Card } from "@/components/card";
 import { Container } from "@/components/container";
 import { Heading } from "@/components/heading";
-import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
 import { Text } from "@/components/text";
-import { PERSONAL } from "@/constants/personal";
-import { cn } from "@/lib/utils";
+import type { SiteProfileForUi } from "@/features/site-profile";
 
 import { ABOUT_CONTENT } from "../../constants/about-content";
+
+type AboutSectionProps = {
+  profile: SiteProfileForUi;
+};
 
 /**
  * Home page "About Preview" (docs/project-design/pages.md § Home).
  *
- * Presentation-only — reads static content from `constants/personal.ts`
- * (shared identity) and the feature-local `about-content.ts` (biography,
- * strengths, current focus, education). No business logic, no data
- * fetching. The full `/about` page is composed by `AboutPage`.
+ * Presentation-only — identity and career narrative from SiteProfile;
+ * strengths and current-focus copy stay static. The full `/about` page
+ * is composed by `AboutPage`.
  *
  * `id="about"` anchors this section for the one-page Navbar navigation
  * (see `constants/navigation.ts`).
  */
-export function AboutSection() {
-  const { biography, strengths, currentFocus, education } = ABOUT_CONTENT;
+export function AboutSection({ profile }: AboutSectionProps) {
+  const { strengths, currentFocus } = ABOUT_CONTENT;
 
   return (
     <Section id="about" alt aria-label="About">
       <Container className="flex flex-col gap-10">
-        <SectionHeading title="About Me" description={PERSONAL.tagline} />
+        <SectionHeading title="About Me" description={profile.tagline} />
 
         <Text variant="body-lg" className="max-w-3xl">
-          {biography}
+          {profile.biography}
         </Text>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
           <Card className="h-full">
             <Heading level="h3">Core Strengths</Heading>
             <ul className="flex flex-wrap gap-2">
@@ -59,25 +56,15 @@ export function AboutSection() {
           <Card className="h-full">
             <Heading level="h3">Education</Heading>
             <Text variant="body">
-              {education.degree} — {education.institution} (
-              {education.period})
+              {profile.education.degree} — {profile.education.institution} (
+              {profile.education.period})
             </Text>
           </Card>
         </div>
 
-        <Link
-          href="/about"
-          underline={false}
-          variant="inherit"
-          className={cn(
-            buttonBaseClassName,
-            buttonVariantClassName.primary,
-            buttonSizeClassName.lg,
-            "self-center",
-          )}
-        >
-          More About Me
-        </Link>
+          <CtaLink href="/about" size="lg" className="w-full self-stretch sm:w-auto sm:self-center">
+            More About Me
+          </CtaLink>
       </Container>
     </Section>
   );

@@ -28,6 +28,11 @@ function resolveSocialTitle(title: Metadata["title"]): string {
  * Applied as the root layout default and extended per-route via
  * `buildPageMetadata`. Open Graph image is provided by
  * `app/opengraph-image.tsx` (Next.js file convention).
+ *
+ * `keywords` and Open Graph `siteName` are intentionally omitted: the root
+ * layout sets both from SiteProfile (`metaKeywords` / `name`) and routes
+ * inherit them, so pages built here do not pin static values. `SEO_DEFAULTS`
+ * remains the fallback inside the service.
  */
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -36,13 +41,11 @@ export const defaultMetadata: Metadata = {
     template: SEO_DEFAULTS.titleTemplate,
   },
   description: SEO_DEFAULTS.description,
-  keywords: SEO_DEFAULTS.keywords,
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
-    siteName: siteConfig.name,
     title: SEO_DEFAULTS.defaultTitle,
     description: SEO_DEFAULTS.description,
     url: siteConfig.url,
@@ -52,6 +55,9 @@ export const defaultMetadata: Metadata = {
     card: SEO_DEFAULTS.twitterCard,
     title: SEO_DEFAULTS.defaultTitle,
     description: SEO_DEFAULTS.description,
+  },
+  icons: {
+    icon: [{ url: "/favicons/icon.svg", type: "image/svg+xml" }],
   },
 };
 

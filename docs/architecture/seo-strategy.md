@@ -4,7 +4,7 @@
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-09-03
 >
 > Owner: Project Team
 >
@@ -73,6 +73,8 @@ Include
 Provide alt text.
 
 Use optimized Next.js Image.
+
+The tab icon is the **HS** monogram (`src/app/icon.svg`, also served from `public/favicons/icon.svg`). It follows the public nav brand. Dashboard upload of favicons remains out of V1.
 
 ---
 

@@ -8,6 +8,7 @@ import { Input } from "@/components/input";
 import { Text } from "@/components/text";
 import { Textarea } from "@/components/textarea";
 
+import { CONTACT_CONTENT } from "../../constants/contact-content";
 import { contactFormSchema } from "../../schemas/contact-form-schema";
 
 type FieldErrors = Record<string, string>;
@@ -106,6 +107,7 @@ export function ContactForm() {
         autoComplete="name"
         fullWidth
         required
+        disabled={isPending}
         error={fieldErrors.fullName}
       />
 
@@ -117,6 +119,7 @@ export function ContactForm() {
         autoComplete="email"
         fullWidth
         required
+        disabled={isPending}
         error={fieldErrors.email}
       />
 
@@ -128,6 +131,7 @@ export function ContactForm() {
         autoComplete="off"
         fullWidth
         required
+        disabled={isPending}
         error={fieldErrors.subject}
       />
 
@@ -138,6 +142,7 @@ export function ContactForm() {
         rows={5}
         fullWidth
         required
+        disabled={isPending}
         error={fieldErrors.message}
       />
 
@@ -155,12 +160,12 @@ export function ContactForm() {
         </Alert>
       ) : (
         <Text id="contact-form-feedback" variant="small">
-          I typically reply within a few days.
+          {CONTACT_CONTENT.formNotice}
         </Text>
       )}
 
-      <Button type="submit" size="lg" fullWidth disabled={isPending}>
-        {isPending ? "Sending…" : "Send Message"}
+      <Button type="submit" size="lg" fullWidth loading={isPending}>
+        {CONTACT_CONTENT.submitLabel}
       </Button>
     </form>
   );

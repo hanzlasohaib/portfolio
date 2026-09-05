@@ -2,7 +2,11 @@ import { Link } from "@/components/link";
 
 import type { BreadcrumbProps } from "./breadcrumb.types";
 
-export function Breadcrumb({ items, className }: BreadcrumbProps) {
+export function Breadcrumb({
+  items,
+  className,
+  leadingSeparator = false,
+}: BreadcrumbProps) {
   if (items.length === 0) {
     return null;
   }
@@ -12,14 +16,14 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
       <ol className="flex flex-wrap items-center gap-2">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
-          const showSeparator = index > 0;
+          const showSeparator = leadingSeparator || index > 0;
 
           return (
             <li key={`${item.label}-${index}`} className="flex items-center gap-2">
               {showSeparator ? (
                 <span
                   aria-hidden="true"
-                  className="text-small text-text-disabled"
+                  className="text-small text-text-tertiary"
                 >
                   /
                 </span>

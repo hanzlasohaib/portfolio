@@ -1,43 +1,50 @@
 import { PageWrapper } from "@/components";
 
+import type { JourneyEntry } from "@/features/journey";
+import type { SiteProfileForUi } from "@/features/site-profile";
 import type { SkillCategory } from "@/features/skills";
 
-import { AboutAtAGlance } from "../about-at-a-glance";
 import { AboutCta } from "../about-cta";
-import { AboutCurrentlyLearning } from "../about-currently-learning";
-import { AboutCurrentlyWorkingWith } from "../about-currently-working-with";
-import { AboutEducation } from "../about-education";
 import { AboutIntroduction } from "../about-introduction";
-import { AboutJourneySummary } from "../about-journey-summary";
-import { AboutProfessionalSummary } from "../about-professional-summary";
-import { AboutSkills } from "../about-skills";
-import { AboutTechnologies } from "../about-technologies";
+import { AboutPath } from "../about-path";
+import { AboutStack } from "../about-stack";
 import { AboutWhatIDo } from "../about-what-i-do";
 
 type AboutPageProps = {
   skillCategories: SkillCategory[];
-  technologies: string[];
+  journeyEntries: JourneyEntry[];
+  currentJourneyEntry: JourneyEntry | null;
+  publishedProjectCount: number;
+  profile: SiteProfileForUi;
 };
 
 /**
- * Full `/about` page composition (docs/project-design/pages.md § About).
+ * Full `/about` page — five sections (docs/design/design-system.md §6.3.2).
  */
 export function AboutPage({
   skillCategories,
-  technologies,
+  journeyEntries,
+  currentJourneyEntry,
+  publishedProjectCount,
+  profile,
 }: AboutPageProps) {
   return (
     <PageWrapper>
-      <AboutIntroduction />
-      <AboutAtAGlance />
-      <AboutProfessionalSummary />
-      <AboutWhatIDo />
-      <AboutEducation />
-      <AboutJourneySummary />
-      <AboutSkills categories={skillCategories} />
-      <AboutTechnologies technologies={technologies} />
-      <AboutCurrentlyWorkingWith />
-      <AboutCurrentlyLearning />
+      <AboutIntroduction
+        profile={profile}
+        educationLabel={profile.education.label}
+        experience={currentJourneyEntry?.title ?? null}
+        projectCount={publishedProjectCount}
+      />
+      <AboutWhatIDo items={profile.whatIDo} />
+      <AboutStack
+        categories={skillCategories}
+        currentlyLearning={profile.currentlyLearning}
+      />
+      <AboutPath
+        entries={journeyEntries}
+        education={profile.education}
+      />
       <AboutCta />
     </PageWrapper>
   );

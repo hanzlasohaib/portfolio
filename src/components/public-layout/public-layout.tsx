@@ -1,41 +1,50 @@
 import { BackToTopButton } from "@/components/back-to-top-button";
+import { CustomCursor } from "@/components/custom-cursor";
 import { Footer } from "@/components/footer";
-import { Header } from "@/components/header";
+import { HashScroll } from "@/components/hash-scroll";
 import { LayoutShell } from "@/components/layout-shell";
-import { Navbar } from "@/components/navbar";
+import { ScrollAwareHeader } from "@/components/scroll-aware-header";
 import { ScrollProgressBar } from "@/components/scroll-progress-bar";
-import { cn } from "@/lib/utils";
+import { SkipToContent } from "@/components/skip-to-content";
+import { getSiteProfileForUi } from "@/features/site-profile";
 
 import type { PublicLayoutProps } from "./public-layout.types";
 
 /**
  * Public route group shell with primary navigation.
  *
- * Header uses `fixed` (not `sticky`) so it stays pinned while scrolling
- * up or down across browsers — sticky can detach on scroll-up when
- * ancestors use transforms or certain flex layouts.
+ * The fixed header overlays page content. `<Main>` is padded by
+ * `--nav-height` so inner pages clear the bar. The home hero pulls back
+ * under the header with a matching negative margin so its gradient sits
+ * behind the transparent nav.
  */
-export function PublicLayout({ children }: PublicLayoutProps) {
+export async function PublicLayout({ children }: PublicLayoutProps) {
+  const profile = await getSiteProfileForUi();
+
   return (
     <LayoutShell
+      mainClassName="pt-[var(--nav-height)]"
       header={
-        <Header
-          className={cn(
-            "fixed inset-x-0 top-0 z-50 border-b border-border bg-surface",
-          )}
-        >
-          <Navbar />
-        </Header>
+        <>
+          <SkipToContent />
+          <ScrollAwareHeader
+            brandLabel={profile.name}
+            resumeUrl={profile.resumeUrl}
+          />
+        </>
       }
-      footer={<Footer />}
+      footer={
+        <Footer
+          name={profile.name}
+          tagline={profile.tagline}
+          socialLinks={profile.socialLinks}
+        />
+      }
       floating={<BackToTopButton />}
     >
-      {/* Reserve space for the fixed header so content is not covered. */}
-      <div
-        aria-hidden="true"
-        className="h-[var(--nav-height)] shrink-0"
-      />
       <ScrollProgressBar />
+      <HashScroll />
+      <CustomCursor />
       {children}
     </LayoutShell>
   );

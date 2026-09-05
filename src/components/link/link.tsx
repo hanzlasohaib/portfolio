@@ -13,12 +13,15 @@ export function Link({
   replace,
   scroll,
 }: LinkProps) {
+  const allowScroll =
+    scroll ?? (typeof href === "string" ? !href.includes("#") : true);
+
   return (
     <NextLink
       href={href}
       prefetch={prefetch}
       replace={replace}
-      scroll={scroll}
+      scroll={allowScroll}
       className={linkClassName(variant, underline, className)}
     >
       {children}

@@ -1,16 +1,14 @@
 import { PERSONAL } from "./personal";
 
 /**
- * Canonical social / contact links.
+ * Static fallback social / contact links.
  *
- * Single source of truth reused by the Hero section, Footer, and Contact
- * page (docs/project-design/pages.md lists Email, LinkedIn, GitHub for the
- * Contact page; the same set is reused for the Hero social links).
+ * Runtime links come from `SiteProfile` (`githubUrl`, `linkedinUrl`, and
+ * mailto from `email`) via `getSiteProfileForUi()`. This array remains the
+ * empty-DB / unreachable-DB fallback and the default for `SocialLinks`
+ * when no `links` prop is passed.
  *
- * The email entry derives its address from `PERSONAL.email` rather than
- * repeating the literal string, so the address exists in exactly one
- * place (folder-structure.md: "Personal information ... must exist only
- * once").
+ * The email entry derives its address from `PERSONAL.email`.
  */
 
 export type SocialPlatform = "github" | "linkedin" | "email";

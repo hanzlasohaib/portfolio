@@ -51,6 +51,7 @@ Landing page sections may include About preview, Featured Projects, Skills previ
 | Dashboard Overview | `/dashboard` |
 | Manage Projects | `/dashboard/projects` |
 | Manage Journey | `/dashboard/journey` |
+| Manage Skills | `/dashboard/skills` |
 | Manage Contact Messages | `/dashboard/messages` |
 | Settings | `/dashboard/settings` |
 
@@ -147,6 +148,7 @@ This table is the single source of truth for V1 routes. All other documents must
 | `/dashboard` | Dashboard Overview |
 | `/dashboard/projects` | Manage Projects |
 | `/dashboard/journey` | Manage Journey |
+| `/dashboard/skills` | Manage Skills |
 | `/dashboard/messages` | Contact Messages |
 | `/dashboard/settings` | Settings |
 

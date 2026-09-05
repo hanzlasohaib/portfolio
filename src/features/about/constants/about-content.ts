@@ -1,23 +1,16 @@
 /**
- * Static About content (Phase 2 — Home "About Preview" + dedicated `/about`
- * page; docs/project-design/pages.md § Home / § About).
+ * About copy. Career narrative (`biography`, `professionalSummary`,
+ * `education`, `whatIDo`, `currentlyLearning`) is fallback-only — runtime
+ * reads `SiteProfile` via `getSiteProfileForUi()`.
  *
- * Feature-local constants (docs/architecture/feature-template.md) — scoped
- * to the `about` feature. Cross-cutting identity fields (name, role,
- * tagline, email, location, resume) live in `src/constants/personal.ts`
- * and are reused rather than duplicated here.
+ * Kept static (marketing / overlaps other dashboard sources):
+ * - `strengths` — Home badges; Skills owns the skill list
+ * - `currentFocus` — restates the current Journey role
+ * - `currentlyWorkingWith` — Stack “currently using” emphasis; overlaps Skills
+ * - `cta` — section marketing copy
  *
- * Documentation note: `pages.md` § About lists Interests and does not list
- * What I Do / Currently Working With / Currently Learning / At a Glance /
- * CTA. This module intentionally extends that outline for brand reasons
- * and omits Interests until real content exists. `pages.md` should be
- * updated later to match.
- *
- * Preview fields (`biography`, `strengths`, `currentFocus`, `education`)
- * are sourced from `public/resume/Hanzla_Sohaib_Software_Engineer_Resume.pdf`. Page-only
- * fields (`whatIDo`, `currentlyWorkingWith`, `currentlyLearning`,
- * `atAGlance`, `cta`, `professionalSummary`) are owner-supplied copy —
- * not inferred filler (AGENTS.md).
+ * `atAGlance` is the education-label fallback only: the snapshot's Experience
+ * and Projects values are derived from `Journey` and `Project`.
  */
 
 export type AboutWhatIDoItem = {
@@ -67,22 +60,14 @@ export const ABOUT_CONTENT = {
   },
 
   /**
-   * Recruiter-facing snapshot. Location is composed at render time from
-   * `PERSONAL.location` so identity stays single-source
-   * (`src/constants/personal.ts`).
+   * Fallback source for the `SiteProfile` education label only. Location comes
+   * from SiteProfile; Experience is the current Journey role and Projects is
+   * the published project count — neither is stored here.
    */
   atAGlance: [
     {
       label: "Education",
       value: "BS Computer Science (NUML)",
-    },
-    {
-      label: "Experience",
-      value: "Software Development Intern",
-    },
-    {
-      label: "Projects",
-      value: "15+ Projects",
     },
   ] satisfies AboutAtAGlanceItem[],
 

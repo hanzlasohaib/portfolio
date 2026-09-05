@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { Heading } from "@/components/heading";
+import { Heading, type HeadingLevel } from "@/components/heading";
 import { Text } from "@/components/text";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +9,8 @@ export type EmptyStateProps = {
   description: string;
   action?: ReactNode;
   className?: string;
+  /** Heading level under the page `h1` should be `h2` (audit heading skips). */
+  titleLevel?: HeadingLevel;
 };
 
 /**
@@ -19,6 +21,7 @@ export function EmptyState({
   description,
   action,
   className,
+  titleLevel = "h3",
 }: EmptyStateProps) {
   return (
     <div
@@ -28,7 +31,12 @@ export function EmptyState({
       )}
       role="status"
     >
-      <Heading level="h3">{title}</Heading>
+      <Heading
+        level={titleLevel}
+        className={titleLevel === "h3" ? undefined : "text-h3 font-semibold"}
+      >
+        {title}
+      </Heading>
       <Text variant="small" className="text-text-secondary">
         {description}
       </Text>

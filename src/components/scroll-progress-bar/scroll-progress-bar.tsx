@@ -17,12 +17,15 @@ export function ScrollProgressBar({ className }: ScrollProgressBarProps) {
     <div
       aria-hidden="true"
       className={cn(
-        "scroll-progress-bar pointer-events-none fixed inset-x-0 top-0 z-[60] h-[3px] origin-left gradient-primary",
+        "scroll-progress-bar pointer-events-none fixed inset-x-0 top-0 h-0.5 origin-left gradient-primary",
         className,
       )}
       style={{
+        zIndex: "var(--z-progress)",
         transform: `scaleX(${progress})`,
-        transition: prefersReducedMotion ? undefined : "transform 120ms ease-out",
+        transition: prefersReducedMotion
+          ? undefined
+          : "transform var(--duration-instant) var(--easing-default)",
       }}
     />
   );

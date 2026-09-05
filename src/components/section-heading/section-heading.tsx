@@ -1,4 +1,5 @@
 import { Heading } from "@/components/heading";
+import { Reveal } from "@/components/reveal";
 import { Text } from "@/components/text";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +22,7 @@ export function SectionHeading({
   className,
   ...props
 }: SectionHeadingProps) {
-  return (
+  const heading = (
     <div
       className={cn("flex flex-col gap-3", alignClassName[align], className)}
       {...props}
@@ -34,4 +35,11 @@ export function SectionHeading({
       ) : null}
     </div>
   );
+
+  /* Page `h1`s sit above the fold and must not scroll-reveal (§7.4). */
+  if (level === "h1") {
+    return heading;
+  }
+
+  return <Reveal>{heading}</Reveal>;
 }

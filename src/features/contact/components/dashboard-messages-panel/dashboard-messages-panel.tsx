@@ -6,6 +6,7 @@ import { Button } from "@/components/button";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { EmptyState } from "@/components/empty-state";
 import { Input } from "@/components/input";
+import { Select } from "@/components/select";
 import { Text } from "@/components/text";
 import {
   DashboardBusyHint,
@@ -140,6 +141,7 @@ export function DashboardMessagesPanel() {
               ? "When visitors submit the contact form, their messages will appear here."
               : "Try a different search term to find a message."
           }
+          titleLevel="h2"
         />
       ) : (
         <ul className="flex flex-col gap-4">
@@ -157,26 +159,23 @@ export function DashboardMessagesPanel() {
               </div>
               <Text variant="body">{message.message}</Text>
               <div className="flex flex-wrap items-center gap-3">
-                <label className="flex items-center gap-2 text-small">
-                  Status
-                  <select
-                    className="rounded-md border border-border bg-surface px-2 py-1"
-                    value={message.status}
-                    disabled={isPending}
-                    onChange={(event) =>
-                      handleStatusChange(
-                        message.id,
-                        event.target.value as ContactStatus,
-                      )
-                    }
-                  >
-                    {STATUSES.map((status) => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <Select
+                  label="Status"
+                  value={message.status}
+                  disabled={isPending}
+                  onChange={(event) =>
+                    handleStatusChange(
+                      message.id,
+                      event.target.value as ContactStatus,
+                    )
+                  }
+                >
+                  {STATUSES.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </Select>
                 <Button
                   type="button"
                   variant="danger"

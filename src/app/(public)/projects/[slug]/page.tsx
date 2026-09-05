@@ -6,7 +6,9 @@ import { ProjectDetailPage } from "@/features/projects";
 import {
   getPublishedProjectBySlugForUi,
   getPublishedProjectSlugs,
+  getPublishedProjectsForUi,
 } from "@/features/projects/service";
+import { getAdjacentProjects } from "@/features/projects/utils/adjacent-projects";
 
 type ProjectSlugPageProps = {
   params: Promise<{ slug: string }>;
@@ -44,11 +46,24 @@ export async function generateMetadata({
 
 export default async function ProjectSlugPage({ params }: ProjectSlugPageProps) {
   const { slug } = await params;
-  const project = await getPublishedProjectBySlugForUi(slug);
+  const [project, projects] = await Promise.all([
+    getPublishedProjectBySlugForUi(slug),
+    getPublishedProjectsForUi(),
+  ]);
 
   if (!project) {
     notFound();
   }
 
-  return <ProjectDetailPage project={project} />;
+  const { previous, next } = getAdjacentProjects(slug, projects);
+
+  return (
+    <ProjectDetailPage
+      project={project}
+      previousProject={
+        previous ? { slug: previous.slug, title: previous.title } : null
+      }
+      nextProject={next ? { slug: next.slug, title: next.title } : null}
+    />
+  );
 }

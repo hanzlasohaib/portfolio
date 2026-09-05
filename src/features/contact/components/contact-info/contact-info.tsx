@@ -1,10 +1,8 @@
 import { ExternalLink } from "@/components/external-link";
-import { Heading } from "@/components/heading";
+import { Heading, type HeadingLevel } from "@/components/heading";
 import { Text } from "@/components/text";
-import { PERSONAL } from "@/constants/personal";
-import { SOCIAL_LINKS } from "@/constants/social-links";
-
-import { CONTACT_CONTENT } from "../../constants/contact-content";
+import type { SiteProfileForUi } from "@/features/site-profile";
+import { cn } from "@/lib/utils";
 
 type ContactInfoItem = {
   label: string;
@@ -13,15 +11,23 @@ type ContactInfoItem = {
   external?: boolean;
 };
 
-function buildContactInfoItems(): ContactInfoItem[] {
-  const github = SOCIAL_LINKS.find((link) => link.platform === "github");
-  const linkedin = SOCIAL_LINKS.find((link) => link.platform === "linkedin");
+type ContactInfoProps = {
+  profile: SiteProfileForUi;
+  /** Home already has an h2 section title, so the aside is h3 there. */
+  headingLevel?: Extract<HeadingLevel, "h2" | "h3">;
+};
+
+function buildContactInfoItems(profile: SiteProfileForUi): ContactInfoItem[] {
+  const github = profile.socialLinks.find((link) => link.platform === "github");
+  const linkedin = profile.socialLinks.find(
+    (link) => link.platform === "linkedin",
+  );
 
   return [
     {
       label: "Email",
-      value: PERSONAL.email,
-      href: `mailto:${PERSONAL.email}`,
+      value: profile.email,
+      href: `mailto:${profile.email}`,
     },
     ...(linkedin
       ? [
@@ -45,13 +51,26 @@ function buildContactInfoItems(): ContactInfoItem[] {
       : []),
     {
       label: "Location",
-      value: PERSONAL.location,
-    },
-    {
-      label: "Availability",
-      value: CONTACT_CONTENT.availability,
+      value: profile.location,
     },
   ];
+}
+
+function AvailabilityStatus({ value }: { value: string }) {
+  const isOpen = /\bopen\b/i.test(value);
+
+  return (
+    <p className="m-0 flex items-start gap-2 text-body text-text-secondary" role="status">
+      <span
+        aria-hidden="true"
+        className={cn(
+          "mt-1.5 size-2.5 shrink-0 rounded-full",
+          isOpen ? "bg-success" : "bg-text-tertiary",
+        )}
+      />
+      <span>{value}</span>
+    </p>
+  );
 }
 
 /**
@@ -60,12 +79,15 @@ function buildContactInfoItems(): ContactInfoItem[] {
  * extras requested for recruiter clarity. FAQ is intentionally omitted
  * here — it lives on `/contact` (`ContactFaq`).
  */
-export function ContactInfo() {
-  const items = buildContactInfoItems();
+export function ContactInfo({
+  profile,
+  headingLevel = "h2",
+}: ContactInfoProps) {
+  const items = buildContactInfoItems(profile);
 
   return (
     <aside className="flex flex-col gap-6" aria-label="Contact details">
-      <Heading level="h3">Reach me directly</Heading>
+      <Heading level={headingLevel}>Reach me directly</Heading>
 
       <dl className="flex flex-col gap-5">
         {items.map(({ label, value, href, external }) => (
@@ -73,20 +95,15 @@ export function ContactInfo() {
             <dt className="text-small font-medium text-text-primary">
               {label}
             </dt>
-            <dd className="m-0">
+            <dd className="m-0 min-w-0 break-words">
               {href ? (
-                external ? (
-                  <ExternalLink href={href} variant="primary">
-                    {value}
-                  </ExternalLink>
-                ) : (
-                  <a
-                    href={href}
-                    className="text-body text-primary-light underline-offset-4 hover:underline"
-                  >
-                    {value}
-                  </a>
-                )
+                <ExternalLink
+                  href={href}
+                  variant="primary"
+                  target={external ? "_blank" : "_self"}
+                >
+                  {value}
+                </ExternalLink>
               ) : (
                 <Text variant="body" className="m-0">
                   {value}
@@ -95,6 +112,15 @@ export function ContactInfo() {
             </dd>
           </div>
         ))}
+
+        <div className="flex flex-col gap-1">
+          <dt className="text-small font-medium text-text-primary">
+            Availability
+          </dt>
+          <dd className="m-0">
+            <AvailabilityStatus value={profile.availability} />
+          </dd>
+        </div>
       </dl>
     </aside>
   );

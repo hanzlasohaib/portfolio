@@ -2,13 +2,19 @@
 
 > Version: 1.0.0
 >
-> Status: Approved
+> Status: **Superseded**
 >
-> Last Updated: 2026-07-16
+> Last Updated: 2026-09-01
 >
 > Owner: Project Team
 >
 > Category: UI-UX
+>
+> Superseded by: ADR-011 and `docs/design/design-system.md` §3 (Space Grotesk + JetBrains Mono + Inter, fluid scale).
+
+---
+
+**This document is historical.** It mandated Orbitron and Fira Code. Do not implement from it.
 
 ---
 

@@ -1,13 +1,7 @@
-import {
-  buttonBaseClassName,
-  buttonSizeClassName,
-  buttonVariantClassName,
-} from "@/components/button/button-variants";
+import { CtaLink } from "@/components/button";
 import { Container } from "@/components/container";
-import { Link } from "@/components/link";
 import { Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
-import { cn } from "@/lib/utils";
 
 import type { SkillCategory } from "../../constants/skills-data";
 import { SkillsCategories } from "../skills-categories";
@@ -30,19 +24,9 @@ export function SkillsSection({ categories }: SkillsSectionProps) {
 
         <SkillsCategories categories={categories} />
 
-        <Link
-          href="/about"
-          underline={false}
-          variant="inherit"
-          className={cn(
-            buttonBaseClassName,
-            buttonVariantClassName.primary,
-            buttonSizeClassName.lg,
-            "self-center",
-          )}
-        >
+        <CtaLink href="/about" size="lg" className="self-center">
           More About My Skills
-        </Link>
+        </CtaLink>
       </Container>
     </Section>
   );

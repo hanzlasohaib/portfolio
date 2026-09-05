@@ -60,6 +60,10 @@ export async function listPublishedProjectSlugs(): Promise<string[]> {
   return projects.map((project) => project.slug);
 }
 
+export async function countPublishedProjects(): Promise<number> {
+  return prisma.project.count({ where: { published: true } });
+}
+
 export async function findProjectById(
   id: string,
 ): Promise<ProjectWithTechnologies | null> {
@@ -75,6 +79,7 @@ export type UpsertProjectData = {
   shortDescription: string;
   description: string;
   thumbnail?: string | null;
+  preview?: string | null;
   repositoryUrl?: string | null;
   liveUrl?: string | null;
   featured: boolean;
@@ -93,6 +98,7 @@ export async function createProject(
       shortDescription: data.shortDescription,
       description: data.description,
       thumbnail: data.thumbnail ?? null,
+      preview: data.preview ?? null,
       repositoryUrl: data.repositoryUrl ?? null,
       liveUrl: data.liveUrl ?? null,
       featured: data.featured,
@@ -120,6 +126,7 @@ export async function updateProject(
       shortDescription: data.shortDescription,
       description: data.description,
       thumbnail: data.thumbnail ?? null,
+      preview: data.preview ?? null,
       repositoryUrl: data.repositoryUrl ?? null,
       liveUrl: data.liveUrl ?? null,
       featured: data.featured,

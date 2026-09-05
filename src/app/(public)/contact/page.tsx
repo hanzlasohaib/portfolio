@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
 
 import { buildPageMetadata } from "@/config/metadata";
-import { PERSONAL } from "@/constants/personal";
 import { ContactPage } from "@/features/contact";
+import { getSiteProfileForUi } from "@/features/site-profile";
 
 /**
  * Contact (`/contact`) — docs/project-design/pages.md § Contact.
  *
  * Thin App Router page: metadata + feature composition only.
- * Static generation (form interactivity is client-side; submission API
- * arrives in Phase 3).
  */
-export const metadata: Metadata = buildPageMetadata({
-  path: "/contact",
-  title: "Contact",
-  description: `Contact ${PERSONAL.name} — get in touch about full-stack, AI, or collaboration opportunities.`,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const profile = await getSiteProfileForUi();
 
-export default function Contact() {
-  return <ContactPage />;
+  return buildPageMetadata({
+    path: "/contact",
+    title: "Contact",
+    description: `Contact ${profile.name} — get in touch about full-stack, AI, or collaboration opportunities.`,
+  });
+}
+
+export default async function Contact() {
+  const profile = await getSiteProfileForUi();
+  return <ContactPage profile={profile} />;
 }

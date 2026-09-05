@@ -4,7 +4,7 @@
 >
 > Status: Approved
 >
-> Last Updated: 2026-07-17
+> Last Updated: 2026-09-03
 >
 > Owner: Project Team
 >
@@ -230,9 +230,13 @@ Contains:
 
 - Heading
 - Description
+- Credibility strip (icon-led)
 - CTA Buttons
 - Social Links
-- Hero Illustration
+- Code card (`about-me.py`) — generated from profile + skills, not an illustration
+- Technology rail
+
+See `docs/design/design-system.md` §6.9 for the shipped composition.
 
 ---
 

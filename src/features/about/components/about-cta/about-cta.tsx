@@ -1,3 +1,4 @@
+import { CtaLink } from "@/components/button";
 import {
   buttonBaseClassName,
   buttonSizeClassName,
@@ -31,23 +32,14 @@ export function AboutCta() {
       <Container className="flex flex-col items-start gap-8">
         <SectionHeading title={title} />
 
-        <Text variant="body-lg" className="max-w-3xl">
+        <Text variant="body-lg" className="measure-prose">
           {description}
         </Text>
 
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <Link
-            href={primaryHref}
-            underline={false}
-            variant="inherit"
-            className={cn(
-              buttonBaseClassName,
-              buttonVariantClassName.primary,
-              buttonSizeClassName.lg,
-            )}
-          >
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <CtaLink href={primaryHref} size="lg" className="w-full sm:w-auto">
             {primaryLabel}
-          </Link>
+          </CtaLink>
           <Link
             href={secondaryHref}
             underline={false}
@@ -56,6 +48,7 @@ export function AboutCta() {
               buttonBaseClassName,
               buttonVariantClassName.secondary,
               buttonSizeClassName.lg,
+              "w-full sm:w-auto",
             )}
           >
             {secondaryLabel}

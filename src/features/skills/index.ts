@@ -3,6 +3,7 @@
  */
 export { SkillsCategories } from "./components/skills-categories";
 export { SkillsSection } from "./components/skills-section";
+export { DashboardSkillsPanel } from "./components/dashboard-skills-panel";
 export {
   SKILLS_DATA,
   TECHNOLOGIES_DATA,

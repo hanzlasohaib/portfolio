@@ -3,7 +3,7 @@
 import type { Journey } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-import type { Result } from "@/lib/api/response";
+import { type Result, zodFieldErrors } from "@/lib/api/response";
 import { requireAdminSession } from "@/lib/auth/require-admin";
 import { uuidSchema } from "@/lib/validators";
 
@@ -27,7 +27,11 @@ export async function createJourneyAction(
   await requireAdminSession();
   const parsed = journeyInputSchema.safeParse(raw);
   if (!parsed.success) {
-    return { success: false, error: "Validation failed." };
+    return {
+      success: false,
+      error: "Validation failed.",
+      fieldErrors: zodFieldErrors(parsed.error.issues),
+    };
   }
 
   const result = await createJourneyRecord({
@@ -41,6 +45,7 @@ export async function createJourneyAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/journey");
+    revalidatePath("/about");
     revalidatePath("/dashboard/journey");
   }
   return result;
@@ -58,7 +63,11 @@ export async function updateJourneyAction(
 
   const parsed = journeyInputSchema.safeParse(raw);
   if (!parsed.success) {
-    return { success: false, error: "Validation failed." };
+    return {
+      success: false,
+      error: "Validation failed.",
+      fieldErrors: zodFieldErrors(parsed.error.issues),
+    };
   }
 
   const result = await updateJourneyRecord(idParsed.data, {
@@ -72,6 +81,7 @@ export async function updateJourneyAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/journey");
+    revalidatePath("/about");
     revalidatePath("/dashboard/journey");
   }
   return result;
@@ -90,6 +100,7 @@ export async function deleteJourneyAction(
   if (result.success) {
     revalidatePath("/");
     revalidatePath("/journey");
+    revalidatePath("/about");
     revalidatePath("/dashboard/journey");
   }
   return result;

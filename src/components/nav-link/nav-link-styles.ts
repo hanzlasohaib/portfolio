@@ -45,13 +45,25 @@ export function resolvePublicNavActive(
   return isNavLinkActive(pathname, href, exact);
 }
 
+/**
+ * Stage 2: Animated underline that grows from center on hover/active.
+ * Active state shows full underline, hover shows on pointer devices only.
+ */
 export function navLinkClassName(isActive: boolean, className?: string): string {
   return cn(
-    "relative inline-flex items-center pb-1 text-small font-medium transition-fast",
-    "focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+    "relative inline-flex min-h-[var(--touch-target)] items-center pb-1 text-small font-medium",
+    "transition-colors duration-fast ease-[var(--easing-snap)]",
+    "focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[var(--focus-ring-offset)] focus-visible:outline-primary",
+    "active:text-primary",
+    // Underline pseudo-element
+    "after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-primary",
+    "after:origin-center after:transition-transform after:duration-normal after:ease-[var(--easing-entrance)]",
     isActive
-      ? "text-primary after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-primary"
-      : "text-text-secondary hover:text-text-primary",
+      ? "text-primary after:scale-x-100"
+      : "text-text-secondary hover:text-text-primary after:scale-x-0 hover:after:scale-x-100 motion-reduce:after:hidden",
+    // Hide hover underline on touch devices
+    "[@media(hover:none)]:after:scale-x-0 [@media(hover:none)]:hover:after:scale-x-0",
+    isActive && "[@media(hover:none)]:after:scale-x-100",
     className,
   );
 }

@@ -48,6 +48,24 @@ export async function getJourneyEntriesForUi(): Promise<JourneyEntry[]> {
   }
 }
 
+/**
+ * Current (or most recent) role for the About snapshot. Prefers the open-ended
+ * entry; otherwise the first entry of the ordered list.
+ */
+export async function getCurrentJourneyEntryForUi(): Promise<JourneyEntry | null> {
+  try {
+    const journeys = await listJourneys();
+    const current = journeys.find((journey) => journey.endDate === null);
+    const latest = current ?? journeys[0];
+    if (latest) {
+      return toJourneyEntry(latest);
+    }
+  } catch {
+    // fall through to static data
+  }
+  return JOURNEY_DATA[0] ?? null;
+}
+
 export async function getAdminJourneys(): Promise<Journey[]> {
   return listJourneys();
 }

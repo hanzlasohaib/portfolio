@@ -7,6 +7,8 @@ const badgeVariantClassName: Record<BadgeVariant, string> = {
     "border border-primary/30 bg-primary/15 text-primary-light",
   secondary:
     "border border-secondary/30 bg-secondary/15 text-secondary",
+  tech:
+    "rounded-xs border border-secondary/20 bg-secondary/10 font-mono text-caption text-secondary",
   success:
     "border border-success/30 bg-success/15 text-success",
   warning:
@@ -15,7 +17,7 @@ const badgeVariantClassName: Record<BadgeVariant, string> = {
     "border border-danger/30 bg-danger/15 text-danger",
   info: "border border-info/30 bg-info/15 text-info",
   neutral:
-    "border border-border bg-surface text-text-secondary",
+    "border border-border-neutral bg-surface text-text-tertiary",
 };
 
 export function Badge({

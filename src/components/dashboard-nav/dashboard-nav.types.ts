@@ -9,4 +9,5 @@ export type DashboardNavProps = Omit<
   items?: NavLinksItem[];
   className?: string;
   itemClassName?: string;
+  onNavigate?: () => void;
 };

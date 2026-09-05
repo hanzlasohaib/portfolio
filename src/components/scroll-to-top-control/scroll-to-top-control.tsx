@@ -22,7 +22,7 @@ export function ScrollToTopControl({
       className={cn(
         "text-small font-medium text-text-secondary transition-fast",
         "hover:text-text-primary",
-        "focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+        "focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[var(--focus-ring-offset)] focus-visible:outline-primary",
         className,
       )}
     >

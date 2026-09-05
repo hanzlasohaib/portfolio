@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState, useTransition } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState, useTransition } from "react";
 
 import { Button } from "@/components/button";
 import { ConfirmDialog } from "@/components/confirm-dialog";
@@ -12,6 +12,7 @@ import {
   DashboardBusyHint,
   DashboardFormPanelSkeleton,
 } from "@/features/dashboard/components/dashboard-skeletons";
+import { useDashboardFormFocus } from "@/features/dashboard/utils/focus-dashboard-form";
 import { useToast } from "@/providers";
 import type { Journey } from "@prisma/client";
 
@@ -53,11 +54,14 @@ export function DashboardJourneyPanel() {
   const { success, error: toastError } = useToast();
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [draft, setDraft] = useState<Draft>(emptyDraft());
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [query, setQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
+  const formRef = useRef<HTMLFormElement>(null);
+  const requestFormFocus = useDashboardFormFocus(formRef);
 
   function refresh() {
     startTransition(async () => {
@@ -93,6 +97,7 @@ export function DashboardJourneyPanel() {
   const visibleJourneys = filteredJourneys.slice(0, visibleCount);
 
   function startEdit(journey: Journey) {
+    setFieldErrors({});
     setDraft({
       id: journey.id,
       title: journey.title,
@@ -103,10 +108,12 @@ export function DashboardJourneyPanel() {
       endDate: journey.endDate ? toDateInput(new Date(journey.endDate)) : "",
       displayOrder: journey.displayOrder,
     });
+    requestFormFocus();
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setFieldErrors({});
 
     const payload = {
       title: draft.title,
@@ -126,6 +133,7 @@ export function DashboardJourneyPanel() {
         : await createJourneyAction(payload);
 
       if (!result.success) {
+        setFieldErrors(result.fieldErrors ?? {});
         toastError(result.error || "Unable to save journey entry.");
         return;
       }
@@ -175,90 +183,105 @@ export function DashboardJourneyPanel() {
     <div className="flex flex-col gap-8">
       {isPending ? <DashboardBusyHint label="Saving changes…" /> : null}
 
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <Text variant="body-lg">
+      <form
+        ref={formRef}
+        className="flex flex-col gap-4"
+        onSubmit={handleSubmit}
+        aria-labelledby="journey-form-heading"
+      >
+        <Text variant="body-lg" id="journey-form-heading">
           {draft.id ? "Edit journey entry" : "Create journey entry"}
         </Text>
-        <Input
-          label="Title"
-          value={draft.title}
-          onChange={(event) =>
-            setDraft((current) => ({ ...current, title: event.target.value }))
-          }
-          fullWidth
-          required
-        />
-        <Input
-          label="Organization"
-          value={draft.organization}
-          onChange={(event) =>
-            setDraft((current) => ({
-              ...current,
-              organization: event.target.value,
-            }))
-          }
-          fullWidth
-        />
-        <Input
-          label="Location"
-          value={draft.location}
-          onChange={(event) =>
-            setDraft((current) => ({
-              ...current,
-              location: event.target.value,
-            }))
-          }
-          fullWidth
-        />
-        <Textarea
-          label="Description"
-          value={draft.description}
-          onChange={(event) =>
-            setDraft((current) => ({
-              ...current,
-              description: event.target.value,
-            }))
-          }
-          fullWidth
-          rows={4}
-        />
-        <Input
-          label="Start date"
-          type="date"
-          value={draft.startDate}
-          onChange={(event) =>
-            setDraft((current) => ({
-              ...current,
-              startDate: event.target.value,
-            }))
-          }
-          fullWidth
-          required
-        />
-        <Input
-          label="End date"
-          type="date"
-          value={draft.endDate}
-          onChange={(event) =>
-            setDraft((current) => ({ ...current, endDate: event.target.value }))
-          }
-          fullWidth
-        />
-        <Input
-          label="Display order"
-          type="number"
-          min={0}
-          value={draft.displayOrder}
-          onChange={(event) =>
-            setDraft((current) => ({
-              ...current,
-              displayOrder: Number(event.target.value) || 0,
-            }))
-          }
-          fullWidth
-        />
+        <fieldset disabled={isPending} className="flex flex-col gap-4 border-0 p-0">
+          <legend className="sr-only">Journey fields</legend>
+          <Input
+            label="Title"
+            value={draft.title}
+            onChange={(event) =>
+              setDraft((current) => ({ ...current, title: event.target.value }))
+            }
+            error={fieldErrors.title}
+            fullWidth
+            required
+          />
+          <Input
+            label="Organization"
+            value={draft.organization}
+            onChange={(event) =>
+              setDraft((current) => ({
+                ...current,
+                organization: event.target.value,
+              }))
+            }
+            error={fieldErrors.organization}
+            fullWidth
+          />
+          <Input
+            label="Location"
+            value={draft.location}
+            onChange={(event) =>
+              setDraft((current) => ({
+                ...current,
+                location: event.target.value,
+              }))
+            }
+            error={fieldErrors.location}
+            fullWidth
+          />
+          <Textarea
+            label="Description"
+            value={draft.description}
+            onChange={(event) =>
+              setDraft((current) => ({
+                ...current,
+                description: event.target.value,
+              }))
+            }
+            error={fieldErrors.description}
+            fullWidth
+            rows={4}
+          />
+          <Input
+            label="Start date"
+            type="date"
+            value={draft.startDate}
+            onChange={(event) =>
+              setDraft((current) => ({
+                ...current,
+                startDate: event.target.value,
+              }))
+            }
+            error={fieldErrors.startDate}
+            fullWidth
+            required
+          />
+          <Input
+            label="End date"
+            type="date"
+            value={draft.endDate}
+            onChange={(event) =>
+              setDraft((current) => ({ ...current, endDate: event.target.value }))
+            }
+            error={fieldErrors.endDate}
+            fullWidth
+          />
+          <Input
+            label="Display order"
+            type="number"
+            min={0}
+            value={draft.displayOrder}
+            onChange={(event) =>
+              setDraft((current) => ({
+                ...current,
+                displayOrder: Number(event.target.value) || 0,
+              }))
+            }
+            error={fieldErrors.displayOrder}
+            fullWidth
+          />
+        </fieldset>
         <div className="flex flex-wrap gap-3">
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" loading={isPending}>
             {draft.id ? "Update entry" : "Create entry"}
           </Button>
           {draft.id ? (
@@ -266,7 +289,10 @@ export function DashboardJourneyPanel() {
               type="button"
               variant="secondary"
               disabled={isPending}
-              onClick={() => setDraft(emptyDraft())}
+              onClick={() => {
+                setFieldErrors({});
+                setDraft(emptyDraft());
+              }}
             >
               Cancel edit
             </Button>
@@ -296,6 +322,7 @@ export function DashboardJourneyPanel() {
                 ? "Create your first journey entry with the form above."
                 : "Try a different search term to find an entry."
             }
+            titleLevel="h2"
           />
         ) : (
           <ul className="flex flex-col gap-3">
@@ -311,7 +338,7 @@ export function DashboardJourneyPanel() {
                     {journey.location ? ` · ${journey.location}` : ""}
                   </Text>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex shrink-0 gap-2">
                   <Button
                     type="button"
                     size="sm"

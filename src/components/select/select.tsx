@@ -21,6 +21,7 @@ export function Select({
   className,
   id,
   disabled,
+  required,
   children,
   ...props
 }: SelectProps) {
@@ -33,11 +34,16 @@ export function Select({
 
   return (
     <div className={cn(fieldWrapperClassName, fullWidth && "w-full")}>
-      {label ? <Label htmlFor={selectId}>{label}</Label> : null}
+      {label ? (
+        <Label htmlFor={selectId} required={required}>
+          {label}
+        </Label>
+      ) : null}
 
       <select
         id={selectId}
         disabled={disabled}
+        required={required}
         aria-invalid={hasError || undefined}
         aria-describedby={describedBy}
         className={cn(

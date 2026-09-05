@@ -77,6 +77,7 @@ model Project {
   shortDescription String
   description      String              @db.Text
   thumbnail        String?
+  preview          String?
   repositoryUrl    String?
   liveUrl          String?
   featured         Boolean             @default(false)
@@ -144,6 +145,33 @@ model Skill {
   @@index([category])
   @@index([displayOrder])
   @@map("skills")
+}
+
+model SiteProfile {
+  id                     String   @id @default(uuid())
+  name                   String
+  role                   String
+  tagline                String   @db.Text
+  email                  String
+  location               String
+  availability           String?
+  resumeUrl              String
+  githubUrl              String?
+  linkedinUrl            String?
+  metaDescription        String?  @db.Text
+  metaKeywords           Json?
+  biography              String?  @db.Text
+  professionalSummary    String?  @db.Text
+  educationDegree        String?
+  educationInstitution   String?
+  educationPeriod        String?
+  educationLabel         String?
+  whatIDo                Json?
+  currentlyLearning      Json?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@map("site_profiles")
 }
 
 /// Future UI only — no /blog or /dashboard/blog in V1.

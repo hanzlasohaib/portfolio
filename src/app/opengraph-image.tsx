@@ -1,6 +1,9 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Hanzla Sohaib — Full Stack Software Engineer • AI Engineer";
+import { PERSONAL } from "@/constants/personal";
+import { getSiteProfileForUi } from "@/features/site-profile";
+
+export const alt = `${PERSONAL.name} — ${PERSONAL.role}`;
 export const size = {
   width: 1200,
   height: 630,
@@ -10,8 +13,11 @@ export const contentType = "image/png";
 /**
  * Generated Open Graph / Twitter card image
  * (docs/architecture/seo-strategy.md — rich previews).
+ * Name and role come from SiteProfile (DB-first, static fallback).
  */
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const profile = await getSiteProfileForUi();
+
   return new ImageResponse(
     (
       <div
@@ -46,7 +52,7 @@ export default function OpenGraphImage() {
             marginBottom: 20,
           }}
         >
-          Hanzla Sohaib
+          {profile.name}
         </div>
         <div
           style={{
@@ -56,7 +62,7 @@ export default function OpenGraphImage() {
             lineHeight: 1.4,
           }}
         >
-          Full Stack Software Engineer • AI Engineer
+          {profile.role}
         </div>
       </div>
     ),

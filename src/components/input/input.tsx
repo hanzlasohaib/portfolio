@@ -25,6 +25,7 @@ export function Input({
   id,
   disabled,
   readOnly,
+  required,
   ...props
 }: InputProps) {
   const generatedId = useId();
@@ -36,7 +37,11 @@ export function Input({
 
   return (
     <div className={cn(fieldWrapperClassName, fullWidth && "w-full")}>
-      {label ? <Label htmlFor={inputId}>{label}</Label> : null}
+      {label ? (
+        <Label htmlFor={inputId} required={required}>
+          {label}
+        </Label>
+      ) : null}
 
       <div className="relative">
         {startAdornment ? (
@@ -49,6 +54,7 @@ export function Input({
           id={inputId}
           disabled={disabled}
           readOnly={readOnly}
+          required={required}
           aria-invalid={hasError || undefined}
           aria-describedby={describedBy}
           className={cn(

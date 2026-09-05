@@ -8,7 +8,7 @@ export default function DashboardSettingsLoading() {
       <div className="flex flex-col gap-2">
         <Heading level="h1">Settings</Heading>
         <Text variant="small">
-          Account details for the signed-in administrator.
+          Account, public site identity, and About narrative.
         </Text>
       </div>
       <DashboardSettingsSkeleton />

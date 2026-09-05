@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
 
 import { buildPageMetadata } from "@/config/metadata";
-import { PERSONAL } from "@/constants/personal";
 import { JourneyPage } from "@/features/journey";
 import { getJourneyEntriesForUi } from "@/features/journey/service";
+import { getSiteProfileForUi } from "@/features/site-profile";
 
 /**
  * Journey (`/journey`) — docs/project-design/pages.md § Journey.
  */
-export const metadata: Metadata = buildPageMetadata({
-  path: "/journey",
-  title: "Journey",
-  description: `Professional journey of ${PERSONAL.name} — experience, internships, and full-stack development milestones.`,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const profile = await getSiteProfileForUi();
+
+  return buildPageMetadata({
+    path: "/journey",
+    title: "Journey",
+    description: `Professional journey of ${profile.name} — experience, internships, and full-stack development milestones.`,
+  });
+}
 
 export default async function Journey() {
   const entries = await getJourneyEntriesForUi();

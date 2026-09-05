@@ -12,6 +12,8 @@ type ProjectsPageProps = {
 
 /**
  * Full `/projects` page composition (docs/project-design/pages.md § Projects).
+ *
+ * Heading order: page `h1` → explorer `h2` ("Selected work") → card `h3`.
  */
 export function ProjectsPage({ projects }: ProjectsPageProps) {
   return (
@@ -24,7 +26,7 @@ export function ProjectsPage({ projects }: ProjectsPageProps) {
             level="h1"
           />
 
-          <ProjectsExplorer projects={projects} showRepository />
+          <ProjectsExplorer projects={projects} />
         </Container>
       </Section>
     </PageWrapper>
